@@ -1,0 +1,13 @@
+[
+  {
+    "model": "announcements.announcement",
+    "pk": 1,
+    "fields": {
+      "author": 1,
+      "pub_date": "2025-10-22T12:30:00Z",
+      "text": "This is a special announcement for all the parents",
+      "groups": [4,3],
+      "users": []
+    }
+  }
+]
