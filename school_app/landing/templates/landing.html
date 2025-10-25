@@ -1,12 +1,111 @@
+{% load django_bootstrap5 %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome</title>
+    {% bootstrap_css %}
 </head>
 <body>
-    <h1>Welcome {% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}!</h1>
-    <p>This is the landing page of your site {{test}}.</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'landing' %}">
+                <i class="fas fa-graduation-cap me-2"></i>School App
+            </a>
+            <div class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                    <span class="navbar-text me-3">
+                        Welcome, {{ user.first_name|default:user.username }}!
+                    </span>
+                    <form method="post" action="{% url 'logout' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </button>
+                    </form>
+                {% else %}
+                    <a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a>
+                    <a class="btn btn-primary btn-sm" href="{% url 'signup' %}">
+                        <i class="fas fa-user-plus me-1"></i>Sign Up
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="mb-0">
+                            <i class="fas fa-home me-2"></i>
+                            Welcome {% if user.is_authenticated %}{{ user.first_name|default:user.username }}{% else %}Guest{% endif %}!
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text lead">This is the landing page of your school application.</p>
+                        
+                        {% if user.is_authenticated %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="card bg-light">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-bullhorn fa-2x text-primary mb-2"></i>
+                                            <h5>Announcements</h5>
+                                            <p class="card-text">Check the latest school announcements</p>
+                                            <a href="#" class="btn btn-primary">View Announcements</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card bg-light">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-user-cog fa-2x text-success mb-2"></i>
+                                            <h5>Profile</h5>
+                                            <p class="card-text">Manage your account settings</p>
+                                            <a href="#" class="btn btn-success">Edit Profile</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-cogs me-1"></i>Admin Panel
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="text-center">
+                                <p class="lead">Please log in to access all features of the school application.</p>
+                                <div class="d-grid gap-2 d-md-block">
+                                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                                    </a>
+                                    <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg">
+                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
+    {% bootstrap_javascript %}
 </body>
 </html>
