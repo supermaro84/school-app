@@ -1,0 +1,6 @@
+<h1>{{ announcement.title }} ({{ expired }})</h1>
+<p>{{ announcement.text }}</p>d
+<p>Published: {{ announcement.pub_date }}</p>
+<p>Author: {{ announcement.author }}</p>
+<p>Expires on: {{ announcement.exp_date }}</p>
+<a href="{% url 'announcement_edit' announcement.pk %}" class="btn btn-primary">Edit</a>

@@ -4,11 +4,14 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .forms import CustomUserCreationForm
+from announcements.models import Announcement
 
 
 # Create your views here.
 def index(request):
-    return render(request, "landing.html")
+    announcements = Announcement.objects.all()
+    announcements=(sorted(announcements, key=lambda x: x.pub_date, reverse=True))
+    return render(request, "landing.html", {"announcements": announcements})
 
 
 class CustomLoginView(LoginView):

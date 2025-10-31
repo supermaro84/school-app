@@ -6,11 +6,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome</title>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
     {% bootstrap_css %}
 </head>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: '/api/events/', // You'll create this endpoint
+        height: '100%'
+    });
+    calendar.render();
+});
+</script>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
+        <div class="container" style="width: 100%;">
             <a class="navbar-brand" href="{% url 'landing' %}">
                 <i class="fas fa-graduation-cap me-2"></i>School App
             </a>
@@ -37,18 +54,9 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-        
-        <div class="row justify-content-center">
-            <div class="col-md-8">
+    <div class="container-fluid mt-4">        
+        <div class="row">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
                         <h1 class="mb-0">
@@ -61,24 +69,32 @@
                         
                         {% if user.is_authenticated %}
                             <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="card bg-light">
-                                        <div class="card-body text-center">
+                                <div class="col-lg-8 col-md-12 mb-3"><div style="height: calc(100vh - 300px);"  class="overflow-hidden"><div class="card bg-light h-100"><div id="calendar" style="height: 100%;"></div></div></div></div>
+                                <div class="col-lg-4 col-md-12 mb-3">
+                                    <div style="height: calc(50vh - 150px);" class="overflow-hidden">
+                                    <div class="card bg-light h-100">
+                                        <div class="card-body text-center" style="overflow-y: auto; height: 100%;">
                                             <i class="fas fa-bullhorn fa-2x text-primary mb-2"></i>
-                                            <h5>Announcements</h5>
-                                            <p class="card-text">Check the latest school announcements</p>
-                                            <a href="#" class="btn btn-primary">View Announcements</a>
+                                            <h5>Announcements<a href="{% url 'announcement_create' %}" class="btn btn-primary">+</a></h5>
+                                            {% for ann in announcements %}
+                                                <div class="alert alert-{{ ann.tags }} alert-dismissible fade show" role="alert">
+                                                    {{ ann.title }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                    <a href="{% url 'announcement_detail' ann.pk %}" class="btn btn-primary">View</a>
+                                                </div>
+                                            {% endfor %}                                            
                                         </div>
-                                    </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="card bg-light">
+                                    </div>
+                                    <div style="height: calc(50vh - 150px);" class="overflow-hidden">
+                                    <div class="card bg-light h-100">
                                         <div class="card-body text-center">
                                             <i class="fas fa-user-cog fa-2x text-success mb-2"></i>
                                             <h5>Profile</h5>
                                             <p class="card-text">Manage your account settings</p>
                                             <a href="#" class="btn btn-success">Edit Profile</a>
                                         </div>
+                                    </div>
                                     </div>
                                 </div>
                             </div>

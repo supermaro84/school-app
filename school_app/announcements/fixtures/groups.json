@@ -3,28 +3,70 @@
     "model": "auth.group",
     "pk": 1,
     "fields": {
-      "name": "Teachers"
+      "name": "Grade 1"
     }
   },
   {
     "model": "auth.group",
     "pk": 2,
     "fields": {
-      "name": "Students"
+      "name": "Grade 2"
     }
   },
   {
     "model": "auth.group",
     "pk": 3,
     "fields": {
-      "name": "Admins"
+      "name": "Grade 3"
     }
   },
   {
     "model": "auth.group",
     "pk": 4,
     "fields": {
+      "name": "Grade 4"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 5,
+    "fields": {
+      "name": "Grade 5"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 6,
+    "fields": {
+      "name": "Grade 6"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 7,
+    "fields": {
+      "name": "Teachers"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 8,
+    "fields": {
+      "name": "Administration"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 9,
+    "fields": {
       "name": "Parents"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 10,
+    "fields": {
+      "name": "Support Staff"
     }
   }
 ]
