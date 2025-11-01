@@ -20,9 +20,9 @@ class Announcement(models.Model):
 
 
 class AnnouncementComment(models.Model):
-    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
+    announcement = models.ForeignKey(Announcement,related_name='comments', on_delete=models.CASCADE) #related_name helps to match announcement with this
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="announcement_comments"
     )
-    comment_date = models.DateTimeField("published comment date")
+    comment_date = models.DateTimeField("published comment date",auto_now_add=True)
     text = models.CharField(max_length=500)

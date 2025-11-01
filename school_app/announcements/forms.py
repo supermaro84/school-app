@@ -1,5 +1,5 @@
 from django import forms
-from .models import Announcement
+from .models import Announcement,AnnouncementComment
 from django.contrib.auth.models import Group
 
 class AnnouncementForm(forms.ModelForm):
@@ -15,3 +15,8 @@ class AnnouncementForm(forms.ModelForm):
     class Meta:
         model = Announcement
         fields = ['title', 'text', 'groups', 'users', 'exp_date']
+
+class AnnouncementCommentForm(forms.ModelForm):
+    class Meta:
+        model = AnnouncementComment
+        fields = ['text']

@@ -1,6 +1,32 @@
-<h1>{{ announcement.title }} ({{ expired }})</h1>
-<p>{{ announcement.text }}</p>d
-<p>Published: {{ announcement.pub_date }}</p>
-<p>Author: {{ announcement.author }}</p>
-<p>Expires on: {{ announcement.exp_date }}</p>
-<a href="{% url 'announcement_edit' announcement.pk %}" class="btn btn-primary">Edit</a>
+
+{% extends 'base.html' %}
+
+{% block title %}Announcements{% endblock %}
+
+{% block content %}
+<h1><span class="badge badge-primary">New</span></h1>
+<div class="jumbotron">
+  <h1 class="display-4">{{ announcement.title }} </h1>
+  <p class="lead">{{ announcement.text }}</p>
+  <hr class="my-4">
+  <p>Published by {{ announcement.author }} on {{ announcement.pub_date }}</p>
+  <p>Expires on {{ announcement.exp_date }}</p>
+  <a class="btn btn-primary btn-lg" href="{% url 'announcement_edit' announcement.pk %}" role="button">Edit</a>
+</div>
+
+<h2>Comments</h2>
+<ul>
+    {% for comment in announcement.comments.all %}
+        <li><h3>{{ comment.author }} on {{ comment.comment_date }}</h3> {{ comment.text }}</li>
+    {% empty %}
+        <li>No comments yet.</li>
+    {% endfor %}
+</ul>
+
+<h3>Add a Comment</h3>
+<form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+{% endblock %}

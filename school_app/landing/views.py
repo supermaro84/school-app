@@ -14,6 +14,10 @@ def index(request):
     return render(request, "landing.html", {"announcements": announcements})
 
 
+def announcements_page(request):
+    announcements = Announcement.objects.all()
+    announcements = sorted(announcements, key=lambda x: x.pub_date, reverse=True)
+    return render(request, "announcements_page.html", {"announcements": announcements})
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
     redirect_authenticated_user = True

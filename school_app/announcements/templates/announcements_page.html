@@ -1,0 +1,24 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Announcements{% endblock %}
+
+{% block content %}
+<div style="height: calc(50vh - 150px);" class="overflow-hidden">
+                                    <div class="card bg-light h-100">
+                                        <div class="card-body text-center" style="overflow-y: auto; height: 100%;">
+                                            <i class="fas fa-bullhorn fa-2x text-primary mb-2"></i>
+                                            <h5>Announcements<a href="{% url 'announcement_create' %}" class="btn btn-primary">+</a></h5>
+                                            {% for ann in announcements %}
+                                                <div class="alert alert-{{ ann.tags }} alert-dismissible fade show" role="alert">
+                                                    {{ ann.title }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                    <a href="{% url 'announcement_detail' ann.pk %}" class="btn btn-primary">View</a>
+                                                </div>
+                                            {% endfor %}                                            
+                                        </div>
+                                </div>
+                                    </div>
+{% endblock %}
+
+    

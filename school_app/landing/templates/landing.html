@@ -1,14 +1,8 @@
-{% load django_bootstrap5 %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome</title>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-    {% bootstrap_css %}
-</head>
+{% extends 'base.html' %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+    
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
@@ -25,37 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     calendar.render();
 });
 </script>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container" style="width: 100%;">
-            <a class="navbar-brand" href="{% url 'landing' %}">
-                <i class="fas fa-graduation-cap me-2"></i>School App
-            </a>
-            <div class="navbar-nav ms-auto">
-                {% if user.is_authenticated %}
-                    <span class="navbar-text me-3">
-                        Welcome, {{ user.first_name|default:user.username }}!
-                    </span>
-                    <form method="post" action="{% url 'logout' %}" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-light btn-sm">
-                            <i class="fas fa-sign-out-alt me-1"></i>Logout
-                        </button>
-                    </form>
-                {% else %}
-                    <a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">
-                        <i class="fas fa-sign-in-alt me-1"></i>Login
-                    </a>
-                    <a class="btn btn-primary btn-sm" href="{% url 'signup' %}">
-                        <i class="fas fa-user-plus me-1"></i>Sign Up
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </nav>
-
-    <div class="container-fluid mt-4">        
-        <div class="row">
+<div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
@@ -71,21 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="row">
                                 <div class="col-lg-8 col-md-12 mb-3"><div style="height: calc(100vh - 300px);"  class="overflow-hidden"><div class="card bg-light h-100"><div id="calendar" style="height: 100%;"></div></div></div></div>
                                 <div class="col-lg-4 col-md-12 mb-3">
-                                    <div style="height: calc(50vh - 150px);" class="overflow-hidden">
-                                    <div class="card bg-light h-100">
-                                        <div class="card-body text-center" style="overflow-y: auto; height: 100%;">
-                                            <i class="fas fa-bullhorn fa-2x text-primary mb-2"></i>
-                                            <h5>Announcements<a href="{% url 'announcement_create' %}" class="btn btn-primary">+</a></h5>
-                                            {% for ann in announcements %}
-                                                <div class="alert alert-{{ ann.tags }} alert-dismissible fade show" role="alert">
-                                                    {{ ann.title }}
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                                    <a href="{% url 'announcement_detail' ann.pk %}" class="btn btn-primary">View</a>
-                                                </div>
-                                            {% endfor %}                                            
-                                        </div>
-                                </div>
-                                    </div>
+                                    
                                     <div style="height: calc(50vh - 150px);" class="overflow-hidden">
                                     <div class="card bg-light h-100">
                                         <div class="card-body text-center">
@@ -120,8 +70,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         </div>
-    </div>
-    
-    {% bootstrap_javascript %}
-</body>
-</html>
+{% endblock %}
+
