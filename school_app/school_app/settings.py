@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "announcements.apps.AnnouncementsConfig",
     "landing.apps.LandingConfig",
     "accounts.apps.AccountsConfig",
+    "events.apps.EventsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

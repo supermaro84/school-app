@@ -2,23 +2,6 @@
 {% block title %}Welcome{% endblock %}
 {% block content %}
     
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: '/api/events/', // You'll create this endpoint
-        height: '100%'
-    });
-    calendar.render();
-});
-</script>
 <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -37,22 +20,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="col-lg-4 col-md-12 mb-3">
                                     
                                     <div style="height: calc(50vh - 150px);" class="overflow-hidden">
-                                    <div class="card bg-light h-100">
-                                        <div class="card-body text-center">
-                                            <i class="fas fa-user-cog fa-2x text-success mb-2"></i>
-                                            <h5>Profile</h5>
-                                            <p class="card-text">Manage your account settings</p>
-                                            <a href="#" class="btn btn-success">Edit Profile</a>
-                                        </div>
-                                    </div>
+                                    
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-center mt-3">
-                                <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-cogs me-1"></i>Admin Panel
-                                </a>
-                            </div>
+                            
+                            
                         {% else %}
                             <div class="text-center">
                                 <p class="lead">Please log in to access all features of the school application.</p>
