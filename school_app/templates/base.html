@@ -1,0 +1,100 @@
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+    {% bootstrap_css %}
+</head>
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents page scrolling */
+    }
+    
+    .main-wrapper {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .navbar {
+        flex-shrink: 0; /* Navbar stays fixed height */
+    }
+    
+    .content-area {
+        flex-grow: 1;
+        overflow: hidden;
+    }
+    
+    .footer {
+        flex-shrink: 0; /* Footer stays fixed height */
+        background-color: #f8f9fa;
+        padding: 1rem 0;
+        border-top: 1px solid #dee2e6;
+    }
+</style>
+<body>
+    <div class="main-wrapper">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container" style="width: 100%;">
+                <a class="navbar-brand" href="{% url 'landing' %}">
+                    <i class="fas fa-graduation-cap me-2"></i>Home
+                </a>
+                {% if user.is_authenticated %}
+                <a class="navbar-brand" href="{% url 'calendar' %}">
+                    <i class="fas fa-graduation-cap me-2"></i>Calendar
+                </a>
+                <a class="navbar-brand" href="{% url 'announcements_page' %}">
+                    <i class="fas fa-graduation-cap me-2"></i>Announcements
+                </a>
+                <a class="navbar-brand" href="{% url 'landing' %}">
+                    <i class="fas fa-graduation-cap me-2"></i>Messages
+                </a>
+                {% endif %}
+                <div class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text me-3">
+                            Welcome, {{ user.first_name|default:user.username }}!
+                        </span>
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </button>
+                        </form>
+                    {% else %}
+                        <a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a class="btn btn-primary btn-sm" href="{% url 'signup' %}">
+                            <i class="fas fa-user-plus me-1"></i>Sign Up
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content Area -->
+        <div class="content-area">        
+            {% block content %}
+            <!-- Default content, can be overridden in child templates -->
+            {% endblock %}
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container text-center">
+                <p class="mb-0">&copy; 2025 My Website. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+    {% bootstrap_javascript %}
+</body>
+</html>

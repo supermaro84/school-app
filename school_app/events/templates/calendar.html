@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Calendar{% endblock %}
+{% block content %}
+    
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js'></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: '{% url "events" %}',
+        height: '100%'
+    });
+    calendar.render();
+});
+</script>
+
+<div class="container-fluid h-100 d-flex flex-column overflow-hidden p-0">
+    <div class="row flex-grow-1 g-0">
+        <div class="col-12">
+            <div class="card h-100 border-0">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="mb-0">
+                        <i class="fas fa-calendar me-2"></i>Calendar
+                    </h1>
+                </div>
+                <div class="card-body flex-grow-1 p-3 d-flex flex-column overflow-hidden">
+                    <div class="row flex-grow-1 overflow-hidden">
+                        <!-- Calendar: 2/3 width (8 columns) -->
+                        <div class="col-lg-8 col-md-12 d-flex">
+                            <div class="flex-grow-1 d-flex flex-column">
+                                <div class="card bg-light flex-grow-1">
+                                    <div id="calendar" class="h-100 p-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Events Panel: 1/3 width (4 columns) -->
+                        <div class="col-lg-4 col-md-12 d-flex">
+                            <div class="flex-grow-1 d-flex flex-column">
+                                <div class="card bg-light flex-grow-1 d-flex flex-column">
+                                    <div class="card-header bg-secondary text-white">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-plus me-2"></i>Create Event
+                                        </h6>
+                                    </div>
+                                    <div class="card-body flex-grow-1 overflow-auto p-3">
+                                        <form method="post" class="h-100 d-flex flex-column">
+                                            {% csrf_token %}
+                                            
+                                            <!-- Scrollable form fields -->
+                                            <div class="flex-grow-1 overflow-auto mb-3">
+                                                {% for field in event_form %}
+                                                    <div class="mb-3">
+                                                        <label for="{{ field.id_for_label }}" class="form-label small">
+                                                            {{ field.label }}
+                                                        </label>
+                                                        {{ field }}
+                                                        {% if field.errors %}
+                                                            <div class="text-danger small">
+                                                                {{ field.errors }}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            
+                                            <!-- Fixed submit button at bottom -->
+                                            <div class="border-top pt-3">
+                                                <button type="submit" class="btn btn-success btn-sm w-100">
+                                                    <i class="fas fa-save me-1"></i>Create Event
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

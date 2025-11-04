@@ -1,0 +1,46 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Announcements{% endblock %}
+
+{% block content %}
+<h1><span class="badge badge-primary">New</span></h1>
+<div class="jumbotron">
+  <h1 class="display-4">{{ announcement.title }}  <a class="btn btn-primary btn-lg" href="{% url 'announcement_edit' announcement.pk %}" role="button">Edit</a>
+ </h1>
+  
+  <p class="lead">{{ announcement.text }}</p>
+  <hr class="my-4">
+  <p>Published by {{ announcement.author }} on {{ announcement.pub_date }}</p>
+  <p>Expires on {{ announcement.exp_date }}</p>
+</div>
+
+<h2>Comments</h2>
+<ul class="list-group">
+    {% for comment in announcement.comments.all %}
+    <li class="list-group-item">
+        <div class="card">
+  <div class="card-body">
+    <p2>{{ comment.author }} on {{ comment.comment_date }}</p2>
+    <p class="h4">{{ comment.text }}</p>
+     
+  </div>
+</div>
+    </li>
+    
+    {% empty %}
+        <li>No comments yet.</li>
+    {% endfor %}
+</ul>
+
+<h3>Add a Comment</h3>
+<form method="post">
+    <div class="card-body">
+     {% csrf_token %}
+    {{ form.as_p }}
+     
+  </div>
+       <button class="btn btn-primary btn-lg" type="submit">Save</button></a>
+        
+    </form>
+{% endblock %}

@@ -17,9 +17,33 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from landing import views
-
+from landing.views import CustomLoginView, CustomLogoutView, SignUpView
+from announcements.views import show_announcement_by_id,CreateAnnouncementView,EditAnnouncementView,AnnouncementDetailView
+from events.views import events,calendar
 urlpatterns = [
     path("", views.index, name="landing"),
     path("admin/", admin.site.urls),
+    
+    # Authentication URLs
+    path("login/", CustomLoginView.as_view(), name="login"),
+    path("logout/", CustomLogoutView.as_view(), name="logout"),
+    path("signup/", SignUpView.as_view(), name="signup"),
+    
+    # Password reset URLs
+    path("password_reset/", auth_views.PasswordResetView.as_view(), name="password_reset"),
+    path("password_reset/done/", auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path("reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path("reset/done/", auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
+
+    # Announcement URLs
+    path("announcements/", views.announcements_page, name="announcements_page"),
+    path("announcements/<int:pk>/", AnnouncementDetailView.as_view(), name="announcement_detail"),
+    path("announcements/create/", CreateAnnouncementView.as_view(), name="announcement_create"),
+    path("announcements/<int:pk>/edit/", EditAnnouncementView.as_view(), name="announcement_edit"),
+
+    # Events URLs
+    path('api/events/', events, name='events'),
+    path('calendar/', calendar, name='calendar'),
 ]

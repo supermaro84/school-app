@@ -1,12 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome</title>
-</head>
-<body>
-    <h1>Welcome {% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}!</h1>
-    <p>This is the landing page of your site {{test}}.</p>
+{% extends 'base.html' %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
     
-</body>
-</html>
+<div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="mb-0">
+                            <i class="fas fa-home me-2"></i>
+                            Welcome {% if user.is_authenticated %}{{ user.first_name|default:user.username }}{% else %}Guest{% endif %}!
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text lead">This is the landing page of your school application.</p>
+                        
+                        {% if user.is_authenticated %}
+                            <div class="row">
+                                <div class="col-lg-8 col-md-12 mb-3"><div style="height: calc(100vh - 300px);"  class="overflow-hidden"><div class="card bg-light h-100"><div id="calendar" style="height: 100%;"></div></div></div></div>
+                                <div class="col-lg-4 col-md-12 mb-3">
+                                    
+                                    <div style="height: calc(50vh - 150px);" class="overflow-hidden">
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        {% else %}
+                            <div class="text-center">
+                                <p class="lead">Please log in to access all features of the school application.</p>
+                                <div class="d-grid gap-2 d-md-block">
+                                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                                    </a>
+                                    <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg">
+                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
