@@ -8,7 +8,6 @@ from django.views.generic import CreateView,UpdateView
 
 
 def events(request):
-    events=Event.objects.all()
     events_list = []
     for event in Event.objects.all():
         events_list.append({
@@ -17,11 +16,12 @@ def events(request):
             "start": event.event_start_time.isoformat(),
             "end": event.event_end_time.isoformat(),
             "description": getattr(event, 'description', ''),
+            'status': event.status.value if hasattr(event.status, 'value') else str(event.status),
         })
     return JsonResponse(events_list, safe=False)
 
 
-def calendar(request):
+def event_editing(request):
     if request.method == 'POST':
         # Handle form submission
         form = EventForm(request.POST)
@@ -35,4 +35,4 @@ def calendar(request):
     else:
         # GET request - show empty form
         form = EventForm()
-    return render(request, "calendar.html", {'event_form': form})
+    return render(request, "calendar.html", {'event_form': form,'events':Event.objects.all()})
