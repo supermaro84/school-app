@@ -29,6 +29,7 @@ class Event(models.Model):
         related_name='owned_events',
     )
     event_name = models.CharField(max_length=200,default="Event")
+    event_description = models.TextField(default="Event Description")
     event_type = models.ForeignKey(EventType, on_delete=models.CASCADE)
     event_start_time = models.DateTimeField('event start time')
     event_end_time = models.DateTimeField('event end time')
