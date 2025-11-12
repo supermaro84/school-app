@@ -9,6 +9,12 @@ from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
 
+
+
+def announcements_page(request):
+    announcements = Announcement.objects.all()
+    announcements = sorted(announcements, key=lambda x: x.pub_date, reverse=True)
+    return render(request, "announcements_page.html", {"announcements": announcements})
 # Create your views here.
 def show_announcement_by_id(request, pk):
     announcement = Announcement.objects.get(pk=pk)
@@ -30,15 +36,25 @@ class CreateAnnouncementView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['announcements'] = Announcement.objects.all().order_by('-pub_date')
+        return context
+    def get_success_url(self):
+        return reverse('announcement_detail', kwargs={'pk': self.object.pk})
 class EditAnnouncementView(UpdateView):
     model = Announcement
     form_class = AnnouncementForm
     template_name = 'announcement_edit_form.html'
-    success_url = '/'
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['announcements'] = Announcement.objects.all().order_by('-pub_date')
+        return context
+    def get_success_url(self):
+        return reverse('announcement_detail', kwargs={'pk': self.object.pk})    
 
 class CreateAnnouncementCommentView(CreateView):
     model = AnnouncementComment
@@ -71,6 +87,7 @@ class AnnouncementDetailView(FormMixin, DetailView):
         # Add the comments for the current announcement
         context['comments'] = self.object.comments.all()  # All comments related to this announcement
         context['status'] = self.get_status(self.object)
+        context['announcements'] = Announcement.objects.all().order_by('-pub_date')
         return context
 
     def get_success_url(self):

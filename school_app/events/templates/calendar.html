@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         events: '{% url "events" %}',
         height: '100%',
+        eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+        slotLabelFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
         dateClick: function(info) {
             document.getElementById('event_panel').hidden = true;
             document.getElementById('edit_panel').hidden = false;
@@ -107,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     {{ event_form.event_name.label }}
                                                     {{ event_form.event_name }}
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-2">
                                                     {{ event_form.event_description.label }}
                                                     {{ event_form.event_description }}
                                                 </div>
