@@ -24,7 +24,7 @@
                                             <h5 class="mb-0">
                                                 <i class="fas fa-bullhorn me-2"></i>
                                                 All Announcements
-                                                <a href="{% url 'announcement_create' %}" class="btn btn-sm btn-light float-end">+</a>
+                                                <a href="{% url 'announcement_create' %}" class="btn btn-sm btn-light float-end">Add new</a>
                                             </h5>
                                         </div>
                                         <div class="card-body flex-grow-1 overflow-auto p-2">
@@ -44,22 +44,17 @@
                             <div class="col-lg-8 col-md-12 d-flex">
                                 <div class="flex-grow-1 d-flex flex-column">
                                     <div class="card bg-light flex-grow-1 d-flex flex-column">
+                                        {% block announcement %}
                                         <div class="card-header bg-success text-white">
                                             <h5 class="mb-0">
                                                 <i class="fas fa-calendar-alt me-2"></i>
                                                 Calendar / Events
                                             </h5>
                                         </div>
-                                        <div class="card-body flex-grow-1 overflow-auto p-2">
-                                            <!-- Add your content here -->
-                                            <p>This card takes 2/3 of the width</p>
-                                            <p>You can add calendar, events, or any other content here</p>
-                                            <p>This content will scroll if needed</p>
-                                            <!-- Add more content to test scrolling -->
-                                            {% for i in "1234567890"|make_list %}
-                                                <p>Sample content line {{ forloop.counter }} to demonstrate scrolling...</p>
-                                            {% endfor %}
+                                        <div class="card-body flex-grow-1 overflow-auto p-2">                                            
+                                                
                                         </div>
+                                        {% endblock %}
                                     </div>
                                 </div>
                             </div>

@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Announcement</title>
-</head>
-<body>
-    <h1>Edit Announcement</h1>
+{% extends 'announcements_page.html' %}
 
+{% block title %}Announcement detail{% endblock %}
+
+{% block announcement %}
+<div class="card-header bg-success text-white">
+    <h5 class="mb-0">
+        <i class="fas fa-calendar-alt me-2"></i>
+        Edit Announcement
+    </h5>
+</div>
+<div class="card-body flex-grow-1 overflow-auto p-2">                                            
     <form method="post">
-        {% csrf_token %}
+       {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save</button>
+        <button type="submit" class="btn btn-primary btn-lg">Save</button>
     </form>
-</body>
-</html>
+</div>
+     
+    </form>
+</div>
+{% endblock %}
