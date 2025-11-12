@@ -46,4 +46,8 @@ urlpatterns = [
     # Events URLs
     path('api/events/', events, name='events'),
     path('calendar/', event_editing, name='calendar'),
+
+    #Groups URLs
+    path('groups/', views.groups, name='groups'),
+    path("groups/<int:pk>/", views.group_detail, name="group_detail"),
 ]

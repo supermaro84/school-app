@@ -57,6 +57,9 @@
                 <a class="navbar-brand" href="{% url 'landing' %}">
                     <i class="fas fa-graduation-cap me-2"></i>Messages
                 </a>
+                <a class="navbar-brand" href="{% url 'groups' %}">
+                    <i class="fas fa-graduation-cap me-2"></i>Groups
+                </a>
                 {% endif %}
                 <div class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}

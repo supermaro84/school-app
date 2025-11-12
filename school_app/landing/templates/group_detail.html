@@ -1,0 +1,26 @@
+{% extends 'groups.html' %}
+
+{% block title %}Group detail{% endblock %}
+
+{% block group %}
+<div class="card-header bg-success text-white">
+    <h5 class="mb-0">
+        <i class="fas fa-calendar-alt me-2"></i>
+        Group Details
+    </h5>
+</div>
+<div class="card-body flex-grow-1 overflow-auto p-2">                                            
+    <h1>{{ group.name }}</h1>
+    <p class="lead">{{ group.description }}</p>
+    <hr class="my-4">
+    <p>Created on {{ group.created_at }}</p>
+    <p>Members:</p>
+    <ul>
+        {% for member in users %}
+            <li>{{ member.username }} ({{ member.email }})</li>
+        {% empty %}
+            <li>No members in this group.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
