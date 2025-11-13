@@ -22,6 +22,7 @@ from landing import views
 from landing.views import CustomLoginView, CustomLogoutView, SignUpView
 from announcements.views import show_announcement_by_id,CreateAnnouncementView,EditAnnouncementView,AnnouncementDetailView,announcements_page
 from events.views import events,event_editing
+from groups import views as group_views
 urlpatterns = [
     path("", views.index, name="landing"),
     path("admin/", admin.site.urls),
@@ -48,6 +49,6 @@ urlpatterns = [
     path('calendar/', event_editing, name='calendar'),
 
     #Groups URLs
-    path('groups/', views.groups, name='groups'),
-    path("groups/<int:pk>/", views.group_detail, name="group_detail"),
+    path('groups/', group_views.group_list, name='groups'),
+    path("groups/<int:pk>/", group_views.group_detail, name="group_detail"),
 ]

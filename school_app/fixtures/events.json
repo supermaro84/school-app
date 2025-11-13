@@ -1,0 +1,77 @@
+[
+  {
+    "model": "events.event",
+    "pk": 1,
+    "fields": {
+      "owner": 2,
+      "event_name": "First Grade Math Workshop",
+      "event_description": "Interactive math learning session for first grade students. Parents welcome to observe.",
+      "event_type": 1,
+      "event_start_time": "2025-11-20T09:00:00Z",
+      "event_end_time": "2025-11-20T10:30:00Z",
+      "status": 1,
+      "groups": [1, 7],
+      "users": [2, 6, 7]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 2,
+    "fields": {
+      "owner": 3,
+      "event_name": "Parent-Teacher Conference", 
+      "event_description": "Individual meetings with teachers to discuss student progress.",
+      "event_type": 5,
+      "event_start_time": "2025-11-22T14:00:00Z",
+      "event_end_time": "2025-11-22T17:00:00Z",
+      "status": 1,
+      "groups": [7, 9],
+      "users": [2, 3, 4, 8, 9]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 3,
+    "fields": {
+      "owner": 1,
+      "event_name": "Thanksgiving Break",
+      "event_description": "School holiday - No classes scheduled",
+      "event_type": 4,
+      "event_start_time": "2025-11-25T00:00:00Z",
+      "event_end_time": "2025-11-29T23:59:59Z",
+      "status": 1,
+      "groups": [1, 2, 3, 4, 5, 6, 7, 8],
+      "users": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 4,
+    "fields": {
+      "owner": 5,
+      "event_name": "Staff Meeting",
+      "event_description": "Monthly staff meeting to discuss curriculum updates and school policies.",
+      "event_type": 3,
+      "event_start_time": "2025-12-02T15:30:00Z",
+      "event_end_time": "2025-12-02T16:30:00Z",
+      "status": 1,
+      "groups": [7, 8],
+      "users": [1, 2, 3, 4, 5, 10]
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 5,
+    "fields": {
+      "owner": 4,
+      "event_name": "Winter Concert",
+      "event_description": "Student performance showcasing music and arts learned throughout the semester.",
+      "event_type": 2,
+      "event_start_time": "2025-12-15T18:00:00Z",
+      "event_end_time": "2025-12-15T20:00:00Z",
+      "status": 1,
+      "groups": [1, 2, 3, 4, 5, 6, 9],
+      "users": [4, 6, 7, 8, 9, 10, 11]
+    }
+  }
+]

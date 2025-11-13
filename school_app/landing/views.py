@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .forms import CustomUserCreationForm
 from announcements.models import Announcement
-from django.contrib.auth.models import Group
 
 
 # Create your views here.
@@ -14,16 +13,6 @@ def index(request):
     announcements=(sorted(announcements, key=lambda x: x.pub_date, reverse=True))
     return render(request, "landing.html", {"announcements": announcements})
 
-def groups(request):
-    groups = Group.objects.all()
-    return render(request, "groups.html", {"groups": groups})
-
-
-def group_detail(request, pk):
-    group = Group.objects.get(pk=pk)
-    groups = Group.objects.all()
-    users = group.user_set.all()
-    return render(request, "group_detail.html", {"group": group,"groups": groups,"users": users})
 
 
 class CustomLoginView(LoginView):

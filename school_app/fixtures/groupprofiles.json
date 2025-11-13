@@ -1,0 +1,102 @@
+[
+  {
+    "model": "groups.groupprofile",
+    "pk": 1,
+    "fields": {
+      "group": 1,
+      "description": "First grade students learning fundamentals of reading, writing, and mathematics.",
+      "admins": [2, 3],
+      "members": [6, 7]
+    }
+  },
+  {
+    "model": "groups.groupprofile",
+    "pk": 2,
+    "fields": {
+      "group": 2,
+      "description": "Second grade students building on foundational skills with more advanced concepts.",
+      "admins": [2, 4],
+      "members": [8, 9]
+    }
+  },
+  {
+    "model": "groups.groupprofile",
+    "pk": 3,
+    "fields": {
+      "group": 3,
+      "description": "Third grade students developing critical thinking and problem-solving abilities.",
+      "admins": [3, 4],
+      "members": [10, 11]
+    }
+  },
+  {
+    "model": "groups.groupprofile",
+    "pk": 4,
+    "fields": {
+      "group": 4,
+      "description": "Fourth grade students preparing for intermediate academic challenges.",
+      "admins": [3, 5],
+      "members": [6]
+    }
+  },
+  {
+    "model": "groups.groupprofile",
+    "pk": 5,
+    "fields": {
+      "group": 5,
+      "description": "Fifth grade students mastering core subjects before middle school transition.",
+      "admins": [4, 5],
+      "members": [7]
+    }
+  },
+  {
+    "model": "groups.groupprofile",
+    "pk": 6,
+    "fields": {
+      "group": 6,
+      "description": "Sixth grade students preparing for middle school with advanced curriculum.",
+      "admins": [4, 10],
+      "members": [8]
+    }
+  },
+  {
+    "model": "groups.groupprofile",
+    "pk": 7,
+    "fields": {
+      "group": 7,
+      "description": "Professional educators dedicated to student learning and development.",
+      "admins": [1, 5],
+      "members": [2, 3, 4, 10]
+    }
+  },
+  {
+    "model": "groups.groupprofile",
+    "pk": 8,
+    "fields": {
+      "group": 8,
+      "description": "School leadership and administrative staff managing operations and policies.",
+      "admins": [1],
+      "members": [2, 5]
+    }
+  },
+  {
+    "model": "groups.groupprofile",
+    "pk": 9,
+    "fields": {
+      "group": 9,
+      "description": "Parent community supporting student education and school activities.",
+      "admins": [1, 2],
+      "members": [8, 9, 11]
+    }
+  },
+  {
+    "model": "groups.groupprofile",
+    "pk": 10,
+    "fields": {
+      "group": 10,
+      "description": "Essential support personnel including cafeteria, maintenance, and office staff.",
+      "admins": [1, 5],
+      "members": [10, 11]
+    }
+  }
+]

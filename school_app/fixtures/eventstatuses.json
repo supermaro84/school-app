@@ -1,0 +1,30 @@
+[
+  {
+    "model": "events.eventstatus",
+    "pk": 1,
+    "fields": {
+      "name": "Active"
+    }
+  },
+  {
+    "model": "events.eventstatus",
+    "pk": 2,
+    "fields": {
+      "name": "Cancelled"
+    }
+  },
+  {
+    "model": "events.eventstatus",
+    "pk": 3,
+    "fields": {
+      "name": "Completed"
+    }
+  },
+  {
+    "model": "events.eventstatus",
+    "pk": 4,
+    "fields": {
+      "name": "Tentative"
+    }
+  }
+]

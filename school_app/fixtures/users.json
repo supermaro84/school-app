@@ -3,8 +3,24 @@
     "model": "auth.user",
     "pk": 1,
     "fields": {
+      "username": "marek",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
+      "is_superuser": true,
+      "is_staff": true,
+      "is_active": true,
+      "email": "marek@school.edu",
+      "first_name": "Marek",
+      "last_name": "Admin",
+      "date_joined": "2024-01-01T00:00:00Z",
+      "last_login": null
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
       "username": "sarah_johnson",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": false,
       "is_staff": true,
       "is_active": true,
@@ -17,10 +33,10 @@
   },
   {
     "model": "auth.user",
-    "pk": 2,
+    "pk": 3,
     "fields": {
       "username": "michael_chen",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": false,
       "is_staff": true,
       "is_active": true,
@@ -33,10 +49,10 @@
   },
   {
     "model": "auth.user",
-    "pk": 3,
+    "pk": 4,
     "fields": {
       "username": "maria_garcia",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": false,
       "is_staff": true,
       "is_active": true,
@@ -49,10 +65,10 @@
   },
   {
     "model": "auth.user",
-    "pk": 4,
+    "pk": 5,
     "fields": {
       "username": "david_miller",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": true,
       "is_staff": true,
       "is_active": true,
@@ -65,10 +81,10 @@
   },
   {
     "model": "auth.user",
-    "pk": 5,
+    "pk": 6,
     "fields": {
       "username": "emma_wilson",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": false,
       "is_staff": false,
       "is_active": true,
@@ -81,10 +97,10 @@
   },
   {
     "model": "auth.user",
-    "pk": 6,
+    "pk": 7,
     "fields": {
       "username": "james_anderson",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": false,
       "is_staff": false,
       "is_active": true,
@@ -97,10 +113,10 @@
   },
   {
     "model": "auth.user",
-    "pk": 7,
+    "pk": 8,
     "fields": {
       "username": "lisa_thompson",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": false,
       "is_staff": false,
       "is_active": true,
@@ -113,10 +129,10 @@
   },
   {
     "model": "auth.user",
-    "pk": 8,
+    "pk": 9,
     "fields": {
       "username": "robert_davis",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": false,
       "is_staff": false,
       "is_active": true,
@@ -129,10 +145,10 @@
   },
   {
     "model": "auth.user",
-    "pk": 9,
+    "pk": 10,
     "fields": {
       "username": "jennifer_lee",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": false,
       "is_staff": true,
       "is_active": true,
@@ -145,10 +161,10 @@
   },
   {
     "model": "auth.user",
-    "pk": 10,
+    "pk": 11,
     "fields": {
       "username": "sophia_martinez",
-      "password": "pbkdf2_sha256$1000000$KbQVXrI38BarWR16MV2dQL$+3MNmZUZN5wJ3oME6Z86QRhjijSkx1OPZM1xp2XTKWs=",
+      "password": "pbkdf2_sha256$1000000$AMghMdq9vCSvgYXk9uovL2$7R2Wiy1Gq+hnWsqPI4gebv2t18On6K+s8f+UABYcyCw=",
       "is_superuser": false,
       "is_staff": false,
       "is_active": true,
@@ -157,96 +173,6 @@
       "last_name": "Martinez",
       "date_joined": "2024-01-01T00:00:00Z",
       "last_login": null
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 1,
-    "fields": {
-      "user": 1,
-      "birthdate": "1985-03-15",
-      "phone_number": "+1234567890"
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 2,
-    "fields": {
-      "user": 2,
-      "birthdate": "1978-11-22",
-      "phone_number": "+1234567891"
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 3,
-    "fields": {
-      "user": 3,
-      "birthdate": "1982-07-08",
-      "phone_number": "+1234567892"
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 4,
-    "fields": {
-      "user": 4,
-      "birthdate": "1975-12-03",
-      "phone_number": "+1234567893"
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 5,
-    "fields": {
-      "user": 5,
-      "birthdate": "2016-04-12",
-      "phone_number": ""
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 6,
-    "fields": {
-      "user": 6,
-      "birthdate": "2015-09-20",
-      "phone_number": ""
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 7,
-    "fields": {
-      "user": 7,
-      "birthdate": "1980-05-15",
-      "phone_number": "+1234567894"
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 8,
-    "fields": {
-      "user": 8,
-      "birthdate": "1988-02-28",
-      "phone_number": "+1234567895"
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 9,
-    "fields": {
-      "user": 9,
-      "birthdate": "1986-10-14",
-      "phone_number": "+1234567896"
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 10,
-    "fields": {
-      "user": 10,
-      "birthdate": "2017-01-30",
-      "phone_number": ""
     }
   }
 ]

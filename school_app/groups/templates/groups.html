@@ -30,7 +30,7 @@
                                         <div class="card-body flex-grow-1 overflow-auto p-2">
                                             {% for group in groups %}
                                                 <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
-                                                    <h6 class="alert-heading">{{ group.name }}</h6>
+                                                    <h6 class="alert-heading">{{ group.group }}</h6>
                                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                                     <a href="{% url 'group_detail' group.pk %}" class="btn btn-primary btn-sm">View</a>
                                                 </div>

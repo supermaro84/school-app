@@ -1,10 +1,9 @@
 from django import forms
 from .models import Announcement,AnnouncementComment
-from django.contrib.auth.models import Group
-
+from groups.models import GroupProfile
 class AnnouncementForm(forms.ModelForm):
     groups = forms.ModelMultipleChoiceField(
-        queryset=Group.objects.all(),
+        queryset=GroupProfile.objects.all(),
         widget=forms.CheckboxSelectMultiple,  # optional: renders as checkboxes
         required=False
     )
