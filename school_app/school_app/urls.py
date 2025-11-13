@@ -51,4 +51,7 @@ urlpatterns = [
     #Groups URLs
     path('groups/', group_views.group_list, name='groups'),
     path("groups/<int:pk>/", group_views.group_detail, name="group_detail"),
+    path("groups/create/", group_views.CreateGroupView.as_view(), name="group_create"),
+    path("groups/<int:pk>/edit/", group_views.EditGroupView.as_view(), name="group_edit"),
+    
 ]

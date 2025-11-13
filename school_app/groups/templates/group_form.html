@@ -1,0 +1,21 @@
+{% extends 'groups.html' %}
+
+{% block title %}Group detail{% endblock %}
+
+{% block group %}
+<div class="card-header bg-success text-white">
+    <h5 class="mb-0">
+        <i class="fas fa-calendar-alt me-2"></i>
+        Add a New Group
+    </h5>
+</div>
+<div class="card-body flex-grow-1 overflow-auto p-2">                                            
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+    </form>
+</div>
+     
+</div>
+{% endblock %}
