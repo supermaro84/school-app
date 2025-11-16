@@ -23,6 +23,7 @@ from landing.views import CustomLoginView, CustomLogoutView, SignUpView
 from announcements.views import show_announcement_by_id,CreateAnnouncementView,EditAnnouncementView,AnnouncementDetailView,announcements_page
 from events.views import events,event_editing
 from groups import views as group_views
+from messages.views import messages_page,CreateMessageView,show_message_thread_by_id
 urlpatterns = [
     path("", views.index, name="landing"),
     path("admin/", admin.site.urls),
@@ -54,4 +55,8 @@ urlpatterns = [
     path("groups/create/", group_views.CreateGroupView.as_view(), name="group_create"),
     path("groups/<int:pk>/edit/", group_views.EditGroupView.as_view(), name="group_edit"),
     
+    #Message URLs
+    path("messages/", messages_page, name="messages_page"),
+    path("messages/create/", CreateMessageView.as_view(), name="message_create"),
+    path("messages/<int:pk>/", show_message_thread_by_id, name="message_thread_detail"),
 ]

@@ -3,6 +3,7 @@
 {% block title %}Group edit{% endblock %}
 
 {% block group %}
+
 <div class="card-header bg-success text-white">
     <h5 class="mb-0">
         <i class="fas fa-calendar-alt me-2"></i>
@@ -13,7 +14,31 @@
 <div class="card-body flex-grow-1 overflow-auto p-2">                                            
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <label>Description</label>
+        {{form.description}}
+        <br>
+      <label for="users-select">Select Admins</label>
+<select class="users-select" name="admins" multiple>
+    {% for admin in form.admins %}
+        <option value="{{ admin.pk }}">{{ admin }}</option>
+    {% endfor %}
+</select>
+<script>
+    new SlimSelect({
+        select: '.users-select'
+    });
+</script>
+<label for="members-select">Select Members</label>
+<select class="members-select" name="members" multiple>
+    {% for member in form.members %}
+        <option value="{{ member.pk }}">{{ member }}</option>
+    {% endfor %}
+</select>
+<script>
+    new SlimSelect({
+        select: '.members-select'
+    });
+</script>    
         <button type="submit" class="btn btn-primary btn-lg">Save</button>
     </form>
 

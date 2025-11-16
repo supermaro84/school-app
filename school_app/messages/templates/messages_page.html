@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Groups{% endblock %}
+{% block title %}Messages{% endblock %}
 
 {% block content %}
-
-<div class="container-fluid d-flex flex-column overflow-hidden" style="height: calc(100vh - var(--navbar-height, 80px));"> <!-- Adjust based on your navbar height -->
+<div class="container-fluid d-flex flex-column" style="height: calc(100vh - var(--navbar-height, 80px)); overflow-y: auto;"> <!-- Adjust based on your navbar height -->
     <div class="row flex-grow-1 g-0">
         <div class="col-12">
             <div class="card h-100 border-0">
                 <div class="card-header bg-primary text-white">
                     <h1 class="mb-0">
                         <i class="fas fa-bullhorn me-2"></i>
-                        Groups
+                        Messages
                     </h1>
                 </div>
                 <div class="card-body flex-grow-1 p-3 d-flex flex-column overflow-hidden">
@@ -19,38 +18,37 @@
                         <div class="row flex-grow-1 overflow-hidden g-3">
                             <!-- Announcements card: 1/3 width (4 columns) -->
                             <div class="col-lg-4 col-md-12 d-flex">
-    <div class="flex-grow-1 d-flex flex-column">
-
-        <!-- This height limit is REQUIRED -->
-        <div class="card bg-light flex-grow-1 d-flex flex-column" style="max-height: 80vh;">
-
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">All Groups  <a href="{% url 'group_create' %}" class="btn btn-sm btn-light float-end">Add new<i class="bi bi-plus-circle-fill"></i></a></h5>
-            </div>
-
-            <div class="card-body flex-grow-1 overflow-auto p-2">
-                {% for group in groups %}
-                    <div class="alert alert-primary mb-2">
-                        <h6>{{ group.group }} <a href="{% url 'group_detail' group.pk %}" class="btn btn-primary btn-sm">View</a><a href="{% url 'group_edit' group.pk %}" class="btn btn-secondary btn-sm">Edit</a></h6>
-                        
-                    </div>
-                {% endfor %}
-            </div>
-
-        </div>
-
-    </div>
-</div>
+                                <div class="flex-grow-1 d-flex flex-column">
+                                    <div class="card bg-light flex-grow-1 d-flex flex-column">
+                                        <div class="card-header bg-info text-white">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-bullhorn me-2"></i>
+                                                All Messages
+                                                <a href="{% url 'message_create' %}" class="btn btn-sm btn-light float-end">Add new</a>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body flex-grow-1 overflow-auto p-2">
+                                            {% for msg_thread in message_threads %}
+                                                <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
+                                                    <h6 class="alert-heading">{{ msg_thread.title }}</h6>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                    <a href="{% url 'message_thread_detail' msg_thread.pk %}" class="btn btn-primary btn-sm">View</a>
+                                                </div>
+                                            {% endfor %}                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Calendar/Events card: 2/3 width (8 columns) -->
                             <div class="col-lg-8 col-md-12 d-flex">
                                 <div class="flex-grow-1 d-flex flex-column">
                                     <div class="card bg-light flex-grow-1 d-flex flex-column">
-                                        {% block group %}
+                                       {% block message %}
                                         <div class="card-header bg-success text-white">
                                             <h5 class="mb-0">
                                                 <i class="fas fa-calendar-alt me-2"></i>
-                                                Groups
+                                                Messages
                                             </h5>
                                         </div>
                                         <div class="card-body flex-grow-1 overflow-auto p-2">                                            

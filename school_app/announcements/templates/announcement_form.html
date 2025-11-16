@@ -12,7 +12,38 @@
 <div class="card-body flex-grow-1 overflow-auto p-2">                                            
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+         <label>Title</label>
+        {{form.title}}
+        <label>Text</label>
+        {{form.text}}
+        <label>Groups</label>
+   <select name="groups" class="group-select" multiple>
+    {% for gp in form.groups.field.queryset %}
+        <option value="{{ gp.pk }}"
+            {% if form.instance.pk and gp in form.instance.groups.all %}selected{% endif %}
+        >
+            {{ gp.group.name }}
+        </option>{# Dont get this loop #}
+    {% endfor %}
+</select>
+    <script>
+        new SlimSelect({
+            select: '.group-select'
+        });
+    </script>
+        <label>Users</label>
+         <select class="users-select" name="users" multiple>
+        {% for user in form.users %}
+            <option value="{{ user.pk }}">{{ user }}</option>
+        {% endfor %}
+    </select>
+    <script>
+        new SlimSelect({
+            select: '.users-select'
+        });
+    </script>
+        <label>Expiration Date</label>
+        {{form.exp_date}}
         <button type="submit" class="btn btn-primary btn-lg">Save</button>
     </form>
 </div>
