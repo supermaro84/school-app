@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import Group, User
-
+from django.contrib.auth.models import User
+from groups.models import GroupProfile
 
 # Create your models here.
 class Announcement(models.Model):
@@ -15,7 +15,7 @@ class Announcement(models.Model):
 
     title = models.CharField(max_length=200,default="Title")
     text = models.CharField(max_length=1500)
-    groups = models.ManyToManyField(Group, related_name="announcements")
+    groups = models.ManyToManyField(GroupProfile, related_name="announcements")
     users = models.ManyToManyField(User, related_name="announcements")
 
 

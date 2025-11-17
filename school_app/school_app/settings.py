@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     "landing.apps.LandingConfig",
     "accounts.apps.AccountsConfig",
     "events.apps.EventsConfig",
+    "messages.apps.MessagesConfig",
+    "groups.apps.GroupsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

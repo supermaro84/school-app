@@ -14,6 +14,7 @@ def index(request):
     return render(request, "landing.html", {"announcements": announcements})
 
 
+
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
     redirect_authenticated_user = True
@@ -41,3 +42,5 @@ class SignUpView(CreateView):
         username = form.cleaned_data.get('username')
         messages.success(self.request, f'Account created for {username}! You can now log in.')
         return response
+
+

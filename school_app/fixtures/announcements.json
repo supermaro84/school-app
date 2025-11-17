@@ -1,0 +1,67 @@
+[
+  {
+    "model": "announcements.announcement",
+    "pk": 1,
+    "fields": {
+      "author": 1,
+      "title": "Welcome to the New School Year",
+      "text": "We are excited to welcome all students and families to the 2024-2025 school year. Please review the updated policies in your welcome packet.",
+      "pub_date": "2024-08-15T08:00:00Z",
+      "exp_date": "2024-12-31T23:59:59Z",
+      "groups": [7, 8, 9],
+      "users": [1, 2, 3, 4, 5]
+    }
+  },
+  {
+    "model": "announcements.announcement", 
+    "pk": 2,
+    "fields": {
+      "author": 2,
+      "title": "Parent-Teacher Conferences Scheduled",
+      "text": "Individual parent-teacher conferences are scheduled for November 22nd. Please sign up for your preferred time slot.",
+      "pub_date": "2024-11-10T14:30:00Z",
+      "exp_date": "2024-11-23T00:00:00Z",
+      "groups": [9],
+      "users": [8, 9, 10, 11]
+    }
+  },
+  {
+    "model": "announcements.announcement",
+    "pk": 3,
+    "fields": {
+      "author": 5,
+      "title": "Winter Concert Rehearsals",
+      "text": "All students participating in the winter concert must attend rehearsals on December 5th and 10th. Contact the music teacher for details.",
+      "pub_date": "2024-11-18T10:15:00Z",
+      "exp_date": "2024-12-16T00:00:00Z",
+      "groups": [1, 2, 3, 4, 5, 6],
+      "users": [4, 6, 7, 8, 10, 11]
+    }
+  },
+  {
+    "model": "announcements.announcement",
+    "pk": 4,
+    "fields": {
+      "author": 3,
+      "title": "School Lunch Menu Updated",
+      "text": "The cafeteria has updated the lunch menu for December. New healthy options are now available. Menu is posted on the school website.",
+      "pub_date": "2024-11-20T09:00:00Z",
+      "exp_date": "2024-12-31T23:59:59Z",
+      "groups": [1, 2, 3, 4, 5, 6, 9, 10],
+      "users": [1, 6, 7, 8, 9, 10, 11]
+    }
+  },
+  {
+    "model": "announcements.announcement",
+    "pk": 5,
+    "fields": {
+      "author": 1,
+      "title": "Holiday Break Schedule",
+      "text": "School will be closed from December 20th through January 14th for winter break. Classes resume on January 15th. Have a wonderful holiday season!",
+      "pub_date": "2024-11-25T11:00:00Z",
+      "exp_date": "2025-01-15T08:00:00Z",
+      "groups": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "users": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    }
+  }
+]

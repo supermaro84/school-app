@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Announcements{% endblock %}
+{% block title %}Messages{% endblock %}
 
 {% block content %}
 <div class="container-fluid d-flex flex-column" style="height: calc(100vh - var(--navbar-height, 80px)); overflow-y: auto;"> <!-- Adjust based on your navbar height -->
@@ -10,7 +10,7 @@
                 <div class="card-header bg-primary text-white">
                     <h1 class="mb-0">
                         <i class="fas fa-bullhorn me-2"></i>
-                        Announcements
+                        Messages
                     </h1>
                 </div>
                 <div class="card-body flex-grow-1 p-3 d-flex flex-column overflow-hidden">
@@ -23,16 +23,16 @@
                                         <div class="card-header bg-info text-white">
                                             <h5 class="mb-0">
                                                 <i class="fas fa-bullhorn me-2"></i>
-                                                All Announcements
-                                                <a href="{% url 'announcement_create' %}" class="btn btn-sm btn-light float-end">Add new</a>
+                                                All Messages
+                                                <a href="{% url 'message_create' %}" class="btn btn-sm btn-light float-end">Add new</a>
                                             </h5>
                                         </div>
                                         <div class="card-body flex-grow-1 overflow-auto p-2">
-                                            {% for ann in announcements %}
+                                            {% for msg_thread in message_threads %}
                                                 <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
-                                                    <h6 class="alert-heading">{{ ann.title }}</h6>
+                                                    <h6 class="alert-heading">{{ msg_thread.title }}</h6>
                                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                                    <a href="{% url 'announcement_detail' ann.pk %}" class="btn btn-primary btn-sm">View</a>
+                                                    <a href="{% url 'message_thread_detail' msg_thread.pk %}" class="btn btn-primary btn-sm">View</a>
                                                 </div>
                                             {% endfor %}                                            
                                         </div>
@@ -44,11 +44,11 @@
                             <div class="col-lg-8 col-md-12 d-flex">
                                 <div class="flex-grow-1 d-flex flex-column">
                                     <div class="card bg-light flex-grow-1 d-flex flex-column">
-                                        {% block announcement %}
+                                       {% block message %}
                                         <div class="card-header bg-success text-white">
                                             <h5 class="mb-0">
                                                 <i class="fas fa-calendar-alt me-2"></i>
-                                                Calendar / Events
+                                                Messages
                                             </h5>
                                         </div>
                                         <div class="card-body flex-grow-1 overflow-auto p-2">                                            

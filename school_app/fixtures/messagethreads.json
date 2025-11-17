@@ -1,0 +1,47 @@
+[
+  {
+    "model": "custom_messages.messagethread",
+    "pk": 1,
+    "fields": {
+      "title": "First Grade Math Curriculum Discussion",
+      "author": 2,
+      "recipients": [6, 8]
+    }
+  },
+  {
+    "model": "custom_messages.messagethread",
+    "pk": 2,
+    "fields": {
+      "title": "Winter Concert Planning",
+      "author": 4,
+      "recipients": [1, 2, 3]
+    }
+  },
+  {
+    "model": "custom_messages.messagethread",
+    "pk": 3,
+    "fields": {
+      "title": "Parent Meeting Follow-up",
+      "author": 3,
+      "recipients": [8, 9]
+    }
+  },
+  {
+    "model": "custom_messages.messagethread",
+    "pk": 4,
+    "fields": {
+      "title": "Science Fair Preparation",
+      "author": 10,
+      "recipients": [5, 6, 7]
+    }
+  },
+  {
+    "model": "custom_messages.messagethread",
+    "pk": 5,
+    "fields": {
+      "title": "Staff Meeting Agenda",
+      "author": 1,
+      "recipients": [2, 3, 4, 5, 10]
+    }
+  }
+]

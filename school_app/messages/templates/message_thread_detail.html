@@ -1,0 +1,35 @@
+{% extends 'messages_page.html' %}
+
+{% block title %}{% endblock %}
+
+{% block message %}
+<div class="card-header bg-success text-white">
+<h5 class="mb-0">
+    <i class="fas fa-calendar-alt me-2"></i>
+    Read Message
+</h5>
+</div>
+<div class="card-body flex-grow-1 overflow-auto p-2">                                            
+<div class="jumbotron">
+      <h1 class="display-4">{{ thread.title }}
+
+ </h1>
+  
+  <p class="lead">{{ thread.message.text }}</p>
+  <hr class="my-4">
+  {% for message in messages %}
+  <div class="card bg-light h-100">
+ <div class="message">
+      <p>{{ message.sender }} said: {{ message.text }}</p>
+      <p><small>Published on {{ message.pub_date }}</small></p>
+    </div>
+  </div>
+   
+  {% endfor %}
+  {% block reply %}
+      <a href="{% url 'reply_message' thread.pk %}" class="btn btn-outline-primary btn-lg">Reply</a>
+
+
+  {% endblock %}
+</div>
+{% endblock %}

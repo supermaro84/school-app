@@ -1,0 +1,21 @@
+{% extends 'messages_page.html' %}
+
+{% block title %}Message create{% endblock %}
+
+{% block message %}
+<div class="card-header bg-success text-white">
+    <h5 class="mb-0">
+        <i class="fas fa-calendar-alt me-2"></i>
+        Add a New Message
+    </h5>
+</div>
+<div class="card-body flex-grow-1 overflow-auto p-2">                                            
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+    </form>
+</div>
+     
+</div>
+{% endblock %}

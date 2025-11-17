@@ -1,0 +1,9 @@
+{% extends 'message_thread_detail.html' %}
+  {% block reply %}
+  <form method="post">
+
+ {% csrf_token %}
+        {{ form.as_p }}
+         <button type="submit" class="btn btn-primary btn-lg">Save</button>
+  </form>
+  {% endblock %}
