@@ -17,12 +17,19 @@
   
   <p class="lead">{{ thread.message.text }}</p>
   <hr class="my-4">
-  <p>Published by {{ thread.author }} on {{ thread.pub_date }}</p>
   {% for message in messages %}
-    <div class="message">
+  <div class="card bg-light h-100">
+ <div class="message">
       <p>{{ message.sender }} said: {{ message.text }}</p>
       <p><small>Published on {{ message.pub_date }}</small></p>
     </div>
+  </div>
+   
   {% endfor %}
+  {% block reply %}
+      <a href="{% url 'reply_message' thread.pk %}" class="btn btn-outline-primary btn-lg">Reply</a>
+
+
+  {% endblock %}
 </div>
 {% endblock %}

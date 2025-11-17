@@ -1,0 +1,102 @@
+[
+  {
+    "model": "custom_messages.message",
+    "pk": 1,
+    "fields": {
+      "thread": 1,
+      "sender": 2,
+      "text": "Hi everyone! I wanted to discuss the new math curriculum changes for first grade. What are your thoughts on the updated materials?",
+      "pub_date": "2024-11-15T09:00:00Z"
+    }
+  },
+  {
+    "model": "custom_messages.message",
+    "pk": 2,
+    "fields": {
+      "thread": 1,
+      "sender": 6,
+      "text": "The new materials look great! My daughter seems more engaged with the visual learning approach.",
+      "pub_date": "2024-11-15T19:30:00Z"
+    }
+  },
+  {
+    "model": "custom_messages.message",
+    "pk": 3,
+    "fields": {
+      "thread": 1,
+      "sender": 8,
+      "text": "I agree! The interactive exercises are helping with homework time at home. Thanks for implementing these changes.",
+      "pub_date": "2024-11-16T07:45:00Z"
+    }
+  },
+  {
+    "model": "custom_messages.message",
+    "pk": 4,
+    "fields": {
+      "thread": 2,
+      "sender": 4,
+      "text": "Team, we need to finalize the winter concert program by next week. Please review the attached song list and let me know your thoughts.",
+      "pub_date": "2024-11-16T14:30:00Z"
+    }
+  },
+  {
+    "model": "custom_messages.message",
+    "pk": 5,
+    "fields": {
+      "thread": 2,
+      "sender": 1,
+      "text": "The song selection looks perfect for our students' age groups. Do we have enough rehearsal time scheduled?",
+      "pub_date": "2024-11-16T16:15:00Z"
+    }
+  },
+  {
+    "model": "custom_messages.message",
+    "pk": 6,
+    "fields": {
+      "thread": 3,
+      "sender": 3,
+      "text": "Thank you both for attending yesterday's meeting. As discussed, I'll send home the progress reports by Friday.",
+      "pub_date": "2024-11-17T11:15:00Z"
+    }
+  },
+  {
+    "model": "custom_messages.message",
+    "pk": 7,
+    "fields": {
+      "thread": 3,
+      "sender": 8,
+      "text": "Perfect! We really appreciate the detailed feedback about Emma's reading progress.",
+      "pub_date": "2024-11-17T20:00:00Z"
+    }
+  },
+  {
+    "model": "custom_messages.message",
+    "pk": 8,
+    "fields": {
+      "thread": 4,
+      "sender": 10,
+      "text": "Students, great work on your science fair projects! Remember to bring your display boards on Monday for setup.",
+      "pub_date": "2024-11-18T16:45:00Z"
+    }
+  },
+  {
+    "model": "custom_messages.message",
+    "pk": 9,
+    "fields": {
+      "thread": 5,
+      "sender": 1,
+      "text": "Staff meeting agenda for next week: 1) Curriculum updates 2) Winter break schedule 3) New safety protocols. Please review before Tuesday.",
+      "pub_date": "2024-11-19T08:00:00Z"
+    }
+  },
+  {
+    "model": "custom_messages.message",
+    "pk": 10,
+    "fields": {
+      "thread": 5,
+      "sender": 2,
+      "text": "Thanks for the agenda. I have some questions about the new safety protocols - can we discuss during the meeting?",
+      "pub_date": "2024-11-19T10:30:00Z"
+    }
+  }
+]

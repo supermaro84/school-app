@@ -15,5 +15,7 @@ uv run python manage.py loaddata fixtures/announcements
 uv run python manage.py loaddata fixtures/eventtypes
 uv run python manage.py loaddata fixtures/eventstatuses
 uv run python manage.py loaddata fixtures/events
+uv run python manage.py loaddata fixtures/messagethreads
+uv run python manage.py loaddata fixtures/messages
 
 echo "Done! Login with: marek/marek"

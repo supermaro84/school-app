@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render
 from .models import MessageThread, Message
 import datetime
@@ -34,7 +35,25 @@ class CreateMessageView(CreateView):
         return super().form_valid(form)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['message_threads'] = Message.objects.all().order_by('-pub_date')
+        context['messages'] = Message.objects.all().order_by('-pub_date')
+        context['message_threads'] = MessageThread.objects.all()
         return context
     def get_success_url(self):
         return reverse('message_thread_detail', kwargs={'pk': self.object.pk})
+
+class ReplyMessageView(CreateView):
+    model = Message
+    template_name = 'message_thread_reply.html'
+    fields = ['text']
+    def form_valid(self, form):
+        thread_id = self.kwargs['pk']
+        form.instance.thread = MessageThread.objects.get(pk=thread_id)
+        form.instance.sender = self.request.user
+        return super().form_valid(form)
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context=super().get_context_data(**kwargs)
+        context['message_threads'] = MessageThread.objects.all()
+        return context
+
+    def get_success_url(self):
+        return reverse('message_thread_detail', kwargs={'pk': self.object.thread.pk})
