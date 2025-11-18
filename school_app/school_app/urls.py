@@ -24,6 +24,7 @@ from announcements.views import show_announcement_by_id,CreateAnnouncementView,E
 from events.views import events,event_editing
 from groups import views as group_views
 from messages.views import messages_page,CreateMessageView,show_message_thread_by_id,ReplyMessageView
+from media.views import images_list
 urlpatterns = [
     path("", views.index, name="landing"),
     path("admin/", admin.site.urls),
@@ -61,4 +62,6 @@ urlpatterns = [
     path("messages/<int:pk>/", show_message_thread_by_id, name="message_thread_detail"),
     path("messages/<int:pk>/reply/", ReplyMessageView.as_view(), name="reply_message"),
 
+    #Media URLs
+    path("media/images/", images_list, name="images_list"),
 ]

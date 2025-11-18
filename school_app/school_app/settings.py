@@ -13,7 +13,29 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR= Path(__file__).resolve().parent.parent
+# LOCAL STATIC FILES
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+USE_SPACES = True
+if USE_SPACES:
+    AWS_ACCESS_KEY_ID = ""
+    AWS_SECRET_ACCESS_KEY = ""
+    AWS_STORAGE_BUCKET_NAME = ""
+    AWS_S3_REGION_NAME = "fra1"
+    AWS_S3_ENDPOINT_URL = "https://fra1.digitaloceanspaces.com"
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+
+    AWS_MEDIA_LOCATION = 'media'
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_REGION_NAME}.digitaloceanspaces.com/{AWS_MEDIA_LOCATION}/"
+    DEFAULT_FILE_STORAGE = 'media.media.MediaStorage'
+    MEDIA_ROOT = None  # PREVENT LOCAL SAVE
+else:
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "mediafiles"
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +59,7 @@ INSTALLED_APPS = [
     "events.apps.EventsConfig",
     "messages.apps.MessagesConfig",
     "groups.apps.GroupsConfig",
+    "media.apps.MediaConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -44,6 +67,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_bootstrap5",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -128,7 +152,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+#STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
