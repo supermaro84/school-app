@@ -3,17 +3,52 @@
 {% block title %}Images{% endblock %}
 
 {% block content %}
+<div class="container-fluid h-100 d-flex flex-column p-3">
     <h1>Image Gallery</h1>
-    <div class="row">
-        {% for image in images %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{{ image.file.url }}" class="card-img-top" alt="{{ image.title }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ image.title }}</h5>
-                    </div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-lg">Upload</button>
+    </form>
+    
+    <div class="row flex-grow-1 overflow-hidden">
+        <!-- Images column -->
+        <div class="col-lg-6 col-md-6 d-flex flex-column">
+            <h3>Images</h3>
+            <div class="flex-grow-1 overflow-auto">
+                <div class="row">
+                    {% for image in images %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card">
+                                <img src="{{ image.file.url }}" class="card-img-top" alt="" style="height: 150px; object-fit: cover;">
+                                <div class="card-body p-2">
+                                    <small>{{ image.uploaded_at|date:"Y-m-d" }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-        {% endfor %}
+        </div>
+        
+        <!-- Documents column -->
+        <div class="col-lg-6 col-md-6 d-flex flex-column">
+            <h3>Documents</h3>
+            <div class="flex-grow-1 overflow-auto">
+                <div class="row">
+                    {% for document in documents %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ document.filename }}</h6>
+                                    <a href="{{ document.file.url }}" class="btn btn-sm btn-primary" download>Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 {% endblock %}
