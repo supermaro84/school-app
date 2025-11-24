@@ -5,13 +5,15 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .forms import CustomUserCreationForm
 from announcements.models import Announcement
+from accounts.models import UserProfile
+from accounts.utils import get_affiliated_users
+from django.contrib.auth.decorators import login_required
 
 
-# Create your views here.
-def index(request):
-    announcements = Announcement.objects.all()
-    announcements=(sorted(announcements, key=lambda x: x.pub_date, reverse=True))
-    return render(request, "landing.html", {"announcements": announcements})
+@login_required
+def summary(request):
+    affiliated_users = get_affiliated_users(request.user)
+    return render(request, "landing.html", {"affiliated_users": affiliated_users})
 
 
 

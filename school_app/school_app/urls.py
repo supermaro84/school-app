@@ -18,15 +18,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from landing import views
-from landing.views import CustomLoginView, CustomLogoutView, SignUpView
+from landing.views import CustomLoginView, CustomLogoutView, SignUpView,summary
 from announcements.views import show_announcement_by_id,CreateAnnouncementView,EditAnnouncementView,AnnouncementDetailView,announcements_page
 from events.views import events,event_editing
 from groups import views as group_views
+from accounts.views import user_list ,user_detail
 from messages.views import messages_page,CreateMessageView,show_message_thread_by_id,ReplyMessageView
 from media.views import images_list,CreateImageView
 urlpatterns = [
-    path("", views.index, name="landing"),
+    path("", summary, name="landing"),
     path("admin/", admin.site.urls),
     
     # Authentication URLs
@@ -64,4 +64,8 @@ urlpatterns = [
 
     #Media URLs
     path("media/images/", CreateImageView.as_view(), name="images_list"),
+
+    #Users URLs
+    path("users/", user_list, name="users_list"),
+    path("users/<int:pk>/", user_detail, name="user_detail"),
 ]

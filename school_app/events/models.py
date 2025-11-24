@@ -37,6 +37,10 @@ class Event(models.Model):
     users = models.ManyToManyField(User, related_name="events")
     status = models.ForeignKey(EventStatus, on_delete=models.CASCADE)
     participations = models.ManyToManyField(EventParticipation, related_name="events")
+    @property
+    def list_of_groups(self):
+        print(", ".join([group.name for group in self.groups.all()]))
+        return ", ".join([group.name for group in self.groups.all()])
     def __str__(self):
         return self.event_name
 

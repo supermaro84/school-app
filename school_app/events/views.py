@@ -18,6 +18,8 @@ def events(request):
             "description": event.event_description,
             'status': event.status.value if hasattr(event.status, 'value') else str(event.status),
             "type": event.event_type.value if hasattr(event.event_type, 'value') else str(event.event_type),
+            "list_of_groups": event.list_of_groups,
+            "users": ", ".join([user.username for user in event.users.all()]),
         })
     return JsonResponse(events_list, safe=False)
 

@@ -1,0 +1,20 @@
+{% extends 'users.html' %}
+
+{% block title %}User detail{% endblock %}
+
+{% block users %}
+<div class="card-header bg-success text-white">
+    <h5 class="mb-0">
+        <i class="fas fa-calendar-alt me-2"></i>
+        User Details
+    </h5>
+</div>
+<div class="card-body flex-grow-1 overflow-auto p-2">                                            
+    <h1><h2>{{ profile.user.username }}</h2>
+</h1>
+    <p class="lead">{{ profile.birthdate }}</p>
+    <hr class="my-4">
+    <p>phone number{{ profile.phone_number }}</p>
+    <p>role: {{ profile.user_role }}</p>
+    <p>affiliated users: {{ profile.affiliated_usernames }}</p>
+{% endblock %}

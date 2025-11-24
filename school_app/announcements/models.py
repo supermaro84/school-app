@@ -17,7 +17,10 @@ class Announcement(models.Model):
     text = models.CharField(max_length=1500)
     groups = models.ManyToManyField(GroupProfile, related_name="announcements")
     users = models.ManyToManyField(User, related_name="announcements")
-
+    @property
+    def all_users(self):
+        return list(self.users.all()) + [profile for profile in self.groups.all()]
+      
 
 class AnnouncementComment(models.Model):
     announcement = models.ForeignKey(Announcement,related_name='comments', on_delete=models.CASCADE) #related_name helps to match announcement with this

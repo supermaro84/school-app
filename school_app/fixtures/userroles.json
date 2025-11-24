@@ -1,0 +1,30 @@
+[
+  {
+    "model": "accounts.userroles",
+    "pk": 1,
+    "fields": {
+      "user_role": "Admin"
+    }
+  },
+  {
+    "model": "accounts.userroles",
+    "pk": 2,
+    "fields": {
+      "user_role": "Teacher"
+    }
+  },
+  {
+    "model": "accounts.userroles",
+    "pk": 3,
+    "fields": {
+      "user_role": "Student"
+    }
+  },
+  {
+    "model": "accounts.userroles",
+    "pk": 4,
+    "fields": {
+      "user_role": "Guardian"
+    }
+  }
+]
