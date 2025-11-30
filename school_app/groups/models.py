@@ -6,6 +6,9 @@ class GroupProfile(models.Model):
     description = models.TextField(blank=True)
     admins = models.ManyToManyField(User, related_name="administered_groups", blank=True)
     members = models.ManyToManyField(User, related_name="member_groups", blank=True)
+    @property
+    def all_members(self):
+        return list(self.admins.all()) + list(self.members.all())
 
     def __str__(self):
         return self.group.name

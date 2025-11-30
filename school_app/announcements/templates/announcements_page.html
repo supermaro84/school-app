@@ -20,22 +20,58 @@
                             <div class="col-lg-4 col-md-12 d-flex">
                                 <div class="flex-grow-1 d-flex flex-column">
                                     <div class="card bg-light flex-grow-1 d-flex flex-column">
-                                        <div class="card-header bg-info text-white">
-                                            <h5 class="mb-0">
-                                                <i class="fas fa-bullhorn me-2"></i>
+                                        <div class="accordion" id="accordionExample">
+                                    <div class="accordion-item">
+            <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+               <i class="fas fa-bullhorn me-2"></i>
                                                 All Announcements {{ user.get_full_name }}
-                                                <a href="{% url 'announcement_create' %}" class="btn btn-sm btn-light float-end">Add new</a>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body flex-grow-1 overflow-auto p-2">
+            </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="card-body flex-grow-1 overflow-auto p-2">
+                                            <div class="d-flex justify-content-end mb-2">
+                                                                                            <a href="{% url 'announcement_create' %}" class="btn btn-sm btn-light float-end">Add new</a>
+                                            </div>
+
                                             {% for ann in announcements_data %}
                                                 <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
-                                                    <h6 class="alert-heading">{{ ann.announcement.title }}{{ann.users_present}}</h6>
+                                                    <h6 class="alert-heading">{{ ann.announcement.title }}
+                                                        {% for user in ann.users_present %}<span class="badge rounded-pill text-bg-primary">{{ user.get_full_name }}</span>{% if not forloop.last %} {% endif %}{% endfor %}
+                                                    </h6>
                                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                                     <a href="{% url 'announcement_detail' ann.announcement.pk %}" class="btn btn-primary btn-sm">View</a>
                                                 </div>
                                             {% endfor %}                                            
                                         </div>
+            </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+               <i class="fas fa-bullhorn me-2 "></i>
+                                                Owned Announcements {{ user.get_full_name }}
+                                                <a href="{% url 'announcement_create' %}" class="btn btn-sm btn-light float-end">Add new</a>
+            </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="card-body flex-grow-1 overflow-auto p-2">
+                                            {% for ann in own_announcements %}
+                                               <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
+                                                    <h6 class="alert-heading">{{ ann.title }}
+                                                    </h6>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                    <a href="{% url 'announcement_detail' ann.pk %}" class="btn btn-primary btn-sm">View</a>
+                                                </div>
+                                            {% endfor %}                                             
+                                        </div>
+            </div>
+            </div>
+        </div>
+        </div>
                                     </div>
                                 </div>
                             </div>

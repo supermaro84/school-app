@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from landing.views import CustomLoginView, CustomLogoutView, SignUpView,summary
-from announcements.views import show_announcement_by_id,CreateAnnouncementView,EditAnnouncementView,AnnouncementDetailView,announcements_page
+from announcements.views import CreateAnnouncementView,EditAnnouncementView,AnnouncementDetailView,announcements_page
 from events.views import events,event_editing
 from groups import views as group_views
 from accounts.views import user_list ,user_detail

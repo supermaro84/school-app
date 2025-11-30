@@ -19,7 +19,7 @@ class Announcement(models.Model):
     users = models.ManyToManyField(User, related_name="announcements")
     @property
     def all_users(self):
-        return list(self.users.all()) + [profile for profile in self.groups.all()]
+        return set(list(self.users.all()) + [user for g in self.groups.all() for user in g.all_members])
       
 
 class AnnouncementComment(models.Model):
