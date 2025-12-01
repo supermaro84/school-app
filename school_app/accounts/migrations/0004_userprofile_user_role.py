@@ -5,15 +5,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('accounts', '0003_userroles'),
+        ("accounts", "0003_userroles"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userprofile',
-            name='user_role',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='accounts.userroles'),
+            model_name="userprofile",
+            name="user_role",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="accounts.userroles",
+            ),
         ),
     ]

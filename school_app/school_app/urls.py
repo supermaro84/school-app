@@ -18,54 +18,85 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from landing.views import CustomLoginView, CustomLogoutView, SignUpView,summary
-from announcements.views import CreateAnnouncementView,EditAnnouncementView,AnnouncementDetailView,announcements_page
-from events.views import events,event_editing
+from landing.views import CustomLoginView, CustomLogoutView, SignUpView, summary
+from announcements.views import (
+    CreateAnnouncementView,
+    EditAnnouncementView,
+    AnnouncementDetailView,
+    announcements_page,
+)
+from events.views import events, event_editing
 from groups import views as group_views
-from accounts.views import user_list ,user_detail
-from messages.views import messages_page,CreateMessageView,show_message_thread_by_id,ReplyMessageView
-from media.views import images_list,CreateImageView
+from accounts.views import user_list, user_detail
+from messages.views import (
+    messages_page,
+    CreateMessageView,
+    show_message_thread_by_id,
+    ReplyMessageView,
+)
+from media.views import images_list, CreateImageView
+
 urlpatterns = [
     path("", summary, name="landing"),
     path("admin/", admin.site.urls),
-    
     # Authentication URLs
     path("login/", CustomLoginView.as_view(), name="login"),
     path("logout/", CustomLogoutView.as_view(), name="logout"),
     path("signup/", SignUpView.as_view(), name="signup"),
-    
     # Password reset URLs
-    path("password_reset/", auth_views.PasswordResetView.as_view(), name="password_reset"),
-    path("password_reset/done/", auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
-    path("reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
-    path("reset/done/", auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
-
+    path(
+        "password_reset/", auth_views.PasswordResetView.as_view(), name="password_reset"
+    ),
+    path(
+        "password_reset/done/",
+        auth_views.PasswordResetDoneView.as_view(),
+        name="password_reset_done",
+    ),
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    path(
+        "reset/done/",
+        auth_views.PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
     # Announcement URLs
     path("announcements/", announcements_page, name="announcements_page"),
-    path("announcements/<int:pk>/", AnnouncementDetailView.as_view(), name="announcement_detail"),
-    path("announcements/create/", CreateAnnouncementView.as_view(), name="announcement_create"),
-    path("announcements/<int:pk>/edit/", EditAnnouncementView.as_view(), name="announcement_edit"),
-
+    path(
+        "announcements/<int:pk>/",
+        AnnouncementDetailView.as_view(),
+        name="announcement_detail",
+    ),
+    path(
+        "announcements/create/",
+        CreateAnnouncementView.as_view(),
+        name="announcement_create",
+    ),
+    path(
+        "announcements/<int:pk>/edit/",
+        EditAnnouncementView.as_view(),
+        name="announcement_edit",
+    ),
     # Events URLs
-    path('api/events/', events, name='events'),
-    path('calendar/', event_editing, name='calendar'),
-
-    #Groups URLs
-    path('groups/', group_views.group_list, name='groups'),
+    path("api/events/", events, name="events"),
+    path("calendar/", event_editing, name="calendar"),
+    # Groups URLs
+    path("groups/", group_views.group_list, name="groups"),
     path("groups/<int:pk>/", group_views.group_detail, name="group_detail"),
     path("groups/create/", group_views.CreateGroupView.as_view(), name="group_create"),
-    path("groups/<int:pk>/edit/", group_views.EditGroupView.as_view(), name="group_edit"),
-    
-    #Message URLs
+    path(
+        "groups/<int:pk>/edit/", group_views.EditGroupView.as_view(), name="group_edit"
+    ),
+    # Message URLs
     path("messages/", messages_page, name="messages_page"),
     path("messages/create/", CreateMessageView.as_view(), name="message_create"),
     path("messages/<int:pk>/", show_message_thread_by_id, name="message_thread_detail"),
     path("messages/<int:pk>/reply/", ReplyMessageView.as_view(), name="reply_message"),
-
-    #Media URLs
+    # Media URLs
     path("media/images/", CreateImageView.as_view(), name="images_list"),
-
-    #Users URLs
+    # Users URLs
     path("users/", user_list, name="users_list"),
     path("users/<int:pk>/", user_detail, name="user_detail"),
 ]

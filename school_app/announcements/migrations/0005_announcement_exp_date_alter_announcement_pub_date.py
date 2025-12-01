@@ -4,20 +4,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('announcements', '0004_announcement_title'),
+        ("announcements", "0004_announcement_title"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='announcement',
-            name='exp_date',
-            field=models.DateTimeField(null=True, verbose_name='expiration date'),
+            model_name="announcement",
+            name="exp_date",
+            field=models.DateTimeField(null=True, verbose_name="expiration date"),
         ),
         migrations.AlterField(
-            model_name='announcement',
-            name='pub_date',
-            field=models.DateTimeField(auto_now_add=True, verbose_name='date published'),
+            model_name="announcement",
+            name="pub_date",
+            field=models.DateTimeField(
+                auto_now_add=True, verbose_name="date published"
+            ),
         ),
     ]

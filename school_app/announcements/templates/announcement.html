@@ -13,7 +13,7 @@
 <div class="card-body flex-grow-1 overflow-auto p-2">                                            
     <h1><span class="badge badge-primary">New</span></h1>
 <div class="jumbotron">
-  <h1 class="display-4">{{ announcement.title }}  <a class="btn btn-primary btn-lg" href="{% url 'announcement_edit' announcement.pk %}" role="button">Edit</a>
+  <h1 class="display-4">{{ announcement.title }}  {% if is_author %}<a class="btn btn-primary btn-lg" href="{% url 'announcement_edit' announcement.pk %}" role="button">Edit</a>{% endif %}
  </h1>
   
   <p class="lead">{{ announcement.text }}</p>

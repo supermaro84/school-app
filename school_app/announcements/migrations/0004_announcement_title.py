@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('announcements', '0003_announcement_author'),
+        ("announcements", "0003_announcement_author"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='announcement',
-            name='title',
-            field=models.CharField(default='Title', max_length=200),
+            model_name="announcement",
+            name="title",
+            field=models.CharField(default="Title", max_length=200),
         ),
     ]

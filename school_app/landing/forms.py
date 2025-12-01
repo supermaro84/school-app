@@ -10,13 +10,21 @@ class CustomUserCreationForm(UserCreationForm):
     last_name = forms.CharField(max_length=30, required=True)
     birthdate = forms.DateField(
         required=False,
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-        help_text="Optional: Your date of birth"
+        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+        help_text="Optional: Your date of birth",
     )
 
     class Meta:
         model = User
-        fields = ("username", "first_name", "last_name", "email", "birthdate", "password1", "password2")
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "birthdate",
+            "password1",
+            "password2",
+        )
 
     def save(self, commit=True):
         user = super().save(commit=False)

@@ -1,47 +1,61 @@
 from django.db import models
-from django.contrib.auth.models import Group, User
+from accounts.models import UserProfile
+from groups.models import GroupProfile
+
 
 # Create your models here.
 class EventType(models.Model):
-    name = models.CharField(max_length=100,default="Misc")
+    name = models.CharField(max_length=100, default="Misc")
+
     def __str__(self):
         return self.name
 
+
 class EventStatus(models.Model):
-    name = models.CharField(max_length=100,default='Active')
+    name = models.CharField(max_length=100, default="Active")
+
     def __str__(self):
         return self.name
+
 
 class EventParticipation(models.Model):
     participant = models.ForeignKey(
-        User,
+        UserProfile,
         on_delete=models.CASCADE,
-        related_name='event_participant',
+        related_name="event_participant",
     )
     invited = models.BooleanField(default=True)
     accepted = models.BooleanField(default=True)
     decline_reason = models.CharField(max_length=100)
 
+
 class Event(models.Model):
     owner = models.ForeignKey(
-        User,
+        UserProfile,
         on_delete=models.CASCADE,
-        related_name='owned_events',
+        related_name="owned_events",
     )
-    event_name = models.CharField(max_length=200,default="Event")
+    event_name = models.CharField(max_length=200, default="Event")
     event_description = models.TextField(default="Event Description")
     event_type = models.ForeignKey(EventType, on_delete=models.CASCADE)
-    event_start_time = models.DateTimeField('event start time')
-    event_end_time = models.DateTimeField('event end time')
-    groups = models.ManyToManyField(Group, related_name="events")
-    users = models.ManyToManyField(User, related_name="events")
+    event_start_time = models.DateTimeField("event start time")
+    event_end_time = models.DateTimeField("event end time")
+    groups = models.ManyToManyField(GroupProfile, related_name="events")
+    users = models.ManyToManyField(UserProfile, related_name="events")
     status = models.ForeignKey(EventStatus, on_delete=models.CASCADE)
     participations = models.ManyToManyField(EventParticipation, related_name="events")
+
     @property
     def list_of_groups(self):
-        print(", ".join([group.name for group in self.groups.all()]))
-        return ", ".join([group.name for group in self.groups.all()])
+        print(", ".join([group.group.name for group in self.groups.all()]))
+        return ", ".join([group.group.name for group in self.groups.all()])
+    @property
+    def all_involved_users(self):
+        return set(
+            list(user.user for user in self.users.all())
+            + 
+            [user for g in self.groups.all() for user in g.all_members]
+        )
+
     def __str__(self):
         return self.event_name
-
-

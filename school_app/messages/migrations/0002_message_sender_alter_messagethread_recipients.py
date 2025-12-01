@@ -6,21 +6,26 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('custom_messages', '0001_initial'),
+        ("custom_messages", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='message',
-            name='sender',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="message",
+            name="sender",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='messagethread',
-            name='recipients',
-            field=models.ManyToManyField(related_name='massage_threads', to=settings.AUTH_USER_MODEL),
+            model_name="messagethread",
+            name="recipients",
+            field=models.ManyToManyField(
+                related_name="massage_threads", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

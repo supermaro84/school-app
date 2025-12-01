@@ -5,20 +5,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('announcements', '0005_announcement_exp_date_alter_announcement_pub_date'),
+        ("announcements", "0005_announcement_exp_date_alter_announcement_pub_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='announcementcomment',
-            name='announcement',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='announcements.announcement'),
+            model_name="announcementcomment",
+            name="announcement",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="comments",
+                to="announcements.announcement",
+            ),
         ),
         migrations.AlterField(
-            model_name='announcementcomment',
-            name='comment_date',
-            field=models.DateTimeField(auto_now_add=True, verbose_name='published comment date'),
+            model_name="announcementcomment",
+            name="comment_date",
+            field=models.DateTimeField(
+                auto_now_add=True, verbose_name="published comment date"
+            ),
         ),
     ]

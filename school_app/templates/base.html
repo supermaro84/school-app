@@ -66,6 +66,9 @@
                 <a class="navbar-brand" href="{% url 'users_list' %}">
                     <i class="fas fa-graduation-cap me-2"></i>Users
                 </a>
+                 <a class="navbar-brand" href="{% url 'images_list' %}">
+                    <i class="fas fa-graduation-cap me-2"></i>Media
+                </a>
                 {% endif %}
                 <div class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}

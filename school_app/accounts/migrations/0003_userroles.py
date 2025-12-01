@@ -4,17 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('accounts', '0002_userprofile_affiliated_users'),
+        ("accounts", "0002_userprofile_affiliated_users"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='UserRoles',
+            name="UserRoles",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user_role', models.CharField(default='Guardian', max_length=100)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("user_role", models.CharField(default="Guardian", max_length=100)),
             ],
         ),
     ]

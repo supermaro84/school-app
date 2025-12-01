@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('groups', '0001_initial'),
+        ("groups", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='groupprofile',
-            name='description',
+            model_name="groupprofile",
+            name="description",
             field=models.TextField(blank=True),
         ),
     ]

@@ -16,33 +16,32 @@ def summary(request):
     return render(request, "landing.html", {"affiliated_users": affiliated_users})
 
 
-
 class CustomLoginView(LoginView):
-    template_name = 'registration/login.html'
+    template_name = "registration/login.html"
     redirect_authenticated_user = True
-    
+
     def get_success_url(self):
-        return reverse_lazy('landing')
-    
+        return reverse_lazy("landing")
+
     def form_invalid(self, form):
-        messages.error(self.request, 'Invalid username or password.')
+        messages.error(self.request, "Invalid username or password.")
         return self.render_to_response(self.get_context_data(form=form))
 
 
 class CustomLogoutView(LogoutView):
-    next_page = reverse_lazy('landing')
-    http_method_names = ['get', 'post']  # Allow both GET and POST
+    next_page = reverse_lazy("landing")
+    http_method_names = ["get", "post"]  # Allow both GET and POST
 
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
-    template_name = 'registration/signup.html'
-    success_url = reverse_lazy('login')
-    
+    template_name = "registration/signup.html"
+    success_url = reverse_lazy("login")
+
     def form_valid(self, form):
         response = super().form_valid(form)
-        username = form.cleaned_data.get('username')
-        messages.success(self.request, f'Account created for {username}! You can now log in.')
+        username = form.cleaned_data.get("username")
+        messages.success(
+            self.request, f"Account created for {username}! You can now log in."
+        )
         return response
-
-

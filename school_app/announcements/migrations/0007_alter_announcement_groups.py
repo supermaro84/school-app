@@ -4,16 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('announcements', '0006_alter_announcementcomment_announcement_and_more'),
-        ('groups', '0002_groupprofile_description'),
+        ("announcements", "0006_alter_announcementcomment_announcement_and_more"),
+        ("groups", "0002_groupprofile_description"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='announcement',
-            name='groups',
-            field=models.ManyToManyField(related_name='announcements', to='groups.groupprofile'),
+            model_name="announcement",
+            name="groups",
+            field=models.ManyToManyField(
+                related_name="announcements", to="groups.groupprofile"
+            ),
         ),
     ]
