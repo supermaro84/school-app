@@ -23,7 +23,7 @@ class Announcement(models.Model):
     def all_users(self):
         return set(
             list(self.users.all())
-            + [user for g in self.groups.all() for user in g.all_members]
+            + [user for g in self.groups.all() for user in g.all_members]+ [self.author]
         )
 
 

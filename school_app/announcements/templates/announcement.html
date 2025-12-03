@@ -20,6 +20,7 @@
   <hr class="my-4">
   <p>Published by {{ announcement.author }} on {{ announcement.pub_date }}</p>
   <p>Expires on {{ announcement.exp_date }}</p>
+  <p>Recipients: {{ announcement.all_users|join:", " }}</p>
 </div>
 
 <h2>Comments</h2>

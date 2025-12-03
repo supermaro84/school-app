@@ -40,8 +40,7 @@ def get_announcements_for_user_and_affiliates(user):
     announcements = []
     for a in Announcement.objects.all():
         if bool(set(all_users) & set(a.all_users)):
-            if bool(a.author != user):
-                announcements.append(a)
+            announcements.append(a)
     return announcements
 
 
@@ -208,5 +207,6 @@ class AnnouncementDetailView(FormMixin, DetailView):
         # Assign the logged-in user and related announcement
         form.instance.author = self.request.user
         form.instance.announcement = self.get_object()
+        form.instance.users.append(self.request.user)        
         form.save()
         return super().form_valid(form)

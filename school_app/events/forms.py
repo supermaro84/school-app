@@ -55,16 +55,27 @@ class EventForm(forms.ModelForm):
                 attrs={"class": "form-control form-control-sm"}
             ),
         }
-
+    
     def save(self, commit=True):
         event = super().save(commit=False)
         hours = self.cleaned_data.get("duration_hours", 1)
         minutes = self.cleaned_data.get("duration_minutes", 0)
         duration = timedelta(hours=hours, minutes=minutes)
-
         event.event_end_time = event.event_start_time + duration
-        print("this is not printed!")
-        if commit:
-            event.save()
-            self.save_m2m()
+        #if commit:
+        #    event.save()
+        #    users = list(self.cleaned_data["users"])
+        #    print(f"USERS BEFORE: {users}")
+        #    if hasattr(self, 'owner') and self.owner:
+        #        users.append(self.owner)
+        #    print(f"USERS AFTER: {users}")
+        #    event.users.set(users)
+        #    users=self.cleaned_data["users"]
+        #    print(f"USERS BEFORE: {users}")
+        #    if hasattr(self, 'owner') and self.owner:
+        #        users.append(self.owner)
+        #    print(f"USERS AFTER: {users}")
+        #    event.users.set(users)
+        #    self.save_m2m()
         return event
+    

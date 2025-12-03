@@ -11,6 +11,10 @@ class MessageThread(models.Model):
         null=True,
     )
     recipients = models.ManyToManyField(User, related_name="massage_threads")
+    @property
+    def all_recipients(self):
+        return [self.author]+list(self.recipients.all())
+
 
 
 # Create your models here.
