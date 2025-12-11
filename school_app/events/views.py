@@ -43,14 +43,11 @@ def event_editing(request):
         print("POST received")
         form = EventForm(request.POST)
         if form.is_valid():
-            print("Form is valid")
             event = form.save(commit=False)
             event.owner = UserProfile.objects.get(user=request.user)
             event.save()        
             form.save_m2m()
-            print(event.users.all())
             event.users.add(event.owner)
-            print(event.users.all())
             # Redirect to same page to prevent re-submission
             return redirect("calendar")
         else:

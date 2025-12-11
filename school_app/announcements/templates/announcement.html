@@ -13,10 +13,10 @@
 <div class="card-body flex-grow-1 overflow-auto p-2">                                            
     <h1><span class="badge badge-primary">New</span></h1>
 <div class="jumbotron">
-  <h1 class="display-4">{{ announcement.title }}  {% if is_author %}<a class="btn btn-primary btn-lg" href="{% url 'announcement_edit' announcement.pk %}" role="button">Edit</a>{% endif %}
+  <h1 class="display-4">{{ announcement.title }}  {% if is_author %}<a class="btn btn-primary btn-lg" href="{% url 'announcement_edit' announcement.pk %}" role="button">Edit</a><form method="post" action="{% url 'announcement_edit' announcement.pk %}" style="display: inline;">{% csrf_token %}<button type="submit" name="delete" class="btn btn-danger btn-lg" onclick="return confirm('Are you sure you want to delete this announcement?');">Delete</button></form>{% endif %}
  </h1>
   
-  <p class="lead">{{ announcement.text }}</p>
+  <p class="lead">{{ announcement.text | safe }}</p>
   <hr class="my-4">
   <p>Published by {{ announcement.author }} on {{ announcement.pub_date }}</p>
   <p>Expires on {{ announcement.exp_date }}</p>

@@ -66,6 +66,19 @@ wheels = [
 ]
 
 [[package]]
+name = "django-ckeditor-5"
+version = "0.2.18"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "pillow" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/17/c0/2ddd9b6b5b62f37f24e470684b5cc5494de2504ce00d6e803f3005fdebbc/django_ckeditor_5-0.2.18.tar.gz", hash = "sha256:08270b1dd8d1b5c27c5a2023ec8f920e2ec0c7d2afa0113af765f0de53947d35", size = 2630309, upload-time = "2025-05-09T15:54:38.668Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/46/e1/c4a02822e86e733cbb5f4c8c2d881bd16cd0a251780e34aff16d2ea82008/django_ckeditor_5-0.2.18-py3-none-any.whl", hash = "sha256:155d14bed6688791026486c191dd82dbc2937d6a588079989d5bd89708de8463", size = 2726759, upload-time = "2025-05-09T15:54:35.281Z" },
+]
+
+[[package]]
 name = "django-storages"
 version = "1.14.6"
 source = { registry = "https://pypi.org/simple" }
@@ -197,6 +210,7 @@ dependencies = [
     { name = "boto3" },
     { name = "django" },
     { name = "django-bootstrap5" },
+    { name = "django-ckeditor-5" },
     { name = "django-storages" },
     { name = "dotenv" },
     { name = "pillow" },
@@ -208,6 +222,7 @@ requires-dist = [
     { name = "boto3", specifier = ">=1.40.75" },
     { name = "django", specifier = ">=5.2.7" },
     { name = "django-bootstrap5", specifier = ">=25.2" },
+    { name = "django-ckeditor-5", specifier = ">=0.2.18" },
     { name = "django-storages", specifier = ">=1.14.6" },
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "pillow", specifier = ">=12.0.0" },

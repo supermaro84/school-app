@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from django.contrib.auth import views as auth_views
 from landing.views import CustomLoginView, CustomLogoutView, SignUpView, summary
 from announcements.views import (
@@ -39,6 +39,8 @@ from media.views import images_list, CreateImageView
 urlpatterns = [
     path("", summary, name="landing"),
     path("admin/", admin.site.urls),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),  # Add this line
+
     # Authentication URLs
     path("login/", CustomLoginView.as_view(), name="login"),
     path("logout/", CustomLogoutView.as_view(), name="logout"),

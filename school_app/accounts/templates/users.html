@@ -1,84 +1,70 @@
 {% extends 'base.html' %}
-
-{% block title %}Users{% endblock %}
-
 {% block content %}
 
-<div class="container-fluid d-flex flex-column overflow-hidden" style="height: calc(100vh - var(--navbar-height, 80px));"> <!-- Adjust based on your navbar height -->
-    <div class="row flex-grow-1 g-0">
-        <div class="col-12">
-            <div class="card h-100 border-0">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="mb-0">
-                        <i class="fas fa-bullhorn me-2"></i>
-                        Users
-                    </h1>
-                </div>
-                <div class="card-body flex-grow-1 p-3 d-flex flex-column overflow-hidden">
-                    {% if user.is_authenticated %}
-                        <div class="row flex-grow-1 overflow-hidden g-3">
-                            <!-- Announcements card: 1/3 width (4 columns) -->
-                            <div class="col-lg-4 col-md-12 d-flex">
-    <div class="flex-grow-1 d-flex flex-column">
+<h1>User Directory</h1>
 
-        <!-- This height limit is REQUIRED -->
-        <div class="card bg-light flex-grow-1 d-flex flex-column" style="max-height: 80vh;">
+<!-- Filters -->
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="q" class="form-control" 
+               placeholder="Search users..." value="{{ search_term }}">
+    </div>
+    <div class="col-md-4">
+        <select name="role" class="form-select">
+            <option value="">Filter by role</option>
+            {% for role in all_roles %}
+            <option value="{{ role.user_role }}" 
+                    {% if selected_role == role.user_role %}selected{% endif %}>
+                {{ role.user_role }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+        <a href="{% url 'users_list' %}" class="btn btn-secondary">Clear</a>
+    </div>
+</form>
 
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">All Users </h5>
-            </div>
-
-            <div class="card-body flex-grow-1 overflow-auto p-2">
-                {% for user in users %}
-                    <div class="alert alert-primary mb-2">
-                        <h6>{{ user.username }} <a href="{% url 'user_detail' user.pk %}" class="btn btn-primary btn-sm">View</a></h6>
-                        
-                    </div>
-                {% endfor %}
-            </div>
-
-        </div>
-
+<!-- Results -->
+{% for user in users_page %}
+<div class="card mb-2">
+    <div class="card-body">
+        <a href="{% url 'user_detail' pk=user.pk %}">{{ user.get_full_name|default:user.username }}</a>
+        {% if user.profile.user_role %}
+        <span class="badge bg-info">{{ user.profile.user_role }}</span>
+        {% endif %}
     </div>
 </div>
+{% empty %}
+<p>No users match your criteria.</p>
+{% endfor %}
 
-                            <div class="col-lg-8 col-md-12 d-flex">
-                                <div class="flex-grow-1 d-flex flex-column">
-                                    <div class="card bg-light flex-grow-1 d-flex flex-column">
-                                        {% block users %}
-                                        <div class="card-header bg-success text-white">
-                                            <h5 class="mb-0">
-                                                <i class="fas fa-calendar-alt me-2"></i>
-                                                Users
-                                            </h5>
-                                        </div>
-                                        <div class="card-body flex-grow-1 overflow-auto p-2">                                            
-                                                
-                                        </div>
-                                        {% endblock %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                            
-                    {% else %}
-                        <div class="text-center flex-grow-1 d-flex align-items-center justify-content-center">
-                            <div>
-                                <p class="lead">Please log in to access all features of the school application.</p>
-                                <div class="d-grid gap-2 d-md-block">
-                                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
-                                        <i class="fas fa-sign-in-alt me-2"></i>Login
-                                    </a>
-                                    <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg">
-                                        <i class="fas fa-user-plus me-2"></i>Create Account
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Pagination controls -->
+{% if users_page.paginator.num_pages > 1 %}
+<nav>
+    <ul class="pagination">
+        {% if users_page.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ users_page.previous_page_number }}{% if search_term %}&q={{ search_term }}{% endif %}{% if selected_role %}&role={{ selected_role }}{% endif %}">
+                &laquo; Prev
+            </a>
+        </li>
+        {% endif %}
+        
+        <li class="page-item disabled">
+            <span class="page-link">{{ users_page.number }} / {{ users_page.paginator.num_pages }}</span>
+        </li>
+        
+        {% if users_page.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ users_page.next_page_number }}{% if search_term %}&q={{ search_term }}{% endif %}{% if selected_role %}&role={{ selected_role }}{% endif %}">
+                Next &raquo;
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
 {% endblock %}

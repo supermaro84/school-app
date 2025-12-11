@@ -12,11 +12,55 @@
 <div class="card-body flex-grow-1 overflow-auto p-2">                                            
     <form method="post">
        {% csrf_token %}
-        {{ form.as_p }}
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            {{ form.title }}
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Text</label>
+            {{ form.text }}
+        </div>
+         <div class="mb-3">
+            <label class="form-label">Groups</label>
+            <select name="groups" class="group-select" multiple>
+                {% for gp in form.groups.field.queryset %}
+                    <option value="{{ gp.pk }}"
+                        {% if form.instance.pk and gp in form.instance.groups.all %}selected{% endif %}>
+                        {{ gp.group.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Users</label>
+            <select class="users-select" name="users" multiple>
+                {% for user_profile in form.users.field.queryset %}
+                    <option value="{{ user_profile.pk }}"
+                        {% if user_profile in form.instance.users.all %}selected{% endif %}>
+                        {{ user_profile.username }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Expiration Date</label>
+            {{ form.exp_date }}
+        </div>
         <button type="submit" class="btn btn-primary btn-lg">Save</button>
     </form>
 </div>
      
     </form>
+        {{ form.media }}
+    <script>
+        new SlimSelect({
+            select: '.group-select'
+        });
+        new SlimSelect({
+            select: '.users-select'
+        });
+    </script>
 </div>
 {% endblock %}

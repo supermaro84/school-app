@@ -47,7 +47,6 @@ class Event(models.Model):
 
     @property
     def list_of_groups(self):
-        print(", ".join([group.group.name for group in self.groups.all()]))
         return ", ".join([group.group.name for group in self.groups.all()])
     @property
     def all_involved_users(self):

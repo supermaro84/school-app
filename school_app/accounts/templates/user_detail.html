@@ -1,20 +1,26 @@
-{% extends 'users.html' %}
+{% extends 'base.html' %}
 
-{% block title %}User detail{% endblock %}
+{% block title %}User Detail{% endblock %}
 
-{% block users %}
-<div class="card-header bg-success text-white">
-    <h5 class="mb-0">
-        <i class="fas fa-calendar-alt me-2"></i>
-        User Details
-    </h5>
+{% block content %}
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-user me-2"></i>
+            User Details
+        </h5>
+    </div>
+    <div class="card-body">                                            
+        <h2>{{ profile.user.username }}</h2>
+        <p class="lead">{{ profile.birthdate }}</p>
+        <hr class="my-4">
+        <p><strong>Phone:</strong> {{ profile.phone_number }}</p>
+        <p><strong>Role:</strong> {{ profile.user_role }}</p>
+        <p><strong>Affiliated users:</strong> {{ profile.affiliated_usernames }}</p>
+        
+        <a href="{% url 'users_list' %}" class="btn btn-secondary mt-3">
+            <i class="fas fa-arrow-left me-2"></i>Back to Users
+        </a>
+    </div>
 </div>
-<div class="card-body flex-grow-1 overflow-auto p-2">                                            
-    <h1><h2>{{ profile.user.username }}</h2>
-</h1>
-    <p class="lead">{{ profile.birthdate }}</p>
-    <hr class="my-4">
-    <p>phone number{{ profile.phone_number }}</p>
-    <p>role: {{ profile.user_role }}</p>
-    <p>affiliated users: {{ profile.affiliated_usernames }}</p>
 {% endblock %}

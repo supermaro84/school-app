@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from groups.models import GroupProfile
+from django_ckeditor_5.fields import CKEditor5Field
+
 
 
 # Create your models here.
@@ -15,7 +17,7 @@ class Announcement(models.Model):
     exp_date = models.DateTimeField("expiration date", null=True)
 
     title = models.CharField(max_length=200, default="Title")
-    text = models.CharField(max_length=1500)
+    text = CKEditor5Field('Text', config_name='extends')
     groups = models.ManyToManyField(GroupProfile, related_name="announcements")
     users = models.ManyToManyField(User, related_name="announcements")
 

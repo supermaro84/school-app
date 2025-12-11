@@ -49,7 +49,12 @@ class UserProfile(models.Model):
     @property
     def affiliated_usernames(self):
         return ", ".join([user.username for user in self.affiliated_users.all()])
-
+    @property
+    def user_and_affiliated_usernames(self):
+        usernames = [self.user.username] + [
+            user.username for user in self.affiliated_users.all()
+        ]
+        return [self.user] + list(self.affiliated_users.all())
     @property
     def group_profiles(self):
         """Get all GroupProfiles where user is admin or member"""

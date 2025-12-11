@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404,redirect
 from .models import Announcement, AnnouncementComment
 from .forms import AnnouncementForm, AnnouncementCommentForm
 from django.views.generic import CreateView, UpdateView
@@ -11,6 +11,8 @@ from django.urls import reverse
 from accounts.utils import get_affiliated_users, get_group_profiles_for_users_list
 from accounts.models import UserProfile
 from django.db.models import Q
+from django.contrib import messages
+
 
 
 def filter_announcements_for_user(user):
@@ -45,8 +47,6 @@ def get_announcements_for_user_and_affiliates(user):
 
 
 def get_own_announcements(user):
-    print(user)
-    print(Announcement.objects.filter(author=user).order_by("-pub_date"))
     return Announcement.objects.filter(author=user).order_by("-pub_date")
 
 
@@ -115,6 +115,17 @@ class EditAnnouncementView(UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+    
+    def post(self, request, *args, **kwargs):
+        # Handle delete action
+        if 'delete' in request.POST:
+            self.object = self.get_object()
+            announcement_id = self.object.pk
+            self.object.delete()
+            messages.success(request, 'Announcement deleted successfully.')
+            return redirect('announcements_page')
+        # Handle normal update
+        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -207,6 +218,6 @@ class AnnouncementDetailView(FormMixin, DetailView):
         # Assign the logged-in user and related announcement
         form.instance.author = self.request.user
         form.instance.announcement = self.get_object()
-        form.instance.users.append(self.request.user)        
+        #form.instance.users.append(self.request.user)        
         form.save()
         return super().form_valid(form)
