@@ -7,8 +7,10 @@ rm db.sqlite3
 uv run python manage.py migrate
 
 # Load fixtures in dependency order
+uv run python manage.py loaddata fixtures/userroles
 uv run python manage.py loaddata fixtures/users
 uv run python manage.py loaddata fixtures/userprofiles
+uv run python manage.py loaddata fixtures/users_affiliations
 uv run python manage.py loaddata fixtures/groups
 uv run python manage.py loaddata fixtures/groupprofiles
 uv run python manage.py loaddata fixtures/announcements

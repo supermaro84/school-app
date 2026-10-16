@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>User Directory</h1>
+
+<!-- Filters -->
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="q" class="form-control" 
+               placeholder="Search users..." value="{{ search_term }}">
+    </div>
+    <div class="col-md-4">
+        <select name="role" class="form-select">
+            <option value="">Filter by role</option>
+            {% for role in all_roles %}
+            <option value="{{ role.user_role }}" 
+                    {% if selected_role == role.user_role %}selected{% endif %}>
+                {{ role.user_role }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+        <a href="{% url 'users_list' %}" class="btn btn-secondary">Clear</a>
+    </div>
+</form>
+
+<!-- Results -->
+{% for user in users_page %}
+<div class="card mb-2">
+    <div class="card-body">
+        <a href="{% url 'user_detail' pk=user.pk %}">{{ user.get_full_name|default:user.username }}</a>
+        {% if user.profile.user_role %}
+        <span class="badge bg-info">{{ user.profile.user_role }}</span>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<p>No users match your criteria.</p>
+{% endfor %}
+
+<!-- Pagination controls -->
+{% if users_page.paginator.num_pages > 1 %}
+<nav>
+    <ul class="pagination">
+        {% if users_page.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ users_page.previous_page_number }}{% if search_term %}&q={{ search_term }}{% endif %}{% if selected_role %}&role={{ selected_role }}{% endif %}">
+                &laquo; Prev
+            </a>
+        </li>
+        {% endif %}
+        
+        <li class="page-item disabled">
+            <span class="page-link">{{ users_page.number }} / {{ users_page.paginator.num_pages }}</span>
+        </li>
+        
+        {% if users_page.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ users_page.next_page_number }}{% if search_term %}&q={{ search_term }}{% endif %}{% if selected_role %}&role={{ selected_role }}{% endif %}">
+                Next &raquo;
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

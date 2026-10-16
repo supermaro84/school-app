@@ -36,12 +36,13 @@ document.addEventListener('DOMContentLoaded', function() {
             event_panel.hidden = false
             document.getElementById('edit_panel').hidden = true;
             document.getElementById('event-panel-title').innerHTML = '<h5>' + info.event.title + '</h5>';
-            document.getElementById('event-panel-start').innerHTML = '<p>' + info.event.start.toLocaleString() + '</p>';
-            document.getElementById('event-panel-end').innerHTML = '<p>' + info.event.end.toLocaleString() + '</p>';
-            document.getElementById('event-panel-description').innerHTML = '<p>' + info.event.extendedProps.description + '</p>';
-            document.getElementById('event-panel-status').innerHTML = '<p>' + info.event.extendedProps.status + '</p>';
-            document.getElementById('event-panel-type').innerHTML = '<p>' + info.event.extendedProps.type + '</p>';
-            console.log("WORKING?")
+            document.getElementById('event-panel-start').innerHTML = '<p> Start: ' + info.event.start.toLocaleString() + '</p>';
+            document.getElementById('event-panel-end').innerHTML = '<p> End: ' + info.event.end.toLocaleString() + '</p>';
+            document.getElementById('event-panel-description').innerHTML = '<p>Description: ' + info.event.extendedProps.description + '</p>';
+            document.getElementById('event-panel-status').innerHTML = '<p>Status: ' + info.event.extendedProps.status + '</p>';
+            document.getElementById('event-panel-type').innerHTML = '<p>Type: ' + info.event.extendedProps.type + '</p>';
+            document.getElementById('event-panel-groups').innerHTML = '<p>Groups: ' + info.event.extendedProps.list_of_groups + '</p>';
+            document.getElementById('event-panel-users').innerHTML = '<p>Users: ' + info.event.extendedProps.users + '</p>';
         },
     });
     calendar.render();
@@ -84,6 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                             <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-description"></div>
                                             <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-status"></div>
                                             <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-type"></div>
+                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-groups"></div>
+                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-users"></div>
                                           
                                         </form>
                                     </div>

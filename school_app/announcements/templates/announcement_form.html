@@ -9,45 +9,60 @@
         Add a New Announcement
     </h5>
 </div>
-<div class="card-body flex-grow-1 overflow-auto p-2">                                            
+<div class="card-body flex-grow-1 overflow-auto p-2">
     <form method="post">
         {% csrf_token %}
-         <label>Title</label>
-        {{form.title}}
-        <label>Text</label>
-        {{form.text}}
-        <label>Groups</label>
-   <select name="groups" class="group-select" multiple>
-    {% for gp in form.groups.field.queryset %}
-        <option value="{{ gp.pk }}"
-            {% if form.instance.pk and gp in form.instance.groups.all %}selected{% endif %}
-        >
-            {{ gp.group.name }}
-        </option>{# Dont get this loop #}
-    {% endfor %}
-</select>
+        
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            {{ form.title }}
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Text</label>
+            {{ form.text }}
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Groups</label>
+            <select name="groups" class="group-select" multiple>
+                {% for gp in form.groups.field.queryset %}
+                    <option value="{{ gp.pk }}"
+                        {% if form.instance.pk and gp in form.instance.groups.all %}selected{% endif %}>
+                        {{ gp.group.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Users</label>
+            <select class="users-select" name="users" multiple>
+                {% for user in form.users %}
+                    <option value="{{ user.data.value }}">{{ user.data.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Expiration Date</label>
+            {{ form.exp_date }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+    </form>
+    
+    <!-- Load media files for CKEditor -->
+    {{ form.media }}
+    
+    <!-- Initialize SlimSelect -->
     <script>
         new SlimSelect({
             select: '.group-select'
         });
-    </script>
-        <label>Users</label>
-         <select class="users-select" name="users" multiple>
-        {% for user in form.users %}
-            <option value="{{ user.pk }}">{{ user }}</option>
-        {% endfor %}
-    </select>
-    <script>
         new SlimSelect({
             select: '.users-select'
         });
     </script>
-        <label>Expiration Date</label>
-        {{form.exp_date}}
-        <button type="submit" class="btn btn-primary btn-lg">Save</button>
-    </form>
-</div>
-     
-    </form>
 </div>
 {% endblock %}

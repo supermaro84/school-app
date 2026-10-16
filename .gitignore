@@ -9,3 +9,7 @@ wheels/
 
 # Virtual environments
 .venv
+.env
+
+# Generated user credentials (plain-text passwords)
+credentials*.csv

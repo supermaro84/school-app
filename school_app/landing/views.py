@@ -1,17 +1,35 @@
 from django.shortcuts import render
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .forms import CustomUserCreationForm
 from announcements.models import Announcement
+from accounts.models import UserProfile
+from accounts.utils import get_affiliated_users
+from events.models import Event
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
 
 
-# Create your views here.
-def index(request):
-    announcements = Announcement.objects.all()
-    announcements=(sorted(announcements, key=lambda x: x.pub_date, reverse=True))
-    return render(request, "landing.html", {"announcements": announcements})
+@login_required
+def summary(request):
+    affiliated_users = UserProfile.objects.get(user=request.user).user_and_affiliated_usernames
+    affiliated_profiles = UserProfile.objects.filter(user__in=affiliated_users)
+    today = timezone.now()
+    two_days_ahead = today + timedelta(days=2)
+    events = Event.objects.filter(
+        Q(users__in=affiliated_profiles) | 
+        Q(groups__admins__in=affiliated_users) | 
+        Q(groups__members__in=affiliated_users),event_start_time__gte=today,
+        event_start_time__lte=two_days_ahead
+    ).distinct()
+    user_event_counts = {}
+    for user in affiliated_users:
+        user.event_count = sum(1 for event in events if user in event.all_involved_users)
+    return render(request, "landing.html", {"affiliated_users": affiliated_users, "events": events})
 
 
 
@@ -30,6 +48,20 @@ class CustomLoginView(LoginView):
 class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('landing')
     http_method_names = ['get', 'post']  # Allow both GET and POST
+
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'registration/password_change_form.html'
+    success_url = reverse_lazy('landing')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        profile = self.request.user.profile
+        if profile.must_change_password:
+            profile.must_change_password = False
+            profile.save(update_fields=['must_change_password'])
+        messages.success(self.request, 'Your password has been changed.')
+        return response
 
 
 class SignUpView(CreateView):
