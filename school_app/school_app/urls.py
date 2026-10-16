@@ -18,7 +18,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth import views as auth_views
-from landing.views import CustomLoginView, CustomLogoutView, SignUpView, summary
+from landing.views import (
+    CustomLoginView,
+    CustomLogoutView,
+    CustomPasswordChangeView,
+    SignUpView,
+    summary,
+)
 from announcements.views import (
     CreateAnnouncementView,
     EditAnnouncementView,
@@ -45,6 +51,11 @@ urlpatterns = [
     path("login/", CustomLoginView.as_view(), name="login"),
     path("logout/", CustomLogoutView.as_view(), name="logout"),
     path("signup/", SignUpView.as_view(), name="signup"),
+    path(
+        "password_change/",
+        CustomPasswordChangeView.as_view(),
+        name="password_change",
+    ),
     # Password reset URLs
     path(
         "password_reset/", auth_views.PasswordResetView.as_view(), name="password_reset"

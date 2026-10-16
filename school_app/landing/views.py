@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -48,6 +48,20 @@ class CustomLoginView(LoginView):
 class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('landing')
     http_method_names = ['get', 'post']  # Allow both GET and POST
+
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'registration/password_change_form.html'
+    success_url = reverse_lazy('landing')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        profile = self.request.user.profile
+        if profile.must_change_password:
+            profile.must_change_password = False
+            profile.save(update_fields=['must_change_password'])
+        messages.success(self.request, 'Your password has been changed.')
+        return response
 
 
 class SignUpView(CreateView):

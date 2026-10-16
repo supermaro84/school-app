@@ -1,0 +1,5 @@
+username,first_name,last_name,email,role,birthdate,phone_number,affiliated_users
+anna_novak,Anna,Novak,anna.novak@school.edu,Teacher,1984-06-01,+1234567801,
+tom_novak,Tom,Novak,tom.novak@example.com,Guardian,1981-02-14,+1234567802,lucy_novak;max_novak
+lucy_novak,Lucy,Novak,lucy.novak@school.edu,Student,2016-09-03,,
+max_novak,Max,Novak,max.novak@school.edu,Student,2018-11-21,,

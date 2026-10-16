@@ -25,6 +25,8 @@ class UserProfile(models.Model):
     user_role = models.ForeignKey(
         UserRoles, on_delete=models.SET_NULL, null=True, blank=True
     )
+    # Set for imported users with a generated password; cleared after they change it
+    must_change_password = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
