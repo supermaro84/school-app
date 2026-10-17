@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .forms import CustomUserCreationForm
 from announcements.models import Announcement
-from announcements.views import get_announcements_data
 from accounts.models import UserProfile
 from accounts.utils import get_affiliated_users
 from events.models import Event
@@ -30,15 +29,9 @@ def summary(request):
     ).select_related("event_type", "status").distinct().order_by("event_start_time")
     # Who each event involves, worked out once per event rather than per tab.
     involved = [(event, event.all_involved_users) for event in events]
-    # Read status is the logged-in user's, as on the announcements page.
-    announcements_data = get_announcements_data(request.user)
     for user in affiliated_users:
         user.upcoming_events = [event for event, people in involved if user in people]
         user.event_count = len(user.upcoming_events)
-        user.announcement_items = [
-            item for item in announcements_data if user in item["users_present"]
-        ]
-        user.unread_count = sum(1 for item in user.announcement_items if not item["opened"])
     return render(request, "landing.html", {"affiliated_users": affiliated_users, "events": events})
 
 

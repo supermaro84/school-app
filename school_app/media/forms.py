@@ -1,6 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from school_app.forms import UserChoiceLabelsMixin
+
 from .models import Gallery
 from .utils import compress_image
 
@@ -89,7 +91,7 @@ def save_images(model, files, **owner):
         model.objects.create(file=f, **owner)
 
 
-class GalleryForm(forms.ModelForm):
+class GalleryForm(UserChoiceLabelsMixin, forms.ModelForm):
     class Meta:
         model = Gallery
         fields = ["name", "description", "users", "groups"]

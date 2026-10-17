@@ -1,4 +1,4 @@
-"""Deployment theme: colours, name, logo and mode, read from environment variables.
+"""Deployment theme: colours, fonts, name, logo and mode, read from environment variables.
 
 Each deployment sets these in its .env (see .env.example); nothing is stored in
 the database. ``load_theme()`` runs once at startup (settings.THEME) and the
@@ -25,6 +25,13 @@ NAVBAR_STYLES = ("dark", "light", "primary")
 MODES = ("light", "dark", "auto")
 
 HEX_COLOR = re.compile(r"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$")
+# Google Fonts family names: letters, digits and spaces ("Open Sans", "Source Sans 3")
+FONT_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 ]{0,59}$")
+SYSTEM_FONTS = (
+    'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", '
+    '"Liberation Sans", Arial, sans-serif'
+)
+GOOGLE_FONTS_CSS = "https://fonts.googleapis.com/css2"
 
 
 def normalize_hex(value):
@@ -75,6 +82,39 @@ def _color(env, name, default):
     return value
 
 
+def _font(env, name, default=""):
+    """A Google Fonts family name from ``name``, or ``default``; "system" means none."""
+    raw = (env.get(name) or "").strip()
+    if not raw:
+        return default
+    if raw.lower() == "system":
+        return ""
+    if not FONT_NAME.match(raw):
+        logger.warning("%s=%r is not a font name like 'Open Sans'; using the system font.", name, raw)
+        return ""
+    return " ".join(raw.split())
+
+
+def font_stack(font):
+    return f'"{font}", {SYSTEM_FONTS}' if font else SYSTEM_FONTS
+
+
+def google_fonts_urls(*fonts):
+    """Stylesheet URLs for the given fonts (duplicates and system fonts skipped).
+
+    The first URL asks for weights 400-700; Google rejects it if a family lacks
+    one of them, so a second URL with just each family's default weight makes
+    sure single-weight fonts still load (the browser then synthesises bold).
+    """
+    families = list(dict.fromkeys(f for f in fonts if f))
+    if not families:
+        return []
+    names = [f.replace(" ", "+") for f in families]
+    weighted = "&".join(f"family={n}:wght@400;500;600;700" for n in names)
+    plain = "&".join(f"family={n}" for n in names)
+    return [f"{GOOGLE_FONTS_CSS}?{weighted}&display=swap", f"{GOOGLE_FONTS_CSS}?{plain}&display=swap"]
+
+
 def load_theme(env):
     """Build the theme dict from a mapping of environment variables."""
     preset_name = _choice(env, "THEME_PRESET", tuple(PRESETS), "default")
@@ -82,6 +122,8 @@ def load_theme(env):
     primary = _color(env, "THEME_PRIMARY_COLOR", preset["primary"])
     secondary = _color(env, "THEME_SECONDARY_COLOR", preset["secondary"])
     navbar = _choice(env, "THEME_NAVBAR", NAVBAR_STYLES, "dark")
+    font = _font(env, "THEME_FONT")
+    heading_font = _font(env, "THEME_HEADING_FONT", default=font)
     return {
         "preset": preset_name,
         "app_name": (env.get("APP_NAME") or "").strip(),
@@ -98,6 +140,11 @@ def load_theme(env):
         "logo_url": (env.get("THEME_LOGO_URL") or "").strip(),
         "favicon_url": (env.get("THEME_FAVICON_URL") or "").strip(),
         "footer_text": (env.get("THEME_FOOTER_TEXT") or "").strip(),
+        "font": font,
+        "heading_font": heading_font,
+        "font_stack": font_stack(font),
+        "heading_font_stack": font_stack(heading_font),
+        "font_urls": google_fonts_urls(font, heading_font),
     }
 
 

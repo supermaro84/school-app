@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
@@ -61,3 +62,15 @@ class MessageDocument(AttachedDocument):
 
 
 post_delete.connect(delete_attached_file, sender=MessageDocument)
+
+
+class MessageThreadRead(models.Model):
+    """When a user last opened a thread; later messages from others are new."""
+
+    thread = models.ForeignKey(MessageThread, related_name="reads", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="message_thread_reads", on_delete=models.CASCADE)
+    read_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["thread", "user"], name="unique_thread_read")]
+

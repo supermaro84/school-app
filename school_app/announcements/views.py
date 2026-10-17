@@ -10,8 +10,10 @@ from django.views.generic.edit import FormMixin
 from django.urls import reverse
 from accounts.utils import get_affiliated_users, get_group_profiles_for_users_list
 from accounts.models import UserProfile
-from django.db.models import Q
+from django.db.models import Max, Q
+from school_app.sorting import get_sort
 from django.contrib import messages
+from django.utils import timezone
 from django.utils.translation import gettext as _
 from media.forms import save_images
 
@@ -78,13 +80,43 @@ def get_announcements_data(user):
     ]
 
 
+def sort_announcements_data(data, sort):
+    """Sort cards: "newest" (published), "activity" (published, edited or
+    commented, whichever is latest) or "title" (A-Z)."""
+    if sort == "title":
+        return sorted(data, key=lambda card: card["announcement"].title.casefold())
+    if sort == "activity":
+        ids = [card["announcement"].pk for card in data]
+        last_comment = dict(
+            AnnouncementComment.objects.filter(announcement__in=ids)
+            .values("announcement")
+            .annotate(latest=Max("comment_date"))
+            .values_list("announcement", "latest")
+        )
+
+        def activity(card):
+            ann = card["announcement"]
+            return max(d for d in (ann.pub_date, ann.updated_at, last_comment.get(ann.pk)) if d)
+
+        return sorted(data, key=activity, reverse=True)
+    return sorted(data, key=lambda card: card["announcement"].pub_date, reverse=True)
+
+
+def sorted_announcements_context(request):
+    sort = get_sort(request, "announcement_sort", default="newest")
+    return {
+        "announcements_data": sort_announcements_data(get_announcements_data(request.user), sort),
+        "sort": sort,
+    }
+
+
 def announcements_page(request):
     own_announcements = get_own_announcements(request.user)
     return render(
         request,
         "announcements_page.html",
         {
-            "announcements_data": get_announcements_data(request.user),
+            **sorted_announcements_context(request),
             "own_announcements": own_announcements,
         },
     )
@@ -106,7 +138,7 @@ class CreateAnnouncementView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["announcements"] = filter_announcements_for_user(self.request.user)
-        context["announcements_data"] = get_announcements_data(self.request.user)
+        context.update(sorted_announcements_context(self.request))
         context["own_announcements"] = get_own_announcements(self.request.user)
         return context
 
@@ -121,6 +153,7 @@ class EditAnnouncementView(UpdateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        form.instance.updated_at = timezone.now()
         response = super().form_valid(form)
         for attachment in [*form.cleaned_data["remove_images"], *form.cleaned_data["remove_documents"]]:
             attachment.delete()
@@ -142,7 +175,7 @@ class EditAnnouncementView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["announcements"] = filter_announcements_for_user(self.request.user)
-        context["announcements_data"] = get_announcements_data(self.request.user)
+        context.update(sorted_announcements_context(self.request))
         context["own_announcements"] = get_own_announcements(self.request.user)
 
         return context
@@ -171,6 +204,25 @@ class AnnouncementDetailView(FormMixin, DetailView):
         elif announcement.exp_date < datetime.datetime.now(tz=ZoneInfo(TIME_ZONE)):
             return "Expired"
 
+    def recipients_by_read_status(self, announcement):
+        """Recipients (without the author), split into who opened it and who not.
+
+        Each user gets ``read_at`` (when they first opened it) and ``role``.
+        """
+        reads = {r.user_id: r.read_at for r in announcement.reads.all()}
+        recipients = [user for user in announcement.all_users if user != announcement.author]
+        profiles = UserProfile.objects.filter(user__in=recipients).select_related("user_role")
+        roles = {p.user_id: p.user_role for p in profiles}
+        for user in recipients:
+            user.read_at = reads.get(user.pk)
+            user.role = roles.get(user.pk)
+        recipients.sort(key=lambda u: ((u.get_full_name() or u.username).lower()))
+        return {
+            "recipients": recipients,
+            "recipients_read": [u for u in recipients if u.read_at],
+            "recipients_unread": [u for u in recipients if not u.read_at],
+        }
+
     # Logic to retrieve and display announc
 
     def get_context_data(self, **kwargs):
@@ -185,8 +237,9 @@ class AnnouncementDetailView(FormMixin, DetailView):
             self.object.comments.all()
         )  # All comments related to this announcement
         context["status"] = self.get_status(self.object)
+        context.update(self.recipients_by_read_status(self.object))
         context["announcements"] = filter_announcements_for_user(self.request.user)
-        context["announcements_data"] = get_announcements_data(self.request.user)
+        context.update(sorted_announcements_context(self.request))
         context["own_announcements"] = get_own_announcements(self.request.user)
         if self.request.user == self.object.author:
             context["is_author"] = True
@@ -202,9 +255,12 @@ class AnnouncementDetailView(FormMixin, DetailView):
         # Recorded before rendering so the card in the list already shows it.
         self.object = self.get_object()
         if request.user.is_authenticated:
-            AnnouncementRead.objects.get_or_create(
+            read, created = AnnouncementRead.objects.get_or_create(
                 announcement=self.object, user=request.user
             )
+            if not created:
+                read.last_seen_at = timezone.now()
+                read.save(update_fields=["last_seen_at"])
         return self.render_to_response(self.get_context_data(object=self.object))
 
     def post(self, request, *args, **kwargs):

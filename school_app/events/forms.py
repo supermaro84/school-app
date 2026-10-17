@@ -3,7 +3,7 @@ from .models import Event
 from django.contrib.auth.models import Group, User
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
-from school_app.forms import GroupsOrUsersRequiredMixin
+from school_app.forms import GroupsOrUsersRequiredMixin, UserChoiceLabelsMixin
 from media.forms import MultipleDocumentField
 from .models import EventDocument
 
@@ -31,7 +31,7 @@ EVENT_WIDGETS = {
 }
 
 
-class EventForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
+class EventForm(UserChoiceLabelsMixin, GroupsOrUsersRequiredMixin, forms.ModelForm):
     event_start_time = datetime_field(_("Start time"))
     documents = MultipleDocumentField()
     # Separate hour and minute fields for better UX
@@ -86,7 +86,7 @@ class EventForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
         return event
 
 
-class EventEditForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
+class EventEditForm(UserChoiceLabelsMixin, GroupsOrUsersRequiredMixin, forms.ModelForm):
     """Edit every part of an existing event; start and end are set directly."""
 
     event_start_time = datetime_field(_("Start time"))

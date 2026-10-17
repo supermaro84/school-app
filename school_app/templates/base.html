@@ -21,7 +21,7 @@
 <body>
     <nav class="navbar navbar-expand-xxl sticky-top app-navbar app-navbar-{{ theme.navbar }}"{% if theme.navbar_dark %} data-bs-theme="dark"{% endif %}>
         <div class="container-fluid px-xxl-4">
-            <a class="navbar-brand" href="{% url 'landing' %}">
+            <a class="navbar-brand" href="{% url 'landing' %}" title="{{ app_name }}">
                 {% if theme.logo_url %}<img src="{{ theme.logo_url }}" alt="">{% else %}<i class="bi bi-mortarboard-fill"></i>{% endif %}
                 <span>{{ app_name }}</span>
             </a>
@@ -45,12 +45,12 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link{% if nav_section == 'announcements' %} active{% endif %}" href="{% url 'announcements_page' %}">
-                            <i class="bi bi-megaphone me-1"></i>{% translate "Announcements" %}
+                            <i class="bi bi-megaphone me-1"></i>{% translate "Announcements" %}{% if notify.announcements %}<span class="badge rounded-pill text-bg-danger nav-count">{{ notify.announcements }}<span class="visually-hidden"> {% translate "new" %}</span></span>{% endif %}{% if notify.announcement_comments %}<span class="badge rounded-pill text-bg-orange nav-count" title="{% translate "new comments" %}"><i class="bi bi-chat-fill me-1" aria-hidden="true"></i>{{ notify.announcement_comments }}<span class="visually-hidden"> {% translate "new comments" %}</span></span>{% endif %}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link{% if nav_section == 'messages' %} active{% endif %}" href="{% url 'messages_page' %}">
-                            <i class="bi bi-chat-dots me-1"></i>{% translate "Messages" %}
+                            <i class="bi bi-chat-dots me-1"></i>{% translate "Messages" %}{% if notify.messages %}<span class="badge rounded-pill text-bg-danger nav-count">{{ notify.messages }}<span class="visually-hidden"> {% translate "new" %}</span></span>{% endif %}{% if notify.message_replies %}<span class="badge rounded-pill text-bg-orange nav-count" title="{% translate "new replies" %}"><i class="bi bi-chat-fill me-1" aria-hidden="true"></i>{{ notify.message_replies }}<span class="visually-hidden"> {% translate "new replies" %}</span></span>{% endif %}
                         </a>
                     </li>
                     <li class="nav-item">
@@ -65,7 +65,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link{% if nav_section == 'media' %} active{% endif %}" href="{% url 'images_list' %}">
-                            <i class="bi bi-images me-1"></i>{% translate "Media" %}
+                            <i class="bi bi-images me-1"></i>{% translate "Media" %}{% if notify.galleries %}<span class="badge rounded-pill text-bg-danger nav-count">{{ notify.galleries }}<span class="visually-hidden"> {% translate "new" %}</span></span>{% endif %}
                         </a>
                     </li>
                     <li class="nav-item">
@@ -76,10 +76,10 @@
                 </ul>
                 {% endif %}
                 <div class="d-flex flex-wrap flex-xxl-nowrap align-items-center gap-2 ms-xxl-auto">
-                    {% if theme.navbar_dark %}{% include "includes/theme_toggle.html" with variant="light" %}{% else %}{% include "includes/theme_toggle.html" %}{% endif %}
+                    {% include "includes/theme_toggle.html" with nav=True %}
                     {% if user.is_authenticated %}
                     <div class="dropdown">
-                        <button class="btn btn-sm {% if theme.navbar_dark %}btn-outline-light{% else %}btn-outline-secondary{% endif %} dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-sm app-nav-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle me-1"></i><span class="user-name">{{ user.first_name|default:user.username }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -89,6 +89,11 @@
                                 {% include "includes/language_switcher.html" %}
                             </li>
                             <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'my_profile' %}">
+                                    <i class="bi bi-person-vcard me-2"></i>{% translate "My profile" %}
+                                </a>
+                            </li>
                             <li>
                                 <a class="dropdown-item" href="{% url 'password_change' %}">
                                     <i class="bi bi-key me-2"></i>{% translate "Change Password" %}
@@ -106,8 +111,8 @@
                         </ul>
                     </div>
                     {% else %}
-                    {% if theme.navbar_dark %}{% include "includes/language_switcher.html" with variant="light" %}{% else %}{% include "includes/language_switcher.html" %}{% endif %}
-                    <a class="btn btn-sm {% if theme.navbar_dark %}btn-outline-light{% else %}btn-outline-secondary{% endif %}" href="{% url 'login' %}">
+                    {% include "includes/language_switcher.html" with nav=True %}
+                    <a class="btn btn-sm app-nav-btn" href="{% url 'login' %}">
                         <i class="bi bi-box-arrow-in-right me-1"></i>{% translate "Login" %}
                     </a>
                     <a class="btn btn-sm btn-primary" href="{% url 'signup' %}">

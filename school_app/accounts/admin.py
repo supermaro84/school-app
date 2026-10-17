@@ -7,4 +7,4 @@ from .models import UserProfile
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ["user", "birthdate", "age", "phone_number"]
     list_filter = ["birthdate"]
-    search_fields = ["user__username", "user__first_name", "user__last_name"]
+    search_fields = ["user__username", "user__first_name", "user__last_name", "description"]

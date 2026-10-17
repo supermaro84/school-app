@@ -33,7 +33,7 @@ from announcements.views import (
 )
 from events.views import events, event_editing, event_edit, event_delete
 from groups import views as group_views
-from accounts.views import user_list, user_detail
+from accounts.views import user_list, user_detail, my_profile, profile_edit
 from messages.views import (
     messages_page,
     CreateMessageView,
@@ -133,4 +133,6 @@ urlpatterns = [
     # Users URLs
     path("users/", user_list, name="users_list"),
     path("users/<int:pk>/", user_detail, name="user_detail"),
+    path("profile/", my_profile, name="my_profile"),
+    path("profile/edit/", profile_edit, name="profile_edit"),
 ]

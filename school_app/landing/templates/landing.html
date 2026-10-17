@@ -27,8 +27,8 @@
             {% if affiliated.profile.user_role %}<span class="badge text-bg-info fs-6 align-middle">{{ affiliated.profile.user_role }}</span>{% endif %}
         </h2>
         <div class="row g-3">
-            <div class="col-12 col-lg-6">
-                <section class="app-card h-100">
+            <div class="col-12">
+                <section class="app-card">
                     <div class="card-header">
                         <h5><i class="bi bi-calendar-event me-2 text-primary"></i>{% translate "Upcoming Events" %}</h5>
                         <span class="badge text-bg-secondary">{{ affiliated.event_count }}</span>
@@ -52,41 +52,6 @@
                 </section>
             </div>
 
-            <div class="col-12 col-lg-6">
-                <section class="app-card h-100">
-                    <div class="card-header">
-                        <h5><i class="bi bi-megaphone me-2 text-primary"></i>{% translate "My announcements" %}</h5>
-                        <span>
-                            <span class="badge text-bg-secondary ms-2">{{ affiliated.announcement_items|length }}</span>
-                            {% if affiliated.unread_count %}<span class="badge text-bg-warning ms-1">{% translate "Unread" %}: {{ affiliated.unread_count }}</span>{% endif %}
-                        </span>
-                    </div>
-                    {% if affiliated.announcement_items %}
-                    <div class="list-group list-group-flush app-list">
-                        {% for item in affiliated.announcement_items %}
-                        <a href="{% url 'announcement_detail' item.announcement.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-2{% if not item.opened %} is-unread{% endif %}">
-                            <span class="item-title text-truncate">{{ item.announcement.title }}</span>
-                            <span class="text-nowrap">
-                                <small class="text-secondary me-1">{{ item.announcement.pub_date|date:"SHORT_DATE_FORMAT" }}</small>
-                                {% if not item.opened %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
-                            </span>
-                        </a>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    <div class="empty-state"><i class="bi bi-inbox"></i>{% translate "No announcements." %}</div>
-                    {% endif %}
-                </section>
-            </div>
-
-            <div class="col-12">
-                <section class="app-card">
-                    <div class="card-header">
-                        <h5><i class="bi bi-chat-dots me-2 text-primary"></i>{% translate "My messages" %}</h5>
-                    </div>
-                    <div class="card-body text-secondary">{% translate "Coming soon." %}</div>
-                </section>
-            </div>
         </div>
     </div>
     {% endfor %}

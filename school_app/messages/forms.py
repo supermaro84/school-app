@@ -2,9 +2,10 @@ from .models import Message, MessageThread
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from media.forms import MultipleDocumentField, MultipleImageField
+from school_app.forms import UserChoiceLabelsMixin
 
 
-class MessageThreadForm(forms.ModelForm):
+class MessageThreadForm(UserChoiceLabelsMixin, forms.ModelForm):
     text = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 4}), label=_("Message text"), required=True
     )

@@ -162,3 +162,51 @@ class GroupEditPermissionTests(TestCase):
         self.client.force_login(self.admin)
         self.assertContains(self.client.get(reverse("groups")), self.url)
         self.assertContains(self.client.get(reverse("group_detail", args=[self.group.pk])), self.url)
+
+
+class GroupCreateFromGroupsTests(TestCase):
+    def setUp(self):
+        self.creator = User.objects.create_user(username="creator", password="pw")
+        self.ann, self.bob, self.cid, self.dan = (
+            User.objects.create_user(username=n) for n in ("ann", "bob", "cid", "dan")
+        )
+        self.class_a = GroupProfile.objects.create(group=Group.objects.create(name="Class 1A"))
+        self.class_a.admins.add(self.ann)
+        self.class_a.members.add(self.bob, self.cid)
+        self.class_b = GroupProfile.objects.create(group=Group.objects.create(name="Class 2B"))
+        self.class_b.members.add(self.cid, self.dan)  # cid is in both groups
+        self.client.force_login(self.creator)
+
+    def create(self, **data):
+        return self.client.post(reverse("group_create"), {"name": "Choir", "description": "", **data})
+
+    def test_members_from_groups_without_duplicates_and_admins_first(self):
+        response = self.create(
+            source_groups=[self.class_a.pk, self.class_b.pk],
+            admins=[self.dan.pk],  # dan is also in Class 2B
+            members=[self.bob.pk],  # bob is also in Class 1A
+        )
+        group = GroupProfile.objects.get(group__name="Choir")
+        self.assertRedirects(response, reverse("group_detail", args=[group.pk]), fetch_redirect_response=False)
+        self.assertEqual(set(group.admins.all()), {self.creator, self.dan})
+        self.assertEqual(set(group.members.all()), {self.ann, self.bob, self.cid})
+        self.assertEqual(group.members.count(), 3)  # no duplicates
+
+    def test_creator_is_always_admin_not_member(self):
+        self.create(members=[self.creator.pk, self.bob.pk])
+        group = GroupProfile.objects.get(group__name="Choir")
+        self.assertEqual(list(group.admins.all()), [self.creator])
+        self.assertEqual(list(group.members.all()), [self.bob])
+
+    def test_duplicate_name_is_a_form_error(self):
+        response = self.create(name="class 1a")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "A group with this name already exists.")
+
+    def test_editing_keeps_admins_out_of_members(self):
+        self.class_a.admins.add(self.creator)
+        self.client.post(reverse("group_edit", args=[self.class_a.pk]), {
+            "description": "", "admins": [self.creator.pk, self.bob.pk], "members": [self.bob.pk, self.cid.pk],
+        })
+        self.assertEqual(set(self.class_a.admins.all()), {self.creator, self.bob})
+        self.assertEqual(list(self.class_a.members.all()), [self.cid])

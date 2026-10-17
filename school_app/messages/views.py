@@ -1,6 +1,9 @@
 from typing import Any
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import MessageThread, Message, MessageDocument, MessageImage
+from .models import MessageThread, Message, MessageDocument, MessageImage, MessageThreadRead
+from django.utils import timezone
+from django.db.models import Max, Min
+from school_app.sorting import get_sort
 import datetime
 from zoneinfo import ZoneInfo
 from school_app.settings import TIME_ZONE
@@ -18,24 +21,49 @@ def get_users_messages(user):
     user_threads = [message for message in message_threads if user in message.all_recipients]
     return user_threads
 
+def sorted_threads(request):
+    """The user's threads in the remembered order: "activity" (latest message,
+    default), "newest" (first message) or "title" (A-Z)."""
+    sort = get_sort(request, "message_sort", default="activity")
+    threads = get_users_messages(request.user)
+    if sort == "title":
+        return sorted(threads, key=lambda t: t.title.casefold()), sort
+    dates = {
+        row["thread"]: row
+        for row in Message.objects.filter(thread__in=threads)
+        .values("thread")
+        .annotate(first=Min("pub_date"), last=Max("pub_date"))
+    }
+    field = "last" if sort == "activity" else "first"
+    # Threads without messages go last
+    return sorted(threads, key=lambda t: (t.pk in dates, dates.get(t.pk, {}).get(field)), reverse=True), sort
+
+
+def mark_thread_read(thread, user):
+    # Messages from others after this moment count as new (navbar counter)
+    MessageThreadRead.objects.update_or_create(thread=thread, user=user, defaults={"read_at": timezone.now()})
+
+
 def messages_page(request):
-    message_threads = get_users_messages(request.user)
-    return render(request, "messages_page.html", {"message_threads": message_threads})
+    message_threads, sort = sorted_threads(request)
+    return render(request, "messages_page.html", {"message_threads": message_threads, "sort": sort})
 
 
 # Create your views here.
 def show_message_thread_by_id(request, pk):
     message_thread = MessageThread.objects.get(pk=pk)
     messages = message_thread.messages.prefetch_related("images", "documents").order_by("pub_date")
-    message_threads = get_users_messages(request.user)
+    message_threads, sort = sorted_threads(request)
     # Logic to retrieve and display announcements
     if request.user not in message_thread.all_recipients:
         return redirect('messages_page')
+    mark_thread_read(message_thread, request.user)
     return render(
         request,
         "message_thread_detail.html",
         {
             "message_threads": message_threads,
+            "sort": sort,
             "thread": message_thread,
             "thread_messages": messages,
         },
@@ -59,7 +87,7 @@ class CreateMessageView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["message_threads"] = get_users_messages(self.request.user)
+        context["message_threads"], context["sort"] = sorted_threads(self.request)
         return context
 
     def get_success_url(self):
@@ -91,9 +119,10 @@ class ReplyMessageView(CreateView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["message_threads"] = get_users_messages(self.request.user)
+        context["message_threads"], context["sort"] = sorted_threads(self.request)
         # The reply form sits under the thread, so show its messages too.
         thread = get_object_or_404(MessageThread, pk=self.kwargs["pk"])
+        mark_thread_read(thread, self.request.user)
         context["thread"] = thread
         context["thread_messages"] = thread.messages.prefetch_related("images", "documents").order_by("pub_date")
         return context

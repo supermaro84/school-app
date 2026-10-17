@@ -54,6 +54,7 @@ Every `User` has exactly one `UserProfile` (`user.profile`). A `post_save` signa
 | `user` | OneToOne → `User` | `related_name="profile"`, cascade delete |
 | `birthdate` | Date, optional | Used to compute `age` |
 | `phone_number` | Char(15), optional | |
+| `description` | Text, optional | Free text about the person; shown on the user detail page, edited in Django admin or set by the user import |
 | `user_role` | FK → `UserRoles`, optional | `SET_NULL` on role deletion |
 | `affiliated_users` | M2M → `User` | Users whose content this user can see (see 1.4) |
 
@@ -123,8 +124,9 @@ Note that sophia_martinez lists lisa_thompson, but lisa_thompson does not list s
 | Stage | How | Details |
 |---|---|---|
 | **Sign-up** | `/signup/` (`landing.views.SignUpView`, `CustomUserCreationForm`) | Open to anyone. Collects username, first/last name, email, optional birthdate, password ×2. Creates `User` + `UserProfile` with birthdate. **No role and no affiliations are set.** Redirects to login with a success message. |
-| **Bulk import** | `manage.py import_users <file.csv>` | Columns: `username, first_name, last_name, email, role`, optional `birthdate, phone_number, affiliated_users` (`;`-separated usernames). Each new user gets the temporary password `<username>-<6 random chars>` and `must_change_password=True`. Passwords go to `credentials.csv` (git-ignored). Optional `is_staff` / `is_superuser` columns (`yes`/`no`) grant Django admin access. Existing usernames are skipped; any other error rolls back the whole import. Example: `fixtures/users_import_example.csv`. |
-| **Bulk group import** | `manage.py import_groups <file.csv>` | Columns: `name, description, admins, members` (`;`-separated usernames, which must already exist). Creates the `Group` and its `GroupProfile`. Existing group names are skipped; an unknown username rolls back the whole import. |
+| **Bulk import** | `manage.py import_users <file.csv>` | Columns: `username, first_name, last_name, email, role`, optional `birthdate, phone_number, description, affiliated_users` (`;`-separated usernames). Each new user gets the temporary password `<username>-<6 random chars>` and `must_change_password=True`. Passwords go to `credentials.csv` (git-ignored). Optional `is_staff` / `is_superuser` columns (`yes`/`no`) grant Django admin access. Existing usernames are skipped, unless `--update-descriptions` is given: then only their description is updated from the file. Any other error rolls back the whole import. Example: `fixtures/users_import_example.csv`. |
+| **Bulk group import** | `manage.py import_groups <file.csv>` | Columns: `name, description, admins, members` (`;`-separated usernames, which must already exist). Creates the `Group` and its `GroupProfile`. Existing group names are skipped; an unknown username rolls back the whole import. People listed as admins are not added as members too. |
+| **Group creation in the app** | `/groups/create/` | Name (unique, case-insensitive), description, admins, members, and optionally "Add members from groups": everyone in the chosen groups joins as a member, without duplicates. The creator is always an admin. Admins take precedence: anyone who is an admin is removed from the plain members (also when editing). |
 | **Event types & statuses import** | `manage.py import_event_options <file.csv>` | Columns: `kind` (`type` or `status`), `name`. Fills the `EventType` / `EventStatus` lookup tables that events require. Existing names (case-insensitive) are skipped; an unknown kind or empty name rolls back the whole import. |
 | **Bulk event import** | `manage.py import_events <file.csv>` | Columns: `owner` (username), `name, description`, `type`, `status` (existing names), `start, end` (`YYYY-MM-DD HH:MM`, local time), `groups` (`;`-separated group names), `users` (`;`-separated usernames), optional `repeat_weekly_until` (`YYYY-MM-DD`) to create one event per week up to that date. The owner is always added to the users. An event with the same owner, name and start is skipped; any invalid value rolls back the whole import. Used for one-off events and for the weekly lesson timetable. |
 | **Bulk announcement import** | `manage.py import_announcements <file.csv>` | Columns: `author, title, text` (HTML allowed), `groups` (`;`-separated group names), `users` (`;`-separated usernames), optional `pub_date` / `exp_date` (`YYYY-MM-DD [HH:MM]`). No groups and no users makes the announcement public. An announcement with the same author and title is skipped; an unknown author, group, user or bad date rolls back the whole import. |
@@ -134,6 +136,7 @@ Note that sophia_martinez lists lisa_thompson, but lisa_thompson does not list s
 | **Login** | `/login/` (`CustomLoginView`) | Username + password. Already logged-in users are redirected. Redirects to `/` on success. |
 | **Logout** | `/logout/` (`CustomLogoutView`) | GET or POST; redirects to `/`. |
 | **Password reset** | `/password_reset/` → `/reset/<uidb64>/<token>/` | Standard Django flow; in development, emails go to the console backend. |
+| **Profile self-service** | `/profile/` → own user page, `/profile/edit/` (`accounts.views.profile_edit`) | Each user edits their own first/last name, email (required), birthdate (not in the future), phone (digits, spaces, `+ - ( )`) and description. Username, role and affiliations can't be changed here. Linked from the user menu (My profile) and an Edit profile button on the user's own page. |
 | **Role & affiliation assignment** | Django admin / fixtures | No in-app UI. The `UserProfile` admin (`accounts/admin.py`) shows user, birthdate, age, phone. |
 | **Deactivation / deletion** | Django admin | Deleting a `User` cascades to its profile, authored announcements, comments, messages, owned events and media. |
 
@@ -142,7 +145,7 @@ Note that sophia_martinez lists lisa_thompson, but lisa_thompson does not list s
 | URL | View | Access | Description |
 |---|---|---|---|
 | `/users/` | `accounts.views.user_list` | Logged in | Paginated list of all users (5 per page), sorted by username. Search `q` matches username, first/last name, email. Filter `role` by role name. Shows a role badge. |
-| `/users/<pk>/` | `accounts.views.user_detail` | Logged in | Username, birthdate, phone, role, affiliated usernames. |
+| `/users/<pk>/` | `accounts.views.user_detail` | Logged in | Full name, username, role, email, phone, affiliated usernames and description (the birthdate is not shown). Edit profile button on the user's own page. |
 
 ### 1.7 Seed data
 
@@ -170,7 +173,7 @@ Note that sophia_martinez lists lisa_thompson, but lisa_thompson does not list s
 4. **Affiliation direction.** Should affiliations be symmetric, or strictly guardian → student? Should students see their guardians' content at all?
 5. **Privacy.** Any logged-in user can list all users and see their birthdate, phone and affiliations. Visibility should probably depend on role and relationship.
 6. **Missing login checks.** Several views lack `@login_required` / `LoginRequiredMixin`, including announcements, calendar and messages. Anonymous access to these currently fails or leaks data. (Group create/edit, media and the events API are protected; group editing is limited to the group's admins.)
-7. **No profile self-service.** Users can't edit their own profile (phone, birthdate) or change their password in the app.
+7. **Profile self-service.** Users can edit their own name, email, birthdate, phone and description and change their password (see 1.5); roles and affiliations are admin-only.
 8. **Two kinds of "admin".** `Admin` role, `is_staff`/`is_superuser` and group admin (`GroupProfile.admins`) are separate concepts; the spec should define how they relate.
 9. **Small code issues:** `user_detail` raises a 500 for an unknown `pk` (use `get_object_or_404`); a comment in `user_list` says "15 per page" but the code uses 5; `user_and_affiliated_usernames` returns users, not usernames.
 
@@ -198,6 +201,8 @@ Each deployment sets its look with environment variables (in `.env`; documented 
 | `APP_NAME` | Any text, shown as entered | "School App", translated |
 | `THEME_PRESET` | `default`, `ocean`, `forest`, `sunset`, `plum` | `default` |
 | `THEME_PRIMARY_COLOR`, `THEME_SECONDARY_COLOR` | Hex colour (`#2563eb`, `#26e`) | From the preset |
+| `THEME_FONT` | `system` or a Google Fonts family name (`Inter`, `Open Sans`, ...) | `system` |
+| `THEME_HEADING_FONT` | As `THEME_FONT`; used for headings and the app name | Same as `THEME_FONT` |
 | `THEME_NAVBAR` | `dark`, `light`, `primary` | `dark` |
 | `THEME_MODE` | `auto` (follows the device), `light`, `dark`: the default before a viewer picks one with the theme toggle | `auto` |
 | `THEME_LOGO_URL`, `THEME_FAVICON_URL` | URL | Graduation cap icon |
@@ -206,6 +211,7 @@ Each deployment sets its look with environment variables (in `.env`; documented 
 - Colours are mapped onto Bootstrap's CSS variables (buttons, links, badges, form focus, pagination, calendar), so the whole app follows the primary colour.
 - Text on primary-coloured surfaces turns dark or white depending on the colour's contrast.
 - Invalid values fall back to the default and log a warning at startup.
+- Fonts other than `system` are loaded from Google Fonts (weights 400-700, with a fallback request for single-weight families) and backed by the system font stack; visitors' browsers then contact Google's servers.
 - The theme toggle (sun / moon / half-circle button in the navbar and on the auth pages) lets each viewer choose Light, Dark or System. The choice is saved in the browser (`localStorage`, key `theme-mode`) and applied before the page is drawn; System follows the device and changes with it.
 - For production, run `manage.py collectstatic` (files go to `STATIC_ROOT`, `school_app/staticfiles/`, git-ignored) and serve them from the web server.
 

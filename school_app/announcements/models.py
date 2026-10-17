@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from groups.models import GroupProfile
@@ -18,6 +19,8 @@ class Announcement(models.Model):
     )
     pub_date = models.DateTimeField("date published", auto_now_add=True)
     exp_date = models.DateTimeField("expiration date", null=True)
+    # Set when the author edits the announcement (used for "recent activity")
+    updated_at = models.DateTimeField("last edited", null=True, blank=True)
 
     title = models.CharField(max_length=200, default="Title")
     text = CKEditor5Field('Text', config_name='extends')
@@ -43,6 +46,8 @@ class AnnouncementRead(models.Model):
         User, related_name="announcement_reads", on_delete=models.CASCADE
     )
     read_at = models.DateTimeField("first opened", auto_now_add=True)
+    # Updated on every visit; comments from others after it are new
+    last_seen_at = models.DateTimeField("last opened", default=timezone.now)
 
     class Meta:
         constraints = [

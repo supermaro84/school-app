@@ -1,5 +1,6 @@
 from django.core.files.storage import FileSystemStorage
 from django.db import models
+from django.utils import timezone
 from django.db.models.signals import post_delete
 from django.utils.translation import gettext_lazy as _
 import os
@@ -108,12 +109,21 @@ class Gallery(models.Model):
         "groups.GroupProfile", related_name="galleries", blank=True, verbose_name=_("groups")
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    # Changed on every save, including when images are added (see gallery_detail)
+    updated_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ["-created_at"]
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.updated_at = timezone.now()
+        update_fields = kwargs.get("update_fields")
+        if update_fields is not None and "updated_at" not in update_fields:
+            kwargs["update_fields"] = [*update_fields, "updated_at"]
+        super().save(*args, **kwargs)
 
     @property
     def recipients(self):
@@ -143,3 +153,15 @@ class GalleryImage(AttachedImage):
 
 
 post_delete.connect(delete_attached_file, sender=GalleryImage)
+
+
+class GalleryView(models.Model):
+    """When a user last opened a gallery; a later update makes it new again."""
+
+    gallery = models.ForeignKey(Gallery, related_name="views", on_delete=models.CASCADE)
+    user = models.ForeignKey("auth.User", related_name="gallery_views", on_delete=models.CASCADE)
+    viewed_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["gallery", "user"], name="unique_gallery_view")]
+

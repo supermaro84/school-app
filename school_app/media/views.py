@@ -22,7 +22,7 @@ from messages.models import MessageDocument, MessageImage
 from messages.views import get_users_messages
 
 from .forms import GalleryForm, GalleryUploadForm, save_images
-from .models import DocumentFile, Gallery, GalleryImage, ImageFile
+from .models import DocumentFile, Gallery, GalleryImage, GalleryView, ImageFile
 
 
 def owned_images(source, user):
@@ -135,6 +135,7 @@ def gallery_edit(request, pk):
     form = GalleryForm(request.POST or None, instance=gallery)
     if request.method == "POST" and form.is_valid():
         form.save()
+        GalleryView.objects.update_or_create(gallery=gallery, user=request.user, defaults={"viewed_at": timezone.now()})
         messages.success(request, _("Gallery saved."))
         return redirect("gallery_detail", pk=gallery.pk)
     return render(request, "gallery_form.html", {"form": form, "gallery": gallery})
@@ -160,8 +161,12 @@ def gallery_detail(request, pk):
         form = GalleryUploadForm(request.POST, request.FILES)
         if form.is_valid():
             save_images(GalleryImage, form.cleaned_data["images"], gallery=gallery, uploaded_by=request.user)
+            gallery.save(update_fields=["updated_at"])  # new images make it new for the others
+            GalleryView.objects.update_or_create(gallery=gallery, user=request.user, defaults={"viewed_at": timezone.now()})
             messages.success(request, _("Images added."))
             return redirect("gallery_detail", pk=gallery.pk)
+    # Seen now; later updates make it new again (navbar counter)
+    GalleryView.objects.update_or_create(gallery=gallery, user=request.user, defaults={"viewed_at": timezone.now()})
     images = gallery.images.select_related("uploaded_by")
     for image in images:
         image.can_delete = request.user in (image.uploaded_by, gallery.owner)
