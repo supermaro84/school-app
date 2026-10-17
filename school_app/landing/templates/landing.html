@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}Welcome{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Welcome" %}{% endblock %}
 {% block content %}
     
 <div class="row">
@@ -8,7 +9,7 @@
             <div class="card-header bg-primary text-white">
                 <h1 class="mb-0">
                     <i class="fas fa-home me-2"></i>
-                    Welcome {% if user.is_authenticated %}{{ user.first_name|default:user.username }}{% else %}Guest{% endif %}!
+                    {% if user.is_authenticated %}{% blocktranslate with name=user.first_name|default:user.username %}Welcome {{ name }}!{% endblocktranslate %}{% else %}{% translate "Welcome Guest!" %}{% endif %}
                 </h1>
             </div>
             {% if user.is_authenticated %}
@@ -24,21 +25,26 @@
                 <div class="tab-content mt-3">
                     {% for affiliated in affiliated_users %}
                     <div id="user-{{ affiliated.id }}" class="tab-pane fade{% if forloop.first %} show active{% endif %}" role="tabpanel">
-                        <h3>{{ affiliated.get_full_name|default:affiliated.username }}</h3>
-                        <p>{{ affiliated.username }}'s information here...</p>                      
-<div class="accordion" id="accordionExample">
+                        <h3>
+                            {{ affiliated.get_full_name|default:affiliated.username }}
+                            {% if affiliated.profile.user_role %}<span class="badge bg-info fs-6 align-middle">{{ affiliated.profile.user_role }}</span>{% endif %}
+                        </h3>
+                        <p>{% blocktranslate with name=affiliated.username %}{{ name }}'s information here...{% endblocktranslate %}</p>                      
+<div class="accordion" id="accordion-{{ affiliated.id }}">
   <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Upcoming Events  <span class="badge text-bg-secondary">{{ affiliated.event_count  }}
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{ affiliated.id }}" aria-expanded="true" aria-controls="collapseOne-{{ affiliated.id }}">
+        {% translate "Upcoming Events" %}  <span class="badge text-bg-secondary">{{ affiliated.event_count  }}
      </span>
       </button>
     </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+    <div id="collapseOne-{{ affiliated.id }}" class="accordion-collapse collapse show" data-bs-parent="#accordion-{{ affiliated.id }}">
       {% for event in events %}
       {% if affiliated in event.all_involved_users %}
         <div class="accordion-body">
   <strong>{{ event.event_name }} </strong> - {{ event.event_start_time }}
+  <span class="badge text-bg-info ms-2" title="{% translate 'Type' %}">{{ event.event_type }}</span>
+  <span class="badge text-bg-light border" title="{% translate 'Status' %}">{{ event.status }}</span>
 </a>
         </div>
         {% endif %}
@@ -47,25 +53,41 @@
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        My announcements
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo-{{ affiliated.id }}" aria-expanded="false" aria-controls="collapseTwo-{{ affiliated.id }}">
+        {% translate "My announcements" %}
+        <span class="badge text-bg-secondary ms-2">{{ affiliated.announcement_items|length }}</span>
+        {% if affiliated.unread_count %}<span class="badge text-bg-warning ms-1">{% translate "Unread" %}: {{ affiliated.unread_count }}</span>{% endif %}
       </button>
     </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+    <div id="collapseTwo-{{ affiliated.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-{{ affiliated.id }}">
       <div class="accordion-body">
-        <strong>This is the second item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+        {% if affiliated.announcement_items %}
+        <ul class="list-group">
+          {% for item in affiliated.announcement_items %}
+          <li class="list-group-item d-flex justify-content-between align-items-center{% if not item.opened %} fw-semibold{% endif %}">
+            <a href="{% url 'announcement_detail' item.announcement.pk %}" class="text-decoration-none">{{ item.announcement.title }}</a>
+            <span>
+              <small class="text-muted me-2">{{ item.announcement.pub_date|date:"SHORT_DATE_FORMAT" }}</small>
+              {% if not item.opened %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
+            </span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-muted mb-0">{% translate "No announcements." %}</p>
+        {% endif %}
       </div>
     </div>
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        My messages
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree-{{ affiliated.id }}" aria-expanded="false" aria-controls="collapseThree-{{ affiliated.id }}">
+        {% translate "My messages" %}
       </button>
     </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+    <div id="collapseThree-{{ affiliated.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-{{ affiliated.id }}">
       <div class="accordion-body">
-        <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+        <p class="text-muted mb-0">{% translate "Coming soon." %}</p>
       </div>
     </div>
   </div>
@@ -79,13 +101,13 @@
             {% else %}
             <div class="card-body">
                 <div class="text-center">
-                    <p class="lead">Please log in to access all features of the school application.</p>
+                    <p class="lead">{% translate "Please log in to access all features of the school application." %}</p>
                     <div class="d-grid gap-2 d-md-block">
                         <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
-                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                            <i class="fas fa-sign-in-alt me-2"></i>{% translate "Login" %}
                         </a>
                         <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-user-plus me-2"></i>Create Account
+                            <i class="fas fa-user-plus me-2"></i>{% translate "Create Account" %}
                         </a>
                     </div>
                 </div>

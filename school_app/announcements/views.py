@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404,redirect
-from .models import Announcement, AnnouncementComment
+from .models import Announcement, AnnouncementComment, AnnouncementImage, AnnouncementRead
 from .forms import AnnouncementForm, AnnouncementCommentForm
 from django.views.generic import CreateView, UpdateView
 import datetime
@@ -12,6 +12,8 @@ from accounts.utils import get_affiliated_users, get_group_profiles_for_users_li
 from accounts.models import UserProfile
 from django.db.models import Q
 from django.contrib import messages
+from django.utils.translation import gettext as _
+from media.forms import save_images
 
 
 
@@ -54,23 +56,35 @@ def filter_users_not_present_in_list(user_list, users_to_preserve):
     return [user for user in user_list if user in users_to_preserve]
 
 
-def announcements_page(request):
-    announcements = get_announcements_for_user_and_affiliates(request.user)
-    announcements_data = [
+def get_announcements_data(user):
+    """Cards for the announcement list, with whether ``user`` has opened each one.
+
+    The author's own announcements count as opened.
+    """
+    announcements = get_announcements_for_user_and_affiliates(user)
+    people = user_and_affiliates(user)
+    read_ids = set(
+        AnnouncementRead.objects.filter(user=user).values_list(
+            "announcement_id", flat=True
+        )
+    )
+    return [
         {
             "announcement": ann,
-            "users_present": filter_users_not_present_in_list(
-                ann.all_users, user_and_affiliates(request.user)
-            ),
+            "users_present": filter_users_not_present_in_list(ann.all_users, people),
+            "opened": ann.author_id == user.id or ann.pk in read_ids,
         }
         for ann in announcements
     ]
+
+
+def announcements_page(request):
     own_announcements = get_own_announcements(request.user)
     return render(
         request,
         "announcements_page.html",
         {
-            "announcements_data": announcements_data,
+            "announcements_data": get_announcements_data(request.user),
             "own_announcements": own_announcements,
         },
     )
@@ -84,22 +98,14 @@ class CreateAnnouncementView(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        save_images(AnnouncementImage, form.cleaned_data["images"], announcement=self.object)
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["announcements"] = filter_announcements_for_user(self.request.user)
-        announcements = get_announcements_for_user_and_affiliates(self.request.user)
-        announcements_data = [
-            {
-                "announcement": ann,
-                "users_present": filter_users_not_present_in_list(
-                    ann.all_users, user_and_affiliates(self.request.user)
-                ),
-            }
-            for ann in announcements
-        ]
-        context["announcements_data"] = announcements_data
+        context["announcements_data"] = get_announcements_data(self.request.user)
         context["own_announcements"] = get_own_announcements(self.request.user)
         return context
 
@@ -114,7 +120,11 @@ class EditAnnouncementView(UpdateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        for image in form.cleaned_data["remove_images"]:
+            image.delete()
+        save_images(AnnouncementImage, form.cleaned_data["images"], announcement=self.object)
+        return response
     
     def post(self, request, *args, **kwargs):
         # Handle delete action
@@ -122,7 +132,7 @@ class EditAnnouncementView(UpdateView):
             self.object = self.get_object()
             announcement_id = self.object.pk
             self.object.delete()
-            messages.success(request, 'Announcement deleted successfully.')
+            messages.success(request, _('Announcement deleted successfully.'))
             return redirect('announcements_page')
         # Handle normal update
         return super().post(request, *args, **kwargs)
@@ -130,17 +140,7 @@ class EditAnnouncementView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["announcements"] = filter_announcements_for_user(self.request.user)
-        announcements = get_announcements_for_user_and_affiliates(self.request.user)
-        announcements_data = [
-            {
-                "announcement": ann,
-                "users_present": filter_users_not_present_in_list(
-                    ann.all_users, user_and_affiliates(self.request.user)
-                ),
-            }
-            for ann in announcements
-        ]
-        context["announcements_data"] = announcements_data
+        context["announcements_data"] = get_announcements_data(self.request.user)
         context["own_announcements"] = get_own_announcements(self.request.user)
 
         return context
@@ -184,17 +184,7 @@ class AnnouncementDetailView(FormMixin, DetailView):
         )  # All comments related to this announcement
         context["status"] = self.get_status(self.object)
         context["announcements"] = filter_announcements_for_user(self.request.user)
-        announcements = get_announcements_for_user_and_affiliates(self.request.user)
-        announcements_data = [
-            {
-                "announcement": ann,
-                "users_present": filter_users_not_present_in_list(
-                    ann.all_users, user_and_affiliates(self.request.user)
-                ),
-            }
-            for ann in announcements
-        ]
-        context["announcements_data"] = announcements_data
+        context["announcements_data"] = get_announcements_data(self.request.user)
         context["own_announcements"] = get_own_announcements(self.request.user)
         if self.request.user == self.object.author:
             context["is_author"] = True
@@ -204,6 +194,16 @@ class AnnouncementDetailView(FormMixin, DetailView):
 
     def get_success_url(self):
         return reverse("announcement_detail", kwargs={"pk": self.object.pk})
+
+    def get(self, request, *args, **kwargs):
+        # Opening the detail page marks the announcement as read for this user.
+        # Recorded before rendering so the card in the list already shows it.
+        self.object = self.get_object()
+        if request.user.is_authenticated:
+            AnnouncementRead.objects.get_or_create(
+                announcement=self.object, user=request.user
+            )
+        return self.render_to_response(self.get_context_data(object=self.object))
 
     def post(self, request, *args, **kwargs):
         # self.get_object() loads the announcement

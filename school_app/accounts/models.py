@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db.models import Q
+from django.utils.translation import gettext
 
 
 class UserRoles(models.Model):
@@ -29,7 +30,7 @@ class UserProfile(models.Model):
     must_change_password = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user.username}'s Profile"
+        return gettext("%(username)s's Profile") % {"username": self.user.username}
 
     @property
     def age(self):

@@ -1,0 +1,12 @@
+kind,name
+type,Academic
+type,Social
+type,Administrative
+type,Holiday
+type,Meeting
+type,Misc
+type,Lesson
+status,Active
+status,Tentative
+status,Cancelled
+status,Completed

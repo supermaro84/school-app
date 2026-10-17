@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,7 +30,7 @@ SECRET_KEY = "django-insecure-q=v6i6^z_3(zrya@s=_%wg-)i*q=-ty=7b0w%h*ae()n0ro%(j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.0.117", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["192.168.0.117", "192.168.0.252", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -124,7 +126,16 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
+
+# Languages users can switch between (navbar switcher, django.views.i18n.set_language)
+LANGUAGES = [
+    ("en", _("English")),
+    ("pl", _("Polish")),
+    ("nb", _("Norwegian")),
+]
+
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 TIME_ZONE = "Europe/Oslo"
 

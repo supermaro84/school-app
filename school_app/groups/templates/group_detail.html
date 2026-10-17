@@ -1,12 +1,13 @@
 {% extends 'groups.html' %}
+{% load i18n %}
 
-{% block title %}Group detail{% endblock %}
+{% block title %}{% translate "Group detail" %}{% endblock %}
 
 {% block group %}
 <div class="card-header bg-success text-white">
     <h5 class="mb-0">
         <i class="fas fa-calendar-alt me-2"></i>
-        Group Details
+        {% translate "Group Details" %}
     </h5>
 </div>
 <div class="card-body flex-grow-1 overflow-auto p-2">                                            
@@ -14,31 +15,31 @@
 </h1>
     <p class="lead">{{ group_profile.description }}</p>
     <hr class="my-4">
-    <p>Created on {{ group_profile.group.created_at }}</p>
-    <h3>Admins</h3>
+    <p>{% blocktranslate with date=group_profile.group.created_at %}Created on {{ date }}{% endblocktranslate %}</p>
+    <h3>{% translate "Admins" %}</h3>
 <ul>
   {% for admin in group_profile.admins.all %}
     <li>{{ admin.username }}</li>
   {% empty %}
-    <li>No admins yet.</li>
+    <li>{% translate "No admins yet." %}</li>
   {% endfor %}
 </ul>
 
-<h3>Members</h3>
+<h3>{% translate "Members" %}</h3>
 <ul>
   {% for member in group_profile.members.all %}
     <li>{{ member.username }}</li>
   {% empty %}
-    <li>No members yet.</li>
+    <li>{% translate "No members yet." %}</li>
   {% endfor %}
 </ul>
 
 {% if is_admin %}
-  <p><strong>You are an admin.</strong></p>
+  <p><strong>{% translate "You are an admin." %}</strong></p>
 {% elif is_member %}
-  <p>You are a member of this group.</p>
+  <p>{% translate "You are a member of this group." %}</p>
 {% else %}
-  <p>You are not part of this group.</p>
+  <p>{% translate "You are not part of this group." %}</p>
 {% endif %}
 </div>
 {% endblock %}

@@ -1,0 +1,46 @@
+owner,name,description,type,status,start,end,groups,users,repeat_weekly_until
+t_kovac,Slovak 1A,"Reading, writing and storytelling. Teacher: Mr. Kovac.",Lesson,Active,2026-10-19 08:00,2026-10-19 08:45,Class 1A,,2026-11-13
+t_kovac,Mathematics 1A,"Numbers, shapes and problem solving. Teacher: Mr. Kovac.",Lesson,Active,2026-10-19 08:55,2026-10-19 09:40,Class 1A,,2026-11-13
+t_novak,English 1A,"Songs, games and first conversations in English. Teacher: Mrs. Novak.",Lesson,Active,2026-10-19 10:05,2026-10-19 10:50,Class 1A,,2026-11-13
+t_kovac,Mathematics 1A,"Numbers, shapes and problem solving. Teacher: Mr. Kovac.",Lesson,Active,2026-10-20 08:00,2026-10-20 08:45,Class 1A,,2026-11-13
+t_kovac,Slovak 1A,"Reading, writing and storytelling. Teacher: Mr. Kovac.",Lesson,Active,2026-10-20 08:55,2026-10-20 09:40,Class 1A,,2026-11-13
+t_kovac,PE 1A,Physical education. Bring sports clothes and trainers. Teacher: Mr. Kovac.,Lesson,Active,2026-10-20 10:05,2026-10-20 10:50,Class 1A,,2026-11-13
+t_kovac,Slovak 1A,"Reading, writing and storytelling. Teacher: Mr. Kovac.",Lesson,Active,2026-10-21 08:00,2026-10-21 08:45,Class 1A,,2026-11-13
+t_novak,English 1A,"Songs, games and first conversations in English. Teacher: Mrs. Novak.",Lesson,Active,2026-10-21 08:55,2026-10-21 09:40,Class 1A,,2026-11-13
+t_kovac,Art 1A,"Drawing, painting and crafts. Teacher: Mr. Kovac.",Lesson,Active,2026-10-21 10:05,2026-10-21 10:50,Class 1A,,2026-11-13
+t_kovac,Mathematics 1A,"Numbers, shapes and problem solving. Teacher: Mr. Kovac.",Lesson,Active,2026-10-22 08:00,2026-10-22 08:45,Class 1A,,2026-11-13
+t_kovac,Slovak 1A,"Reading, writing and storytelling. Teacher: Mr. Kovac.",Lesson,Active,2026-10-22 08:55,2026-10-22 09:40,Class 1A,,2026-11-13
+t_novak,Music 1A,"Singing, rhythm and instruments. Teacher: Mrs. Novak.",Lesson,Active,2026-10-22 10:05,2026-10-22 10:50,Class 1A,,2026-11-13
+t_kovac,Mathematics 1A,"Numbers, shapes and problem solving. Teacher: Mr. Kovac.",Lesson,Active,2026-10-23 08:00,2026-10-23 08:45,Class 1A,,2026-11-13
+t_novak,English 1A,"Songs, games and first conversations in English. Teacher: Mrs. Novak.",Lesson,Active,2026-10-23 08:55,2026-10-23 09:40,Class 1A,,2026-11-13
+t_kovac,PE 1A,Physical education. Bring sports clothes and trainers. Teacher: Mr. Kovac.,Lesson,Active,2026-10-23 10:05,2026-10-23 10:50,Class 1A,,2026-11-13
+t_horvath,Mathematics 2B,"Numbers, shapes and problem solving. Teacher: Mr. Horvath.",Lesson,Active,2026-10-19 08:00,2026-10-19 08:45,Class 2B,,2026-11-13
+t_novak,English 2B,"Songs, games and first conversations in English. Teacher: Mrs. Novak.",Lesson,Active,2026-10-19 08:55,2026-10-19 09:40,Class 2B,,2026-11-13
+t_horvath,Slovak 2B,"Reading, writing and storytelling. Teacher: Mr. Horvath.",Lesson,Active,2026-10-19 10:05,2026-10-19 10:50,Class 2B,,2026-11-13
+t_novak,English 2B,"Songs, games and first conversations in English. Teacher: Mrs. Novak.",Lesson,Active,2026-10-20 08:00,2026-10-20 08:45,Class 2B,,2026-11-13
+t_horvath,Mathematics 2B,"Numbers, shapes and problem solving. Teacher: Mr. Horvath.",Lesson,Active,2026-10-20 08:55,2026-10-20 09:40,Class 2B,,2026-11-13
+t_horvath,Science 2B,Experiments and discovering nature. Teacher: Mr. Horvath.,Lesson,Active,2026-10-20 10:05,2026-10-20 10:50,Class 2B,,2026-11-13
+t_horvath,Mathematics 2B,"Numbers, shapes and problem solving. Teacher: Mr. Horvath.",Lesson,Active,2026-10-21 08:00,2026-10-21 08:45,Class 2B,,2026-11-13
+t_horvath,Slovak 2B,"Reading, writing and storytelling. Teacher: Mr. Horvath.",Lesson,Active,2026-10-21 08:55,2026-10-21 09:40,Class 2B,,2026-11-13
+t_novak,Music 2B,"Singing, rhythm and instruments. Teacher: Mrs. Novak.",Lesson,Active,2026-10-21 10:05,2026-10-21 10:50,Class 2B,,2026-11-13
+t_horvath,Slovak 2B,"Reading, writing and storytelling. Teacher: Mr. Horvath.",Lesson,Active,2026-10-22 08:00,2026-10-22 08:45,Class 2B,,2026-11-13
+t_novak,English 2B,"Songs, games and first conversations in English. Teacher: Mrs. Novak.",Lesson,Active,2026-10-22 08:55,2026-10-22 09:40,Class 2B,,2026-11-13
+t_horvath,PE 2B,Physical education. Bring sports clothes and trainers. Teacher: Mr. Horvath.,Lesson,Active,2026-10-22 10:05,2026-10-22 10:50,Class 2B,,2026-11-13
+t_horvath,Science 2B,Experiments and discovering nature. Teacher: Mr. Horvath.,Lesson,Active,2026-10-23 08:00,2026-10-23 08:45,Class 2B,,2026-11-13
+t_horvath,Mathematics 2B,"Numbers, shapes and problem solving. Teacher: Mr. Horvath.",Lesson,Active,2026-10-23 08:55,2026-10-23 09:40,Class 2B,,2026-11-13
+t_novak,Music 2B,"Singing, rhythm and instruments. Teacher: Mrs. Novak.",Lesson,Active,2026-10-23 10:05,2026-10-23 10:50,Class 2B,,2026-11-13
+t_balaz,Mathematics 3C,"Numbers, shapes and problem solving. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-19 08:00,2026-10-19 08:45,Class 3C,,2026-11-13
+t_balaz,Slovak 3C,"Reading, writing and storytelling. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-19 08:55,2026-10-19 09:40,Class 3C,,2026-11-13
+t_balaz,Science 3C,Experiments and discovering nature. Teacher: Mrs. Balaz.,Lesson,Active,2026-10-19 10:05,2026-10-19 10:50,Class 3C,,2026-11-13
+t_balaz,Slovak 3C,"Reading, writing and storytelling. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-20 08:00,2026-10-20 08:45,Class 3C,,2026-11-13
+t_balaz,Mathematics 3C,"Numbers, shapes and problem solving. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-20 08:55,2026-10-20 09:40,Class 3C,,2026-11-13
+t_balaz,History 3C,Stories from the past of our town and country. Teacher: Mrs. Balaz.,Lesson,Active,2026-10-20 10:05,2026-10-20 10:50,Class 3C,,2026-11-13
+t_balaz,Mathematics 3C,"Numbers, shapes and problem solving. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-21 08:00,2026-10-21 08:45,Class 3C,,2026-11-13
+t_balaz,Science 3C,Experiments and discovering nature. Teacher: Mrs. Balaz.,Lesson,Active,2026-10-21 08:55,2026-10-21 09:40,Class 3C,,2026-11-13
+t_balaz,Art 3C,"Drawing, painting and crafts. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-21 10:05,2026-10-21 10:50,Class 3C,,2026-11-13
+t_balaz,Slovak 3C,"Reading, writing and storytelling. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-22 08:00,2026-10-22 08:45,Class 3C,,2026-11-13
+t_balaz,History 3C,Stories from the past of our town and country. Teacher: Mrs. Balaz.,Lesson,Active,2026-10-22 08:55,2026-10-22 09:40,Class 3C,,2026-11-13
+t_balaz,Mathematics 3C,"Numbers, shapes and problem solving. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-22 10:05,2026-10-22 10:50,Class 3C,,2026-11-13
+t_balaz,Mathematics 3C,"Numbers, shapes and problem solving. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-23 08:00,2026-10-23 08:45,Class 3C,,2026-11-13
+t_balaz,Slovak 3C,"Reading, writing and storytelling. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-23 08:55,2026-10-23 09:40,Class 3C,,2026-11-13
+t_balaz,Art 3C,"Drawing, painting and crafts. Teacher: Mrs. Balaz.",Lesson,Active,2026-10-23 10:05,2026-10-23 10:50,Class 3C,,2026-11-13

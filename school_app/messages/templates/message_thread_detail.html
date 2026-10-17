@@ -1,12 +1,13 @@
 {% extends 'messages_page.html' %}
+{% load i18n %}
 
-{% block title %}{% endblock %}
+{% block title %}{% translate "Read Message" %}{% endblock %}
 
 {% block message %}
 <div class="card-header bg-success text-white">
 <h5 class="mb-0">
     <i class="fas fa-calendar-alt me-2"></i>
-    Read Message
+    {% translate "Read Message" %}
 </h5>
 </div>
 <div class="card-body flex-grow-1 overflow-auto p-2">                                            
@@ -21,14 +22,15 @@
   {% for message in messages %}
   <div class="card bg-light h-100">
  <div class="message">
-      <p>{{ message.sender }} said: {{ message.text }}</p>
-      <p><small>Published on {{ message.pub_date }}</small></p>
+      <p>{% blocktranslate with sender=message.sender text=message.text %}{{ sender }} said: {{ text }}{% endblocktranslate %}</p>
+      {% include "includes/image_gallery.html" with images=message.images.all %}
+      <p><small>{% blocktranslate with date=message.pub_date %}Published on {{ date }}{% endblocktranslate %}</small></p>
     </div>
   </div>
    
   {% endfor %}
   {% block reply %}
-      <a href="{% url 'reply_message' thread.pk %}" class="btn btn-outline-primary btn-lg">Reply</a>
+      <a href="{% url 'reply_message' thread.pk %}" class="btn btn-outline-primary btn-lg">{% translate "Reply" %}</a>
 
 
   {% endblock %}

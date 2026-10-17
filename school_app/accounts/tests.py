@@ -88,3 +88,26 @@ class ForcePasswordChangeTests(TestCase):
         self.user.profile.refresh_from_db()
         self.assertFalse(self.user.profile.must_change_password)
         self.assertEqual(self.client.get(reverse("users_list")).status_code, 200)
+
+
+class ImportRolesTests(TestCase):
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+
+    def run_import(self, rows):
+        csv_file = self.tmp / "roles.csv"
+        csv_file.write_text("name\n" + rows)
+        call_command("import_roles", str(csv_file), stdout=open("/dev/null", "w"))
+
+    def test_creates_roles_and_skips_existing(self):
+        UserRoles.objects.create(user_role="Nauczyciel")
+        self.run_import("nauczyciel\nUczeń\nOpiekun\n")
+        self.assertEqual(
+            sorted(UserRoles.objects.values_list("user_role", flat=True)),
+            ["Nauczyciel", "Opiekun", "Uczeń"],
+        )
+
+    def test_empty_name_rolls_back_whole_import(self):
+        with self.assertRaises(CommandError):
+            self.run_import("Nauczyciel\n   \n")
+        self.assertFalse(UserRoles.objects.exists())

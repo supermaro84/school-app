@@ -1,28 +1,29 @@
 {% extends 'announcements_page.html' %}
+{% load i18n %}
 
-{% block title %}Announcement detail{% endblock %}
+{% block title %}{% translate "Edit Announcement" %}{% endblock %}
 
 {% block announcement %}
 <div class="card-header bg-success text-white">
     <h5 class="mb-0">
         <i class="fas fa-calendar-alt me-2"></i>
-        Edit Announcement
+        {% translate "Edit Announcement" %}
     </h5>
 </div>
 <div class="card-body flex-grow-1 overflow-auto p-2">                                            
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
        {% csrf_token %}
         <div class="mb-3">
-            <label class="form-label">Title</label>
+            <label class="form-label">{% translate "Title" %}</label>
             {{ form.title }}
         </div>
         
         <div class="mb-3">
-            <label class="form-label">Text</label>
+            <label class="form-label">{% translate "Text" %}</label>
             {{ form.text }}
         </div>
          <div class="mb-3">
-            <label class="form-label">Groups</label>
+            <label class="form-label">{% translate "Groups" %}</label>
             <select name="groups" class="group-select" multiple>
                 {% for gp in form.groups.field.queryset %}
                     <option value="{{ gp.pk }}"
@@ -33,7 +34,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label class="form-label">Users</label>
+            <label class="form-label">{% translate "Users" %}</label>
             <select class="users-select" name="users" multiple>
                 {% for user_profile in form.users.field.queryset %}
                     <option value="{{ user_profile.pk }}"
@@ -45,20 +46,45 @@
         </div>
         
         <div class="mb-3">
-            <label class="form-label">Expiration Date</label>
+            <label class="form-label">{% translate "Expiration Date" %}</label>
             {{ form.exp_date }}
         </div>
-        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+
+        {% if form.remove_images.field.queryset %}
+        <div class="mb-3">
+            <label class="form-label">{% translate "Attached images" %}</label>
+            <div class="row row-cols-3 row-cols-md-4 g-2">
+                {% for image in form.remove_images.field.queryset %}
+                <div class="col">
+                    <img src="{{ image.file.url }}" class="img-thumbnail w-100" style="height: 100px; object-fit: cover;" alt="">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remove_images" value="{{ image.pk }}" id="remove-image-{{ image.pk }}">
+                        <label class="form-check-label small" for="remove-image-{{ image.pk }}">{% translate "Remove" %}</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.images.id_for_label }}">{% translate "Images" %}</label>
+            {{ form.images }}
+            <div class="form-text">{% translate "You can select several images. They are compressed when uploaded." %}</div>
+            {% for error in form.images.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg">{% translate "Save" %}</button>
     </form>
 </div>
      
     </form>
         {{ form.media }}
     <script>
-        new SlimSelect({
+        new SlimSelect({ settings: slimSelectSettings,
             select: '.group-select'
         });
-        new SlimSelect({
+        new SlimSelect({ settings: slimSelectSettings,
             select: '.users-select'
         });
     </script>

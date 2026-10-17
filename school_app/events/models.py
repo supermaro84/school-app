@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from accounts.models import UserProfile
 from groups.models import GroupProfile
 
@@ -35,14 +36,14 @@ class Event(models.Model):
         on_delete=models.CASCADE,
         related_name="owned_events",
     )
-    event_name = models.CharField(max_length=200, default="Event")
-    event_description = models.TextField(default="Event Description")
-    event_type = models.ForeignKey(EventType, on_delete=models.CASCADE)
-    event_start_time = models.DateTimeField("event start time")
-    event_end_time = models.DateTimeField("event end time")
-    groups = models.ManyToManyField(GroupProfile, related_name="events")
-    users = models.ManyToManyField(UserProfile, related_name="events")
-    status = models.ForeignKey(EventStatus, on_delete=models.CASCADE)
+    event_name = models.CharField(_("event name"), max_length=200, default="Event")
+    event_description = models.TextField(_("description"), default="Event Description")
+    event_type = models.ForeignKey(EventType, on_delete=models.CASCADE, verbose_name=_("type"))
+    event_start_time = models.DateTimeField(_("event start time"))
+    event_end_time = models.DateTimeField(_("event end time"))
+    groups = models.ManyToManyField(GroupProfile, related_name="events", verbose_name=_("groups"))
+    users = models.ManyToManyField(UserProfile, related_name="events", verbose_name=_("users"))
+    status = models.ForeignKey(EventStatus, on_delete=models.CASCADE, verbose_name=_("status"))
     participations = models.ManyToManyField(EventParticipation, related_name="events")
 
     @property

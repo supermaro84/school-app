@@ -2,12 +2,14 @@ from django import forms
 from .models import Event
 from django.contrib.auth.models import Group, User
 from datetime import timedelta
+from django.utils.translation import gettext_lazy as _
 
 
 class EventForm(forms.ModelForm):
     event_start_time = forms.DateTimeField(
         widget=forms.DateTimeInput(attrs={"type": "datetime-local"}),
         input_formats=["%Y-%m-%dT%H:%M"],
+        label=_("Start time"),
     )
     # Separate hour and minute fields for better UX
     duration_hours = forms.IntegerField(

@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% translate "Users" %}{% endblock %}
 {% block content %}
 
-<h1>User Directory</h1>
+<h1>{% translate "User Directory" %}</h1>
 
 <!-- Filters -->
 <form method="get" class="row g-3 mb-4">
     <div class="col-md-5">
         <input type="text" name="q" class="form-control" 
-               placeholder="Search users..." value="{{ search_term }}">
+               placeholder="{% translate "Search users..." %}" value="{{ search_term }}">
     </div>
     <div class="col-md-4">
         <select name="role" class="form-select">
-            <option value="">Filter by role</option>
+            <option value="">{% translate "Filter by role" %}</option>
             {% for role in all_roles %}
             <option value="{{ role.user_role }}" 
                     {% if selected_role == role.user_role %}selected{% endif %}>
@@ -21,8 +23,8 @@
         </select>
     </div>
     <div class="col-md-3">
-        <button type="submit" class="btn btn-primary">Apply Filters</button>
-        <a href="{% url 'users_list' %}" class="btn btn-secondary">Clear</a>
+        <button type="submit" class="btn btn-primary">{% translate "Apply Filters" %}</button>
+        <a href="{% url 'users_list' %}" class="btn btn-secondary">{% translate "Clear" %}</a>
     </div>
 </form>
 
@@ -37,7 +39,7 @@
     </div>
 </div>
 {% empty %}
-<p>No users match your criteria.</p>
+<p>{% translate "No users match your criteria." %}</p>
 {% endfor %}
 
 <!-- Pagination controls -->
@@ -47,7 +49,7 @@
         {% if users_page.has_previous %}
         <li class="page-item">
             <a class="page-link" href="?page={{ users_page.previous_page_number }}{% if search_term %}&q={{ search_term }}{% endif %}{% if selected_role %}&role={{ selected_role }}{% endif %}">
-                &laquo; Prev
+                &laquo; {% translate "Prev" %}
             </a>
         </li>
         {% endif %}
@@ -59,7 +61,7 @@
         {% if users_page.has_next %}
         <li class="page-item">
             <a class="page-link" href="?page={{ users_page.next_page_number }}{% if search_term %}&q={{ search_term }}{% endif %}{% if selected_role %}&role={{ selected_role }}{% endif %}">
-                Next &raquo;
+                {% translate "Next" %} &raquo;
             </a>
         </li>
         {% endif %}

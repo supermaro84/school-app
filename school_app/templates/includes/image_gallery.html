@@ -1,0 +1,12 @@
+{% load i18n %}
+{% if images %}
+<div class="row row-cols-3 row-cols-md-4 g-2 my-2">
+    {% for image in images %}
+    <div class="col">
+        <a href="{{ image.file.url }}" target="_blank" rel="noopener" title="{% translate 'Open full size' %}">
+            <img src="{{ image.file.url }}" class="img-thumbnail w-100" style="height: 120px; object-fit: cover;" alt="" loading="lazy">
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

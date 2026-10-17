@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}Calendar{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Calendar" %}{% endblock %}
 {% block content %}
     
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.19/locales-all.global.min.js'></script>
+{% get_current_language as LANGUAGE_CODE %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         selectable: true,
+        locale: '{{ LANGUAGE_CODE }}',
         initialView: 'dayGridMonth',
         headerToolbar: {
             left: 'prev,next today',
@@ -36,13 +40,13 @@ document.addEventListener('DOMContentLoaded', function() {
             event_panel.hidden = false
             document.getElementById('edit_panel').hidden = true;
             document.getElementById('event-panel-title').innerHTML = '<h5>' + info.event.title + '</h5>';
-            document.getElementById('event-panel-start').innerHTML = '<p> Start: ' + info.event.start.toLocaleString() + '</p>';
-            document.getElementById('event-panel-end').innerHTML = '<p> End: ' + info.event.end.toLocaleString() + '</p>';
-            document.getElementById('event-panel-description').innerHTML = '<p>Description: ' + info.event.extendedProps.description + '</p>';
-            document.getElementById('event-panel-status').innerHTML = '<p>Status: ' + info.event.extendedProps.status + '</p>';
-            document.getElementById('event-panel-type').innerHTML = '<p>Type: ' + info.event.extendedProps.type + '</p>';
-            document.getElementById('event-panel-groups').innerHTML = '<p>Groups: ' + info.event.extendedProps.list_of_groups + '</p>';
-            document.getElementById('event-panel-users').innerHTML = '<p>Users: ' + info.event.extendedProps.users + '</p>';
+            document.getElementById('event-panel-start').innerHTML = '<p>{% filter escapejs %}{% translate "Start:" %}{% endfilter %} ' + info.event.start.toLocaleString('{{ LANGUAGE_CODE }}') + '</p>';
+            document.getElementById('event-panel-end').innerHTML = '<p>{% filter escapejs %}{% translate "End:" %}{% endfilter %} ' + info.event.end.toLocaleString('{{ LANGUAGE_CODE }}') + '</p>';
+            document.getElementById('event-panel-description').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Description:" %}{% endfilter %} ' + info.event.extendedProps.description + '</p>';
+            document.getElementById('event-panel-status').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Status:" %}{% endfilter %} ' + info.event.extendedProps.status + '</p>';
+            document.getElementById('event-panel-type').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Type:" %}{% endfilter %} ' + info.event.extendedProps.type + '</p>';
+            document.getElementById('event-panel-groups').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Groups:" %}{% endfilter %} ' + info.event.extendedProps.list_of_groups + '</p>';
+            document.getElementById('event-panel-users').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Users:" %}{% endfilter %} ' + info.event.extendedProps.users + '</p>';
         },
     });
     calendar.render();
@@ -55,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="card h-100 border-0">
                 <div class="card-header bg-primary text-white">
                     <h1 class="mb-0">
-                        <i class="fas fa-calendar me-2"></i>Calendar
+                        <i class="fas fa-calendar me-2"></i>{% translate "Calendar" %}
                     </h1>
                 </div>
                 <div class="card-body flex-grow-1 p-3 d-flex flex-column overflow-hidden">
@@ -73,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="card bg-light flex-grow-1 d-flex flex-column">
                                     <div class="card-header bg-secondary text-white">
                                         <h6 class="mb-0">
-                                            <i class="fas fa-plus me-2"></i>Inspect Event
+                                            <i class="fas fa-plus me-2"></i>{% translate "Inspect Event" %}
                                         </h6>
                                     </div>
                                     <div class="card-body flex-grow-1 overflow-auto p-3">
@@ -99,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="card bg-light flex-grow-1 d-flex flex-column">
                                     <div class="card-header bg-secondary text-white">
                                         <h6 class="mb-0">
-                                            <i class="fas fa-plus me-2"></i>Create Event
+                                            <i class="fas fa-plus me-2"></i>{% translate "Create Event" %}
                                         </h6>
                                     </div>
                                     <div class="card-body flex-grow-1 overflow-auto p-3">
@@ -121,15 +125,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     {{ event_form.event_start_time }}
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label small">Duration</label>
+                                                    <label class="form-label small">{% translate "Duration" %}</label>
                                                 <div class="row">
                                                     <div class="col-6">
                                                         {{ event_form.duration_hours }}
-                                                        <small class="text-muted">hours</small>
+                                                        <small class="text-muted">{% translate "hours" %}</small>
                                                     </div>
                                                     <div class="col-6">
                                                         {{ event_form.duration_minutes }}
-                                                        <small class="text-muted">minutes</small>
+                                                        <small class="text-muted">{% translate "minutes" %}</small>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
@@ -153,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             <!-- Fixed submit button at bottom -->
                                             <div class="border-top pt-3">
                                                 <button type="submit" class="btn btn-success btn-sm w-100">
-                                                    <i class="fas fa-save me-1"></i>Create Event
+                                                    <i class="fas fa-save me-1"></i>{% translate "Create Event" %}
                                                 </button>
                                             </div>
                                         </form>

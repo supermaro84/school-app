@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib import messages
+from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .forms import CustomUserCreationForm
 from announcements.models import Announcement
+from announcements.views import get_announcements_data
 from accounts.models import UserProfile
 from accounts.utils import get_affiliated_users
 from events.models import Event
@@ -25,10 +27,15 @@ def summary(request):
         Q(groups__admins__in=affiliated_users) | 
         Q(groups__members__in=affiliated_users),event_start_time__gte=today,
         event_start_time__lte=two_days_ahead
-    ).distinct()
-    user_event_counts = {}
+    ).select_related("event_type", "status").distinct()
+    # Read status is the logged-in user's, as on the announcements page.
+    announcements_data = get_announcements_data(request.user)
     for user in affiliated_users:
         user.event_count = sum(1 for event in events if user in event.all_involved_users)
+        user.announcement_items = [
+            item for item in announcements_data if user in item["users_present"]
+        ]
+        user.unread_count = sum(1 for item in user.announcement_items if not item["opened"])
     return render(request, "landing.html", {"affiliated_users": affiliated_users, "events": events})
 
 
@@ -41,7 +48,7 @@ class CustomLoginView(LoginView):
         return reverse_lazy('landing')
     
     def form_invalid(self, form):
-        messages.error(self.request, 'Invalid username or password.')
+        messages.error(self.request, _('Invalid username or password.'))
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -60,7 +67,7 @@ class CustomPasswordChangeView(PasswordChangeView):
         if profile.must_change_password:
             profile.must_change_password = False
             profile.save(update_fields=['must_change_password'])
-        messages.success(self.request, 'Your password has been changed.')
+        messages.success(self.request, _('Your password has been changed.'))
         return response
 
 
@@ -72,7 +79,10 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         username = form.cleaned_data.get('username')
-        messages.success(self.request, f'Account created for {username}! You can now log in.')
+        messages.success(
+            self.request,
+            _('Account created for %(username)s! You can now log in.') % {'username': username},
+        )
         return response
 
 

@@ -1,6 +1,8 @@
 from django import forms
-from .models import Announcement, AnnouncementComment
+from django.utils.translation import gettext_lazy as _
+from .models import Announcement, AnnouncementComment, AnnouncementImage
 from groups.models import GroupProfile
+from media.forms import MultipleImageField
 
 
 class AnnouncementForm(forms.ModelForm):
@@ -13,9 +15,22 @@ class AnnouncementForm(forms.ModelForm):
         widget=forms.DateInput(attrs={"type": "date"}), required=False
     )
 
+    images = MultipleImageField()
+    remove_images = forms.ModelMultipleChoiceField(
+        queryset=AnnouncementImage.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label=_("Remove images"),
+    )
+
     class Meta:
         model = Announcement
         fields = ["title", "text", "groups", "users", "exp_date"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields["remove_images"].queryset = self.instance.images.all()
 
 
 class AnnouncementCommentForm(forms.ModelForm):

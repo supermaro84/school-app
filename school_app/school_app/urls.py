@@ -40,12 +40,13 @@ from messages.views import (
     show_message_thread_by_id,
     ReplyMessageView,
 )
-from media.views import images_list, CreateImageView
+from media.views import CreateImageView, delete_image
 
 urlpatterns = [
     path("", summary, name="landing"),
     path("admin/", admin.site.urls),
     path("ckeditor5/", include('django_ckeditor_5.urls')),  # Add this line
+    path("i18n/", include("django.conf.urls.i18n")),  # set_language view for the language switcher
 
     # Authentication URLs
     path("login/", CustomLoginView.as_view(), name="login"),
@@ -109,6 +110,9 @@ urlpatterns = [
     path("messages/<int:pk>/reply/", ReplyMessageView.as_view(), name="reply_message"),
     # Media URLs
     path("media/images/", CreateImageView.as_view(), name="images_list"),
+    path(
+        "media/images/<str:source>/<int:pk>/delete/", delete_image, name="image_delete"
+    ),
     # Users URLs
     path("users/", user_list, name="users_list"),
     path("users/<int:pk>/", user_detail, name="user_detail"),

@@ -1,0 +1,14 @@
+owner,name,description,type,status,start,end,groups,users,repeat_weekly_until
+admin,School closed: heating maintenance,"Urgent heating maintenance. No lessons, after-school club cancelled.",Administrative,Completed,2026-10-09 07:30,2026-10-09 16:00,Class 1A;Class 2B;Class 3C;Class 1A Parents;Class 2B Parents;Class 3C Parents,,
+t_kovac,Leaf-art workshop,"Bring your autumn leaf! We turn leaves into hedgehogs, owls and foxes.",Academic,Active,2026-10-19 11:00,2026-10-19 12:00,Class 1A,,
+t_kovac,Maths club,"Puzzles, logic games and brain teasers for curious minds from 1A and 2B.",Academic,Active,2026-10-20 13:00,2026-10-20 14:00,Class 1A;Class 2B,,2026-12-15
+admin,Staff meeting,"Agenda: autumn timetable review, school photo day, Halloween parade safety.",Meeting,Active,2026-10-21 14:00,2026-10-21 15:30,,t_kovac;t_novak;t_horvath;t_balaz,
+t_horvath,Autumn sports day,"Cancelled because of the heavy rain forecast. Normal lessons take place instead.",Social,Cancelled,2026-10-23 08:00,2026-10-23 12:00,Class 2B;Class 3C,,
+t_horvath,Bake sale for the class trip,"Cakes, muffins and cookies in the school hall. All money goes to the 2B zoo trip.",Social,Active,2026-10-28 09:40,2026-10-28 10:05,Class 2B;Class 2B Parents,,
+admin,Halloween costume parade,"Witches, pumpkins and superheroes welcome! Parade around the school garden, then hot tea in the hall.",Social,Active,2026-10-30 11:00,2026-10-30 12:00,Class 1A;Class 2B;Class 3C;Class 1A Parents;Class 2B Parents;Class 3C Parents,,
+admin,School photo day,"Individual and class photos. Brush your hair and bring your best smile.",Administrative,Active,2026-11-04 08:00,2026-11-04 12:00,Class 1A;Class 2B;Class 3C,,
+t_balaz,Science fair: volcano projects,"3C presents their volcano projects. Parents are invited to watch the eruptions!",Academic,Active,2026-11-06 11:00,2026-11-06 13:00,Class 3C;Class 3C Parents,,
+t_novak,Parent-teacher meetings,"10-minute meetings with the class teachers. Book your time slot by replying to the announcement.",Meeting,Active,2026-11-12 15:00,2026-11-12 19:00,Class 1A Parents;Class 2B Parents,,
+t_balaz,Museum trip: Natural History Museum,"Meet at the school gate at 8:00. Packed lunch and comfortable shoes, please.",Academic,Active,2026-11-20 08:00,2026-11-20 13:00,Class 3C;Class 3C Parents,,
+t_novak,Winter choir concert,"1A and 2B sing winter songs for families. Date to be confirmed.",Social,Tentative,2026-12-17 17:00,2026-12-17 18:30,Class 1A;Class 2B;Class 1A Parents;Class 2B Parents,,
+t_novak,Reading challenge celebration,"Certificates and a surprise for everyone who read 10 books before winter break.",Social,Active,2026-12-18 10:00,2026-12-18 11:00,Class 1A;Class 2B,,
