@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% translate "Documents" %}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-file-earmark-text"></i>{% translate "Documents" %}</h1>
+    <div class="btn-group btn-group-sm" role="group" aria-label="{% translate 'Document filter' %}">
+        <a href="?show=all" class="btn {% if show == 'all' %}btn-primary{% else %}btn-outline-primary{% endif %}">{% translate "All" %}</a>
+        <a href="?show=mine" class="btn {% if show == 'mine' %}btn-primary{% else %}btn-outline-primary{% endif %}">{% translate "Mine" %}</a>
+    </div>
+</div>
+<p class="text-secondary small">{% translate "Documents attached to announcements, messages and events you can see." %}</p>
+
+<section class="app-card">
+    {% translate "Delete this document? It will also be removed from where it is posted." as delete_confirm %}
+    <div class="list-group list-group-flush app-list">
+        {% for item in documents %}
+        <div class="list-group-item">
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+                <div class="d-flex align-items-start gap-2 flex-grow-1 min-w-0">
+                    <span class="fs-4 lh-1">{% include "includes/document_icon.html" with ext=item.document.extension %}</span>
+                    <div class="min-w-0">
+                        <a href="{{ item.document.file.url }}" target="_blank" rel="noopener" class="item-title text-break">{{ item.document.filename }}</a>
+                        <div class="d-flex flex-wrap align-items-center gap-1 mt-1 small text-secondary">
+                            {% if item.source == "announcement" %}<span class="badge text-bg-info">{% translate "Announcement" %}</span>
+                            {% elif item.source == "message" %}<span class="badge text-bg-primary">{% translate "Message" %}</span>
+                            {% elif item.source == "event" %}<span class="badge text-bg-success">{% translate "Event" %}</span>
+                            {% else %}<span class="badge text-bg-secondary">{% translate "Uploaded" %}</span>{% endif %}
+                            {% if item.url %}<a href="{{ item.url }}" class="text-truncate">{{ item.title }}</a> ·{% endif %}
+                            <span>{{ item.uploader.get_full_name|default:item.uploader.username }}</span> ·
+                            <span>{{ item.document.uploaded_at|date:"SHORT_DATE_FORMAT" }}</span>
+                            {% if item.document.file_size %}· <span>{{ item.document.file_size|filesizeformat }}</span>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 flex-shrink-0">
+                    <a href="{{ item.document.file.url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary"><i class="bi bi-download me-1"></i>{% translate "Download" %}</a>
+                    {% if item.can_delete %}
+                    <form method="post" action="{% url 'document_delete' item.source item.document.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('{{ delete_confirm|escapejs }}');" title="{% translate 'Delete' %}" aria-label="{% translate 'Delete' %}"><i class="bi bi-trash"></i></button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state py-5"><i class="bi bi-folder2-open"></i>{% translate "No documents yet." %}</div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

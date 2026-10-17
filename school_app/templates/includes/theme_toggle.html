@@ -1,11 +1,11 @@
 {% load i18n %}
 {% comment %}
 Light / dark / system toggle. The script in includes/head.html applies and
-saves the choice. Usage: {% include "includes/theme_toggle.html" with variant="light" %}
-(variant: "light" on dark navbars, default "secondary").
+saves the choice. Usage: {% include "includes/theme_toggle.html" %}; pass nav=True in the
+navbar to match the menu links' colours.
 {% endcomment %}
 <div class="dropdown">
-    <button class="btn btn-sm btn-outline-{{ variant|default:'secondary' }} dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{% translate 'Theme' %}" aria-label="{% translate 'Theme' %}">
+    <button class="btn btn-sm {% if nav %}app-nav-btn{% else %}btn-outline-secondary{% endif %} dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{% translate 'Theme' %}" aria-label="{% translate 'Theme' %}">
         <i class="bi bi-circle-half" data-theme-icon></i>
     </button>
     <ul class="dropdown-menu dropdown-menu-end">

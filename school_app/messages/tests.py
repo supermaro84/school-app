@@ -53,3 +53,43 @@ class MessageImageTests(TestCase):
         response = self.client.get(reverse("reply_message", args=[thread.pk]))
         self.assertContains(response, "Hello there")
         self.assertContains(response, 'enctype="multipart/form-data"')
+
+
+class PublishButtonTests(TestCase):
+    def test_publish_buttons(self):
+        from announcements.models import Announcement
+        teacher = User.objects.create_user(username="teacher", password="pw")
+        self.client.force_login(teacher)
+        thread = MessageThread.objects.create(title="Trip", author=teacher)
+        for url in (reverse("message_create"), reverse("reply_message", args=[thread.pk]), reverse("announcement_create")):
+            self.assertContains(self.client.get(url), "Publish</button>")
+        announcement = Announcement.objects.create(author=teacher, title="x", text="x")
+        self.assertContains(self.client.get(reverse("announcement_edit", args=[announcement.pk])), "Save</button>")
+
+
+class MessageSortTests(TestCase):
+    def setUp(self):
+        from datetime import datetime
+        from django.utils import timezone
+        self.teacher = User.objects.create_user(username="teacher", password="pw")
+        self.client.force_login(self.teacher)
+        def make(title, *days):
+            thread = MessageThread.objects.create(title=title, author=self.teacher)
+            for day in days:
+                m = Message.objects.create(thread=thread, sender=self.teacher, text="x")
+                Message.objects.filter(pk=m.pk).update(pub_date=timezone.make_aware(datetime(2026, 10, day, 9)))
+            return thread
+        make("Bus times", 10, 20)  # started first, latest reply
+        make("Allergies", 12)
+        make("Zoo forms", 15)
+
+    def titles(self, query=""):
+        return [t.title for t in self.client.get(reverse("messages_page") + query).context["message_threads"]]
+
+    def test_recent_activity_by_default(self):
+        self.assertEqual(self.titles(), ["Bus times", "Zoo forms", "Allergies"])
+
+    def test_newest_and_alphabetical(self):
+        self.assertEqual(self.titles("?sort=newest"), ["Zoo forms", "Allergies", "Bus times"])
+        self.assertEqual(self.titles("?sort=title"), ["Allergies", "Bus times", "Zoo forms"])
+        self.assertEqual(self.titles(), ["Allergies", "Bus times", "Zoo forms"])  # remembered

@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from accounts.models import UserProfile
 from groups.models import GroupProfile
+from django.db.models.signals import post_delete
+from media.models import AttachedDocument, delete_attached_file
 
 
 # Create your models here.
@@ -60,3 +62,20 @@ class Event(models.Model):
 
     def __str__(self):
         return self.event_name
+
+
+def event_document_path(instance, filename):
+    # events/<author username>/<event id>/<filename>
+    return f"events/{instance.event.owner.user.username}/{instance.event_id}/{filename}"
+
+
+class EventDocument(AttachedDocument):
+    event = models.ForeignKey(Event, related_name="documents", on_delete=models.CASCADE)
+    file = models.FileField(_("document"), upload_to=event_document_path, max_length=255)
+
+    class Meta(AttachedDocument.Meta):
+        pass
+
+
+post_delete.connect(delete_attached_file, sender=EventDocument)
+

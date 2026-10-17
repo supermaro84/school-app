@@ -28,12 +28,18 @@
     </p>
 
     <div class="rich-text mb-3">{{ announcement.text|safe }}</div>
-    {% include "includes/image_gallery.html" with images=announcement.images.all %}
+      {% include "includes/image_gallery.html" with images=announcement.images.all %}
+    {% include "includes/document_list.html" with documents=announcement.documents.all %}
 
-    <dl class="meta-list border-top pt-3 mt-3">
-        <dt>{% translate "Recipients:" %}</dt>
-        <dd>{{ announcement.all_users|join:", " }}</dd>
-    </dl>
+    <div class="accordion accordion-flush border-top mt-3" id="recipients">
+        {% if is_author %}
+        {# Only the author sees who has read it #}
+        {% include "includes/recipient_fold.html" with fold_id="recipients-read" people=recipients_read icon="bi-check2-all text-success" show_read_at=True %}
+        {% include "includes/recipient_fold.html" with fold_id="recipients-unread" people=recipients_unread icon="bi-hourglass-split text-warning" %}
+        {% else %}
+        {% include "includes/recipient_fold.html" with fold_id="recipients-all" people=recipients icon="bi-people" %}
+        {% endif %}
+    </div>
 
     <h3 class="h6 mt-4 mb-2">{% translate "Comments" %} <span class="badge text-bg-secondary">{{ comments|length }}</span></h3>
     <div class="d-flex flex-column gap-2 mb-3">

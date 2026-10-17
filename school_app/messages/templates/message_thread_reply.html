@@ -14,8 +14,9 @@
         {{ form.images }}
         {% for error in form.images.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
     </div>
+    {% include "includes/document_field.html" %}
     <div class="d-flex flex-wrap gap-2">
-        <button type="submit" class="btn btn-primary btn-submit"><i class="bi bi-send me-1"></i>{% translate "Save" %}</button>
+        <button type="submit" class="btn btn-primary btn-submit"><i class="bi bi-send me-1"></i>{% translate "Publish" %}</button>
         <a href="{% url 'message_thread_detail' thread.pk %}" class="btn btn-outline-secondary">{% translate "Cancel" %}</a>
     </div>
 </form>

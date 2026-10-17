@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n notify_tags %}
 
 {% block title %}{% translate "Announcements" %}{% endblock %}
 
@@ -15,8 +15,8 @@
     <div class="col-12 col-lg-4 {% block list_visibility %}{% endblock %}">
         <section class="app-card">
             <div class="card-header">
-                <h2>{% translate "All Announcements" %}</h2>
-                <span class="badge text-bg-secondary">{{ announcements_data|length }}</span>
+                <h2>{% translate "All Announcements" %} <span class="badge text-bg-secondary align-middle">{{ announcements_data|length }}</span></h2>
+                {% include "includes/sort_select.html" %}
             </div>
             <div class="list-group list-group-flush app-list md-scroll">
                 {% for ann in announcements_data %}
@@ -24,7 +24,10 @@
                    class="list-group-item list-group-item-action{% if not ann.opened %} is-unread{% endif %}{% if ann.announcement.pk == announcement.pk %} active{% endif %}">
                     <div class="d-flex justify-content-between align-items-start gap-2">
                         <span class="item-title">{{ ann.announcement.title }}</span>
-                        {% if ann.opened %}<span class="badge text-bg-secondary">{% translate "Opened" %}</span>{% else %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
+                        <span class="text-nowrap">
+                            {% with comments=notify.comment_counts|get_item:ann.announcement.pk %}{% if comments %}<span class="badge text-bg-orange" title="{% translate 'new comments' %}"><i class="bi bi-chat-fill me-1"></i>{{ comments }}</span>{% endif %}{% endwith %}
+                            {% if ann.opened %}<span class="badge text-bg-secondary">{% translate "Opened" %}</span>{% else %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
+                        </span>
                     </div>
                     <div class="d-flex flex-wrap align-items-center gap-1 mt-1">
                         <small class="text-secondary me-1">{{ ann.announcement.pub_date|date:"SHORT_DATE_FORMAT" }}</small>

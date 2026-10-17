@@ -172,3 +172,77 @@ class AnnouncementRecipientsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Select at least one group or user.")
         self.assertFalse(Announcement.objects.exists())
+
+
+class AnnouncementRecipientFoldsTests(TestCase):
+    def setUp(self):
+        self.teacher = User.objects.create_user(username="teacher", password="pw")
+        self.lucy = User.objects.create_user(username="lucy", password="pw", first_name="Lucy", last_name="Gray")
+        self.max = User.objects.create_user(username="max", password="pw", first_name="Max", last_name="Bell")
+        self.announcement = Announcement.objects.create(author=self.teacher, title="Trip", text="x")
+        self.announcement.users.add(self.lucy, self.max)
+        self.url = reverse("announcement_detail", args=[self.announcement.pk])
+
+    def test_author_sees_who_read_it(self):
+        self.client.force_login(self.lucy)
+        self.client.get(self.url)  # Lucy opens it
+        self.client.force_login(self.teacher)
+        response = self.client.get(self.url)
+        self.assertEqual(response.context["recipients_read"], [self.lucy])
+        self.assertEqual(response.context["recipients_unread"], [self.max])
+        self.assertContains(response, 'id="recipients-read"')
+        self.assertContains(response, 'id="recipients-unread"')
+        self.assertContains(response, 'class="accordion-collapse collapse"', count=2)  # folded
+
+    def test_recipients_see_only_the_list(self):
+        self.client.force_login(self.max)
+        response = self.client.get(self.url)
+        self.assertNotContains(response, 'id="recipients-read"')
+        self.assertContains(response, 'id="recipients-all"')
+        self.assertEqual(response.context["recipients"], [self.lucy, self.max])  # by full name, no author
+
+
+class AnnouncementSortTests(TestCase):
+    def setUp(self):
+        from datetime import datetime
+        from django.utils import timezone
+        self.teacher = User.objects.create_user(username="teacher", password="pw")
+        self.lucy = User.objects.create_user(username="lucy", password="pw")
+        def make(title, day):
+            a = Announcement.objects.create(author=self.teacher, title=title, text="x")
+            a.users.add(self.lucy)
+            Announcement.objects.filter(pk=a.pk).update(pub_date=timezone.make_aware(datetime(2026, 10, day, 9)))
+            return Announcement.objects.get(pk=a.pk)
+        self.bake = make("Bake sale", 10)
+        self.zoo = make("Zoo trip", 12)
+        self.art = make("Art day", 11)
+        comment = self.bake.comments.create(author=self.teacher, text="Bring cakes")
+        self.bake.comments.filter(pk=comment.pk).update(comment_date=timezone.make_aware(datetime(2026, 10, 15, 9)))
+        self.client.force_login(self.lucy)
+
+    def titles(self, query=""):
+        cards = self.client.get(reverse("announcements_page") + query).context["announcements_data"]
+        return [card["announcement"].title for card in cards]
+
+    def test_newest_by_default(self):
+        self.assertEqual(self.titles(), ["Zoo trip", "Art day", "Bake sale"])
+
+    def test_recent_activity_counts_comments_and_edits(self):
+        self.assertEqual(self.titles("?sort=activity"), ["Bake sale", "Zoo trip", "Art day"])
+        from datetime import datetime
+        from django.utils import timezone
+        Announcement.objects.filter(pk=self.art.pk).update(updated_at=timezone.make_aware(datetime(2026, 10, 16, 9)))
+        self.assertEqual(self.titles("?sort=activity"), ["Art day", "Bake sale", "Zoo trip"])
+
+    def test_alphabetical_and_remembered(self):
+        self.assertEqual(self.titles("?sort=title"), ["Art day", "Bake sale", "Zoo trip"])
+        self.assertEqual(self.titles(), ["Art day", "Bake sale", "Zoo trip"])  # remembered
+        detail = self.client.get(reverse("announcement_detail", args=[self.zoo.pk]))
+        self.assertEqual([c["announcement"].title for c in detail.context["announcements_data"]], ["Art day", "Bake sale", "Zoo trip"])
+        self.assertContains(detail, '<option value="title" selected>')
+
+    def test_editing_sets_updated_at(self):
+        self.client.force_login(self.teacher)
+        self.client.post(reverse("announcement_edit", args=[self.art.pk]), {"title": "Art day", "text": "y", "users": [self.lucy.pk]})
+        self.art.refresh_from_db()
+        self.assertIsNotNone(self.art.updated_at)

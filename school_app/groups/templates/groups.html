@@ -26,7 +26,9 @@
                 <div class="list-group-item{% if gp.pk == group_profile.pk or gp.pk == object.pk %} active list-group-item-action{% endif %}">
                     <div class="d-flex justify-content-between align-items-center gap-2">
                         <a href="{% url 'group_detail' gp.pk %}{% if show_all %}?show=all{% endif %}" class="item-title text-reset text-decoration-none">{{ gp.group }}</a>
+                        {% if user in gp.admins.all %}
                         <a href="{% url 'group_edit' gp.pk %}{% if show_all %}?show=all{% endif %}" class="btn btn-sm btn-link text-secondary p-0" title="{% translate 'Edit' %}" aria-label="{% translate 'Edit' %}"><i class="bi bi-pencil"></i></a>
+                        {% endif %}
                     </div>
                     {% if gp.connected_users %}
                     <div class="d-flex flex-wrap gap-1 mt-1">

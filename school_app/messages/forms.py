@@ -1,15 +1,17 @@
 from .models import Message, MessageThread
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from media.forms import MultipleImageField
+from media.forms import MultipleDocumentField, MultipleImageField
+from school_app.forms import UserChoiceLabelsMixin
 
 
-class MessageThreadForm(forms.ModelForm):
+class MessageThreadForm(UserChoiceLabelsMixin, forms.ModelForm):
     text = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 4}), label=_("Message text"), required=True
     )
     title = forms.CharField(max_length=150, required=True, label=_("Message title"))
     images = MultipleImageField()
+    documents = MultipleDocumentField()
 
     class Meta:
         model = MessageThread
@@ -18,6 +20,7 @@ class MessageThreadForm(forms.ModelForm):
 
 class MessageReplyForm(forms.ModelForm):
     images = MultipleImageField()
+    documents = MultipleDocumentField()
 
     class Meta:
         model = Message

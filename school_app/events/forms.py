@@ -3,7 +3,9 @@ from .models import Event
 from django.contrib.auth.models import Group, User
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
-from school_app.forms import GroupsOrUsersRequiredMixin
+from school_app.forms import GroupsOrUsersRequiredMixin, UserChoiceLabelsMixin
+from media.forms import MultipleDocumentField
+from .models import EventDocument
 
 
 DATETIME_LOCAL = "%Y-%m-%dT%H:%M"  # value format of <input type="datetime-local">
@@ -29,8 +31,9 @@ EVENT_WIDGETS = {
 }
 
 
-class EventForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
+class EventForm(UserChoiceLabelsMixin, GroupsOrUsersRequiredMixin, forms.ModelForm):
     event_start_time = datetime_field(_("Start time"))
+    documents = MultipleDocumentField()
     # Separate hour and minute fields for better UX
     duration_hours = forms.IntegerField(
         min_value=0,
@@ -83,11 +86,18 @@ class EventForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
         return event
 
 
-class EventEditForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
+class EventEditForm(UserChoiceLabelsMixin, GroupsOrUsersRequiredMixin, forms.ModelForm):
     """Edit every part of an existing event; start and end are set directly."""
 
     event_start_time = datetime_field(_("Start time"))
     event_end_time = datetime_field(_("End time"))
+    documents = MultipleDocumentField()
+    remove_documents = forms.ModelMultipleChoiceField(
+        queryset=EventDocument.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label=_("Remove documents"),
+    )
 
     class Meta:
         model = Event
@@ -102,6 +112,11 @@ class EventEditForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
             "users",
         ]
         widgets = EVENT_WIDGETS
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields["remove_documents"].queryset = self.instance.documents.all()
 
     def clean(self):
         cleaned = super().clean()

@@ -1,0 +1,23 @@
+{% load i18n %}
+{# One collapsed list of recipients; pass fold_id, people, icon and optionally show_read_at #}
+<div class="accordion-item">
+    <h3 class="accordion-header">
+        <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#{{ fold_id }}" aria-expanded="false" aria-controls="{{ fold_id }}">
+            <i class="bi {{ icon }} me-2"></i>
+            {% if fold_id == "recipients-read" %}{% translate "Read" %}{% elif fold_id == "recipients-unread" %}{% translate "Not read yet" %}{% else %}{% translate "Recipients" %}{% endif %}
+            <span class="badge text-bg-secondary ms-2">{{ people|length }}</span>
+        </button>
+    </h3>
+    <div id="{{ fold_id }}" class="accordion-collapse collapse">
+        <ul class="list-group list-group-flush">
+            {% for person in people %}
+            <li class="list-group-item d-flex justify-content-between align-items-center gap-2">
+                <span>{{ person.get_full_name|default:person.username }}{% if person.role %} <span class="text-secondary">({{ person.role }})</span>{% endif %}</span>
+                {% if show_read_at %}<small class="text-secondary text-nowrap">{{ person.read_at|date:"SHORT_DATETIME_FORMAT" }}</small>{% endif %}
+            </li>
+            {% empty %}
+            <li class="list-group-item text-secondary small">{% translate "Nobody." %}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+{% load i18n %}
+{# Document upload field (+ remove checkboxes on edit forms); pass form=... #}
+{% if form.remove_documents and form.remove_documents.field.queryset %}
+<div class="mb-3">
+    <label class="form-label">{% translate "Attached documents" %}</label>
+    {% for document in form.remove_documents.field.queryset %}
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="remove_documents" value="{{ document.pk }}" id="remove-document-{{ document.pk }}">
+        <label class="form-check-label text-break" for="remove-document-{{ document.pk }}">
+            {% include "includes/document_icon.html" with ext=document.extension %} {{ document.filename }}
+            <span class="small text-secondary">({% translate "Remove" %})</span>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="mb-4">
+    <label class="form-label" for="{{ form.documents.id_for_label }}">{% translate "Documents" %}</label>
+    {{ form.documents }}
+    <div class="form-text">{% translate "PDF, Word, Excel, PowerPoint or text files, up to 20 MB each." %}</div>
+    {% for error in form.documents.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+</div>

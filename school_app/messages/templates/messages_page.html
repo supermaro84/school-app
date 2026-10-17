@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n notify_tags %}
 
 {% block title %}{% translate "Messages" %}{% endblock %}
 
@@ -15,14 +15,20 @@
     <div class="col-12 col-lg-4 {% block list_visibility %}{% endblock %}">
         <section class="app-card">
             <div class="card-header">
-                <h2>{% translate "All Messages" %}</h2>
-                <span class="badge text-bg-secondary">{{ message_threads|length }}</span>
+                <h2>{% translate "All Messages" %} <span class="badge text-bg-secondary align-middle">{{ message_threads|length }}</span></h2>
+                {% include "includes/sort_select.html" %}
             </div>
             <div class="list-group list-group-flush app-list md-scroll">
                 {% for msg_thread in message_threads %}
                 <a href="{% url 'message_thread_detail' msg_thread.pk %}"
-                   class="list-group-item list-group-item-action{% if msg_thread.pk == thread.pk %} active{% endif %}">
-                    <div class="item-title text-truncate">{{ msg_thread.title }}</div>
+                   class="list-group-item list-group-item-action{% if msg_thread.pk in notify.thread_ids or notify.reply_counts|get_item:msg_thread.pk %} is-unread{% endif %}{% if msg_thread.pk == thread.pk %} active{% endif %}">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <span class="item-title text-truncate">{{ msg_thread.title }}</span>
+                        <span class="text-nowrap">
+                            {% with replies=notify.reply_counts|get_item:msg_thread.pk %}{% if replies %}<span class="badge text-bg-orange" title="{% translate 'new replies' %}"><i class="bi bi-chat-fill me-1"></i>{{ replies }}</span>{% endif %}{% endwith %}
+                            {% if msg_thread.pk in notify.thread_ids %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
+                        </span>
+                    </div>
                     <small class="text-secondary text-truncate d-block">{{ msg_thread.all_recipients|join:", " }}</small>
                 </a>
                 {% empty %}

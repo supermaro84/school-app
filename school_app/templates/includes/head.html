@@ -49,6 +49,12 @@ app stylesheet and the deployment theme (school_app/theme.py) as CSS variables.
 </script>
 {% bootstrap_css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% if theme.font_urls %}
+{# THEME_FONT / THEME_HEADING_FONT from Google Fonts #}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{% for url in theme.font_urls %}<link rel="stylesheet" href="{{ url }}">
+{% endfor %}{% endif %}
 <style>
     :root {
         --app-primary: {{ theme.primary }};
@@ -56,6 +62,8 @@ app stylesheet and the deployment theme (school_app/theme.py) as CSS variables.
         --app-on-primary: {{ theme.on_primary }};
         --app-secondary: {{ theme.secondary }};
         --app-secondary-rgb: {{ theme.secondary_rgb }};
+        --app-font: {{ theme.font_stack|safe }};
+        --app-heading-font: {{ theme.heading_font_stack|safe }};
     }
 </style>
 <link rel="stylesheet" href="{% static 'css/app.css' %}">
