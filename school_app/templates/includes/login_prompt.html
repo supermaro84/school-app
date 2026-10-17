@@ -1,0 +1,14 @@
+{% load i18n %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="app-card text-center">
+            <div class="card-body p-4 p-md-5">
+                <p class="lead text-secondary">{% translate "Please log in to access all features of the school application." %}</p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg"><i class="bi bi-box-arrow-in-right me-2"></i>{% translate "Login" %}</a>
+                    <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg"><i class="bi bi-person-plus me-2"></i>{% translate "Create Account" %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

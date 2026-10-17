@@ -4,80 +4,77 @@
 {% block title %}{% translate "Images" %}{% endblock %}
 
 {% block content %}
-<div class="container-fluid h-100 d-flex flex-column p-3">
-    <h1>{% translate "Image Gallery" %}</h1>
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% translate 'Close' %}"></button>
-        </div>
-    {% endfor %}
-    <form method="post" enctype="multipart/form-data">
+<div class="page-header">
+    <h1><i class="bi bi-images"></i>{% translate "Image Gallery" %}</h1>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="app-card mb-4 app-form">
+    <div class="card-body">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary btn-lg">{% translate "Upload" %}</button>
-    </form>
-    
-    <div class="row flex-grow-1 overflow-hidden">
-        <!-- Images column -->
-        <div class="col-lg-6 col-md-6 d-flex flex-column">
-            <h3>{% translate "My images" %} <span class="badge text-bg-secondary fs-6 align-middle">{{ my_images|length }}</span></h3>
-            <div class="flex-grow-1 overflow-auto">
-                <div class="row">
-                    {% translate "Delete this image? It will also be removed from where it is posted." as delete_confirm %}
-                    {% for item in my_images %}
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="card h-100">
-                                <a href="{{ item.image.file.url }}" target="_blank" rel="noopener">
-                                    <img src="{{ item.image.file.url }}" class="card-img-top" alt="" style="height: 150px; object-fit: cover;" loading="lazy">
-                                </a>
-                                <div class="card-body p-2 d-flex flex-column">
-                                    <div class="mb-1">
-                                        {% if item.source == "gallery" %}
-                                            <span class="badge text-bg-secondary">{% translate "Gallery" %}</span>
-                                        {% elif item.source == "announcement" %}
-                                            <span class="badge text-bg-info">{% translate "Announcement" %}</span>
-                                            <a href="{% url 'announcement_detail' item.post.pk %}" class="small">{{ item.post.title }}</a>
-                                        {% else %}
-                                            <span class="badge text-bg-primary">{% translate "Message" %}</span>
-                                            <a href="{% url 'message_thread_detail' item.post.pk %}" class="small">{{ item.post.title }}</a>
-                                        {% endif %}
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center mt-auto">
-                                        <small class="text-muted">{{ item.image.uploaded_at|date:"Y-m-d" }}</small>
-                                        <form method="post" action="{% url 'image_delete' item.source item.image.pk %}" class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('{{ delete_confirm|escapejs }}');">{% translate "Delete" %}</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+        <label class="form-label" for="{{ form.file.id_for_label }}">{% translate "Upload" %}</label>
+        <div class="d-flex flex-column flex-sm-row gap-2">
+            <input type="file" name="{{ form.file.html_name }}" id="{{ form.file.id_for_label }}" class="form-control" accept="image/*" required>
+            <button type="submit" class="btn btn-primary text-nowrap"><i class="bi bi-upload me-1"></i>{% translate "Upload" %}</button>
+        </div>
+        {% for error in form.file.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+    </div>
+</form>
+
+<div class="row g-4">
+    <div class="col-12 col-xl-8">
+        <h2 class="h5 mb-3">{% translate "My images" %} <span class="badge text-bg-secondary align-middle">{{ my_images|length }}</span></h2>
+        {% translate "Delete this image? It will also be removed from where it is posted." as delete_confirm %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+            {% for item in my_images %}
+            <div class="col">
+                <div class="app-card image-card h-100 overflow-hidden">
+                    <a href="{{ item.image.file.url }}" target="_blank" rel="noopener">
+                        <img src="{{ item.image.file.url }}" class="card-img-top" alt="" loading="lazy">
+                    </a>
+                    <div class="card-body p-2 d-flex flex-column gap-2">
+                        <div class="text-truncate">
+                            {% if item.source == "gallery" %}
+                                <span class="badge text-bg-secondary">{% translate "Gallery" %}</span>
+                            {% elif item.source == "announcement" %}
+                                <span class="badge text-bg-info">{% translate "Announcement" %}</span>
+                                <a href="{% url 'announcement_detail' item.post.pk %}" class="small">{{ item.post.title }}</a>
+                            {% else %}
+                                <span class="badge text-bg-primary">{% translate "Message" %}</span>
+                                <a href="{% url 'message_thread_detail' item.post.pk %}" class="small">{{ item.post.title }}</a>
+                            {% endif %}
                         </div>
-                    {% empty %}
-                        <p class="text-muted">{% translate "You have not posted any images yet." %}</p>
-                    {% endfor %}
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <small class="text-secondary">{{ item.image.uploaded_at|date:"SHORT_DATE_FORMAT" }}</small>
+                            <form method="post" action="{% url 'image_delete' item.source item.image.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('{{ delete_confirm|escapejs }}');"><i class="bi bi-trash me-1"></i>{% translate "Delete" %}</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Documents column -->
-        <div class="col-lg-6 col-md-6 d-flex flex-column">
-            <h3>{% translate "Documents" %}</h3>
-            <div class="flex-grow-1 overflow-auto">
-                <div class="row">
-                    {% for document in documents %}
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h6 class="card-title">{{ document.filename }}</h6>
-                                    <a href="{{ document.file.url }}" class="btn btn-sm btn-primary" download>{% translate "Download" %}</a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="app-card empty-state"><i class="bi bi-image"></i>{% translate "You have not posted any images yet." %}</div>
             </div>
+            {% endfor %}
         </div>
+    </div>
+
+    <div class="col-12 col-xl-4">
+        <h2 class="h5 mb-3">{% translate "Documents" %}</h2>
+        <section class="app-card">
+            <div class="list-group list-group-flush app-list">
+                {% for document in documents %}
+                <div class="list-group-item d-flex justify-content-between align-items-center gap-2">
+                    <span class="text-truncate"><i class="bi bi-file-earmark-text me-2 text-secondary"></i>{{ document.filename }}</span>
+                    <a href="{{ document.file.url }}" class="btn btn-sm btn-outline-primary text-nowrap" download><i class="bi bi-download me-1"></i>{% translate "Download" %}</a>
+                </div>
+                {% empty %}
+                <div class="empty-state"><i class="bi bi-folder2-open"></i>{% translate "No documents yet." %}</div>
+                {% endfor %}
+            </div>
+        </section>
     </div>
 </div>
 {% endblock %}

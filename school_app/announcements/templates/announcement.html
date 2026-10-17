@@ -1,57 +1,58 @@
-
 {% extends 'announcements_page.html' %}
 {% load i18n %}
 
-{% block title %}{% translate "Announcement detail" %}{% endblock %}
+{% block title %}{{ announcement.title }}{% endblock %}
+{% block list_visibility %}d-none d-lg-block{% endblock %}
+{% block detail_visibility %}{% endblock %}
 
 {% block announcement %}
-<div class="card-header bg-success text-white">
-<h5 class="mb-0">
-    <i class="fas fa-calendar-alt me-2"></i>
-    {% translate "Read Announcement" %}
-</h5>
+<div class="card-header">
+    <h2><i class="bi bi-megaphone me-2 text-primary"></i>{% translate "Read Announcement" %}</h2>
+    <div class="d-flex flex-wrap gap-2">
+        {% url 'announcements_page' as list_url %}{% include "includes/back_link.html" with url=list_url %}
+        {% if is_author %}
+        {% translate "Are you sure you want to delete this announcement?" as delete_confirm %}
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'announcement_edit' announcement.pk %}"><i class="bi bi-pencil me-1"></i>{% translate "Edit" %}</a>
+        <form method="post" action="{% url 'announcement_edit' announcement.pk %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" name="delete" class="btn btn-sm btn-outline-danger" onclick="return confirm('{{ delete_confirm|escapejs }}');"><i class="bi bi-trash me-1"></i>{% translate "Delete" %}</button>
+        </form>
+        {% endif %}
+    </div>
 </div>
-<div class="card-body flex-grow-1 overflow-auto p-2">                                            
-<div class="jumbotron">
-  <h1 class="display-4">{{ announcement.title }}  {% if is_author %}{% translate "Are you sure you want to delete this announcement?" as delete_confirm %}<a class="btn btn-primary btn-lg" href="{% url 'announcement_edit' announcement.pk %}" role="button">{% translate "Edit" %}</a><form method="post" action="{% url 'announcement_edit' announcement.pk %}" style="display: inline;">{% csrf_token %}<button type="submit" name="delete" class="btn btn-danger btn-lg" onclick="return confirm('{{ delete_confirm|escapejs }}');">{% translate "Delete" %}</button></form>{% endif %}
- </h1>
-  
-  <p class="lead">{{ announcement.text | safe }}</p>
-  {% include "includes/image_gallery.html" with images=announcement.images.all %}
-  <hr class="my-4">
-  <p>{% blocktranslate with author=announcement.author date=announcement.pub_date %}Published by {{ author }} on {{ date }}{% endblocktranslate %}</p>
-  <p>{% blocktranslate with date=announcement.exp_date %}Expires on {{ date }}{% endblocktranslate %}</p>
-  <p>{% translate "Recipients:" %} {{ announcement.all_users|join:", " }}</p>
-</div>
+<div class="card-body">
+    <h1 class="detail-title mb-2">{{ announcement.title }}</h1>
+    <p class="text-secondary small mb-3">
+        <i class="bi bi-person me-1"></i>{% blocktranslate with author=announcement.author date=announcement.pub_date %}Published by {{ author }} on {{ date }}{% endblocktranslate %}
+        {% if announcement.exp_date %}<br><i class="bi bi-hourglass-split me-1"></i>{% blocktranslate with date=announcement.exp_date %}Expires on {{ date }}{% endblocktranslate %}{% endif %}
+    </p>
 
-<h2>{% translate "Comments" %}</h2>
-<ul class="list-group">
-    {% for comment in announcement.comments.all %}
-    <li class="list-group-item">
-        <div class="card">
-  <div class="card-body">
-    <p2>{% blocktranslate with author=comment.author date=comment.comment_date %}{{ author }} on {{ date }}{% endblocktranslate %}</p2>
-    <p class="h4">{{ comment.text }}</p>
-     
-  </div>
-</div>
-    </li>
-    
-    {% empty %}
-        <li>{% translate "No comments yet." %}</li>
-    {% endfor %}
-</ul>
+    <div class="rich-text mb-3">{{ announcement.text|safe }}</div>
+    {% include "includes/image_gallery.html" with images=announcement.images.all %}
 
-<h3>{% translate "Add a Comment" %}</h3>
-<form method="post">
-    <div class="card-body">
-     {% csrf_token %}
-    {{ form.as_p }}
-     
-  </div>
-       <button class="btn btn-primary btn-lg" type="submit">{% translate "Save" %}</button></a>
-        
+    <dl class="meta-list border-top pt-3 mt-3">
+        <dt>{% translate "Recipients:" %}</dt>
+        <dd>{{ announcement.all_users|join:", " }}</dd>
+    </dl>
+
+    <h3 class="h6 mt-4 mb-2">{% translate "Comments" %} <span class="badge text-bg-secondary">{{ comments|length }}</span></h3>
+    <div class="d-flex flex-column gap-2 mb-3">
+        {% for comment in comments %}
+        <div class="message-bubble{% if comment.author == user %} is-mine{% endif %}">
+            <div class="small text-secondary mb-1">{% blocktranslate with author=comment.author date=comment.comment_date %}{{ author }} on {{ date }}{% endblocktranslate %}</div>
+            <div>{{ comment.text }}</div>
+        </div>
+        {% empty %}
+        <p class="text-secondary small mb-0">{% translate "No comments yet." %}</p>
+        {% endfor %}
+    </div>
+
+    <form method="post" class="app-form">
+        {% csrf_token %}
+        <label class="form-label" for="{{ form.text.id_for_label }}">{% translate "Add a Comment" %}</label>
+        {{ form.text }}
+        {% for error in form.text.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        <button class="btn btn-primary btn-submit mt-2" type="submit"><i class="bi bi-send me-1"></i>{% translate "Save" %}</button>
     </form>
 </div>
-
 {% endblock %}

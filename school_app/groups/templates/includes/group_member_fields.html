@@ -1,0 +1,26 @@
+{% load i18n %}
+{# Admin and member pickers shared by the group create and edit forms #}
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-6">
+        <label class="form-label">{% translate "Select Admins" %}</label>
+        <select class="admins-select" name="admins" multiple>
+            {% for option in form.admins %}
+            <option value="{{ option.data.value }}"{% if option.data.selected %} selected{% endif %}>{{ option.data.label }}</option>
+            {% endfor %}
+        </select>
+        {% for error in form.admins.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+    </div>
+    <div class="col-12 col-md-6">
+        <label class="form-label">{% translate "Select Members" %}</label>
+        <select class="members-select" name="members" multiple>
+            {% for option in form.members %}
+            <option value="{{ option.data.value }}"{% if option.data.selected %} selected{% endif %}>{{ option.data.label }}</option>
+            {% endfor %}
+        </select>
+        {% for error in form.members.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+    </div>
+</div>
+<script>
+    new SlimSelect({ settings: slimSelectSettings, select: '.admins-select' });
+    new SlimSelect({ settings: slimSelectSettings, select: '.members-select' });
+</script>

@@ -1,0 +1,61 @@
+{% load static django_bootstrap5 %}
+{% comment %}
+Shared <head> contents for base.html and auth_base.html: Bootstrap, icons, the
+app stylesheet and the deployment theme (school_app/theme.py) as CSS variables.
+{% endcomment %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="{{ theme.primary }}">
+<link rel="icon" href="{% if theme.favicon_url %}{{ theme.favicon_url }}{% else %}{% static 'img/favicon.svg' %}{% endif %}">
+<script>
+    // Light/dark mode: the viewer's choice from the theme toggle (saved in this
+    // browser), otherwise the deployment default THEME_MODE. "auto" follows the
+    // device. Runs before the page is drawn, so there is no flash.
+    (function () {
+        var KEY = 'theme-mode';
+        var fallback = '{{ theme.mode }}';
+        var media = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function chosenMode() {
+            var mode = null;
+            try { mode = localStorage.getItem(KEY); } catch (e) {}
+            return mode === 'light' || mode === 'dark' || mode === 'auto' ? mode : fallback;
+        }
+
+        function apply() {
+            var mode = chosenMode();
+            var dark = mode === 'dark' || (mode === 'auto' && media.matches);
+            document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+            document.querySelectorAll('[data-theme-choice]').forEach(function (button) {
+                var active = button.getAttribute('data-theme-choice') === mode;
+                button.classList.toggle('active', active);
+                button.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+            document.querySelectorAll('[data-theme-icon]').forEach(function (icon) {
+                icon.className = 'bi ' + (mode === 'auto' ? 'bi-circle-half' : mode === 'dark' ? 'bi-moon-stars-fill' : 'bi-sun-fill');
+            });
+        }
+
+        apply();
+        media.addEventListener('change', apply);
+        document.addEventListener('DOMContentLoaded', apply);
+        document.addEventListener('click', function (event) {
+            var button = event.target.closest('[data-theme-choice]');
+            if (!button) { return; }
+            try { localStorage.setItem(KEY, button.getAttribute('data-theme-choice')); } catch (e) {}
+            apply();
+        });
+    })();
+</script>
+{% bootstrap_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    :root {
+        --app-primary: {{ theme.primary }};
+        --app-primary-rgb: {{ theme.primary_rgb }};
+        --app-on-primary: {{ theme.on_primary }};
+        --app-secondary: {{ theme.secondary }};
+        --app-secondary-rgb: {{ theme.secondary_rgb }};
+    }
+</style>
+<link rel="stylesheet" href="{% static 'css/app.css' %}">

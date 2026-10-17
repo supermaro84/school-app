@@ -145,3 +145,30 @@ class AnnouncementImageTests(TestCase):
         self.assertTrue(default_storage.exists(image.file.name))
         announcement.delete()
         self.assertFalse(default_storage.exists(image.file.name))
+
+
+class AnnouncementRecipientsTests(TestCase):
+    def setUp(self):
+        self.teacher = User.objects.create_user(username="teacher", password="pw")
+        self.lucy = User.objects.create_user(username="lucy", password="pw")
+        self.group = GroupProfile.objects.create(group=Group.objects.create(name="Class 1A"))
+        self.client.force_login(self.teacher)
+
+    def create(self, **recipients):
+        return self.client.post(reverse("announcement_create"), {"title": "Trip", "text": "<p>x</p>", **recipients})
+
+    def test_groups_alone_are_enough(self):
+        self.create(groups=[self.group.pk])
+        announcement = Announcement.objects.get(title="Trip")
+        self.assertEqual(list(announcement.groups.all()), [self.group])
+        self.assertFalse(announcement.users.exists())
+
+    def test_users_alone_are_enough(self):
+        self.create(users=[self.lucy.pk])
+        self.assertEqual(list(Announcement.objects.get(title="Trip").users.all()), [self.lucy])
+
+    def test_needs_groups_or_users(self):
+        response = self.create()
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Select at least one group or user.")
+        self.assertFalse(Announcement.objects.exists())

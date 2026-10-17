@@ -13,3 +13,6 @@ wheels/
 
 # Generated user credentials (plain-text passwords)
 credentials*.csv
+
+# collectstatic output
+staticfiles/

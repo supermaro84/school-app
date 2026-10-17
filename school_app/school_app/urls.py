@@ -31,7 +31,7 @@ from announcements.views import (
     AnnouncementDetailView,
     announcements_page,
 )
-from events.views import events, event_editing
+from events.views import events, event_editing, event_edit, event_delete
 from groups import views as group_views
 from accounts.views import user_list, user_detail
 from messages.views import (
@@ -96,6 +96,8 @@ urlpatterns = [
     # Events URLs
     path("api/events/", events, name="events"),
     path("calendar/", event_editing, name="calendar"),
+    path("events/<int:pk>/edit/", event_edit, name="event_edit"),
+    path("events/<int:pk>/delete/", event_delete, name="event_delete"),
     # Groups URLs
     path("groups/", group_views.group_list, name="groups"),
     path("groups/<int:pk>/", group_views.group_detail, name="group_detail"),

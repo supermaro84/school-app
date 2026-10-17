@@ -2,118 +2,110 @@
 {% load i18n %}
 {% block title %}{% translate "Welcome" %}{% endblock %}
 {% block content %}
-    
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h1 class="mb-0">
-                    <i class="fas fa-home me-2"></i>
-                    {% if user.is_authenticated %}{% blocktranslate with name=user.first_name|default:user.username %}Welcome {{ name }}!{% endblocktranslate %}{% else %}{% translate "Welcome Guest!" %}{% endif %}
-                </h1>
-            </div>
-            {% if user.is_authenticated %}
-            <div class="card-body">               
-                <ul class="nav nav-tabs" role="tablist">
-                    {% for affiliated in affiliated_users %}
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="tab" data-bs-target="#user-{{ affiliated.id }}" type="button">{{ affiliated.username }}</button>
-                    </li>
-                    {% endfor %}
-                </ul> 
-               
-                <div class="tab-content mt-3">
-                    {% for affiliated in affiliated_users %}
-                    <div id="user-{{ affiliated.id }}" class="tab-pane fade{% if forloop.first %} show active{% endif %}" role="tabpanel">
-                        <h3>
-                            {{ affiliated.get_full_name|default:affiliated.username }}
-                            {% if affiliated.profile.user_role %}<span class="badge bg-info fs-6 align-middle">{{ affiliated.profile.user_role }}</span>{% endif %}
-                        </h3>
-                        <p>{% blocktranslate with name=affiliated.username %}{{ name }}'s information here...{% endblocktranslate %}</p>                      
-<div class="accordion" id="accordion-{{ affiliated.id }}">
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-{{ affiliated.id }}" aria-expanded="true" aria-controls="collapseOne-{{ affiliated.id }}">
-        {% translate "Upcoming Events" %}  <span class="badge text-bg-secondary">{{ affiliated.event_count  }}
-     </span>
-      </button>
-    </h2>
-    <div id="collapseOne-{{ affiliated.id }}" class="accordion-collapse collapse show" data-bs-parent="#accordion-{{ affiliated.id }}">
-      {% for event in events %}
-      {% if affiliated in event.all_involved_users %}
-        <div class="accordion-body">
-  <strong>{{ event.event_name }} </strong> - {{ event.event_start_time }}
-  <span class="badge text-bg-info ms-2" title="{% translate 'Type' %}">{{ event.event_type }}</span>
-  <span class="badge text-bg-light border" title="{% translate 'Status' %}">{{ event.status }}</span>
-</a>
-        </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo-{{ affiliated.id }}" aria-expanded="false" aria-controls="collapseTwo-{{ affiliated.id }}">
-        {% translate "My announcements" %}
-        <span class="badge text-bg-secondary ms-2">{{ affiliated.announcement_items|length }}</span>
-        {% if affiliated.unread_count %}<span class="badge text-bg-warning ms-1">{% translate "Unread" %}: {{ affiliated.unread_count }}</span>{% endif %}
-      </button>
-    </h2>
-    <div id="collapseTwo-{{ affiliated.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-{{ affiliated.id }}">
-      <div class="accordion-body">
-        {% if affiliated.announcement_items %}
-        <ul class="list-group">
-          {% for item in affiliated.announcement_items %}
-          <li class="list-group-item d-flex justify-content-between align-items-center{% if not item.opened %} fw-semibold{% endif %}">
-            <a href="{% url 'announcement_detail' item.announcement.pk %}" class="text-decoration-none">{{ item.announcement.title }}</a>
-            <span>
-              <small class="text-muted me-2">{{ item.announcement.pub_date|date:"SHORT_DATE_FORMAT" }}</small>
-              {% if not item.opened %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
-            </span>
-          </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p class="text-muted mb-0">{% translate "No announcements." %}</p>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree-{{ affiliated.id }}" aria-expanded="false" aria-controls="collapseThree-{{ affiliated.id }}">
-        {% translate "My messages" %}
-      </button>
-    </h2>
-    <div id="collapseThree-{{ affiliated.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-{{ affiliated.id }}">
-      <div class="accordion-body">
-        <p class="text-muted mb-0">{% translate "Coming soon." %}</p>
-      </div>
-    </div>
-  </div>
+{% if user.is_authenticated %}
+<div class="page-header">
+    <h1><i class="bi bi-house-heart"></i>{% blocktranslate with name=user.first_name|default:user.username %}Welcome {{ name }}!{% endblocktranslate %}</h1>
 </div>
 
+{% if affiliated_users|length > 1 %}
+<ul class="nav nav-pills flex-nowrap overflow-auto mb-3" role="tablist">
+    {% for affiliated in affiliated_users %}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link text-nowrap{% if forloop.first %} active{% endif %}" data-bs-toggle="tab" data-bs-target="#user-{{ affiliated.id }}" type="button" role="tab">
+            {% if affiliated == user %}<i class="bi bi-person me-1"></i>{% endif %}{{ affiliated.get_full_name|default:affiliated.username }}
+        </button>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
 
-                    </div>    
-                    {% endfor %}
-                </div>
-            </div>
-            {% else %}
-            <div class="card-body">
-                <div class="text-center">
-                    <p class="lead">{% translate "Please log in to access all features of the school application." %}</p>
-                    <div class="d-grid gap-2 d-md-block">
-                        <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
-                            <i class="fas fa-sign-in-alt me-2"></i>{% translate "Login" %}
-                        </a>
-                        <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-user-plus me-2"></i>{% translate "Create Account" %}
-                        </a>
+<div class="tab-content">
+    {% for affiliated in affiliated_users %}
+    <div id="user-{{ affiliated.id }}" class="tab-pane fade{% if forloop.first %} show active{% endif %}" role="tabpanel">
+        <h2 class="h5 d-flex flex-wrap align-items-center gap-2 mb-3">
+            {{ affiliated.get_full_name|default:affiliated.username }}
+            {% if affiliated.profile.user_role %}<span class="badge text-bg-info fs-6 align-middle">{{ affiliated.profile.user_role }}</span>{% endif %}
+        </h2>
+        <div class="row g-3">
+            <div class="col-12 col-lg-6">
+                <section class="app-card h-100">
+                    <div class="card-header">
+                        <h5><i class="bi bi-calendar-event me-2 text-primary"></i>{% translate "Upcoming Events" %}</h5>
+                        <span class="badge text-bg-secondary">{{ affiliated.event_count }}</span>
                     </div>
+                    {% if affiliated.upcoming_events %}
+                    <ul class="list-group list-group-flush app-list">
+                        {% for event in affiliated.upcoming_events %}
+                        <li class="list-group-item">
+                            <div class="item-title">{{ event.event_name }}</div>
+                            <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+                                <small class="text-secondary"><i class="bi bi-clock me-1"></i>{{ event.event_start_time|date:"D j M, H:i" }}</small>
+                                <span class="badge text-bg-info ms-2" title="{% translate 'Type' %}">{{ event.event_type }}</span>
+                                <span class="badge text-bg-light border" title="{% translate 'Status' %}">{{ event.status }}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <div class="empty-state"><i class="bi bi-calendar2-check"></i>{% translate "No upcoming events." %}</div>
+                    {% endif %}
+                </section>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <section class="app-card h-100">
+                    <div class="card-header">
+                        <h5><i class="bi bi-megaphone me-2 text-primary"></i>{% translate "My announcements" %}</h5>
+                        <span>
+                            <span class="badge text-bg-secondary ms-2">{{ affiliated.announcement_items|length }}</span>
+                            {% if affiliated.unread_count %}<span class="badge text-bg-warning ms-1">{% translate "Unread" %}: {{ affiliated.unread_count }}</span>{% endif %}
+                        </span>
+                    </div>
+                    {% if affiliated.announcement_items %}
+                    <div class="list-group list-group-flush app-list">
+                        {% for item in affiliated.announcement_items %}
+                        <a href="{% url 'announcement_detail' item.announcement.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-2{% if not item.opened %} is-unread{% endif %}">
+                            <span class="item-title text-truncate">{{ item.announcement.title }}</span>
+                            <span class="text-nowrap">
+                                <small class="text-secondary me-1">{{ item.announcement.pub_date|date:"SHORT_DATE_FORMAT" }}</small>
+                                {% if not item.opened %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
+                            </span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state"><i class="bi bi-inbox"></i>{% translate "No announcements." %}</div>
+                    {% endif %}
+                </section>
+            </div>
+
+            <div class="col-12">
+                <section class="app-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-chat-dots me-2 text-primary"></i>{% translate "My messages" %}</h5>
+                    </div>
+                    <div class="card-body text-secondary">{% translate "Coming soon." %}</div>
+                </section>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="app-card text-center">
+            <div class="card-body p-4 p-md-5">
+                <i class="bi bi-mortarboard-fill display-4 text-primary"></i>
+                <h1 class="h3 mt-3">{% translate "Welcome Guest!" %}</h1>
+                <p class="lead text-secondary">{% translate "Please log in to access all features of the school application." %}</p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg"><i class="bi bi-box-arrow-in-right me-2"></i>{% translate "Login" %}</a>
+                    <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg"><i class="bi bi-person-plus me-2"></i>{% translate "Create Account" %}</a>
                 </div>
             </div>
-            {% endif %}
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}

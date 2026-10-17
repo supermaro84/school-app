@@ -21,8 +21,9 @@ class Announcement(models.Model):
 
     title = models.CharField(max_length=200, default="Title")
     text = CKEditor5Field('Text', config_name='extends')
-    groups = models.ManyToManyField(GroupProfile, related_name="announcements")
-    users = models.ManyToManyField(User, related_name="announcements")
+    # Either may be empty; forms require at least one of them.
+    groups = models.ManyToManyField(GroupProfile, related_name="announcements", blank=True)
+    users = models.ManyToManyField(User, related_name="announcements", blank=True)
 
     @property
     def all_users(self):

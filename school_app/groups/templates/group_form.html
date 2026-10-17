@@ -2,47 +2,30 @@
 {% load i18n %}
 
 {% block title %}{% translate "New group" %}{% endblock %}
+{% block list_visibility %}d-none d-lg-block{% endblock %}
+{% block detail_visibility %}{% endblock %}
 
 {% block group %}
-<div class="card-header bg-success text-white">
-    <h5 class="mb-0">
-        <i class="fas fa-calendar-alt me-2"></i>
-        {% translate "Add a New Group" %}
-    </h5>
+<div class="card-header">
+    <h2><i class="bi bi-plus-circle me-2 text-primary"></i>{% translate "Add a New Group" %}</h2>
+    {% url 'groups' as list_url %}{% include "includes/back_link.html" with url=list_url %}
 </div>
-<div class="card-body flex-grow-1 overflow-auto p-2">                                            
-    <form method="post">
+<div class="card-body">
+    <form method="post" class="app-form">
         {% csrf_token %}
-        <label>{% translate "Name" %}</label>
-        {{form.name}}
-        <label>{% translate "Description" %}</label>
-        {{form.description}}
-        <br>
-      <label for="users-select">{% translate "Select Admins" %}</label>
-<select class="users-select" name="admins" multiple>
-    {% for admin in form.admins %}
-        <option value="{{ admin.pk }}">{{ admin }}</option>
-    {% endfor %}
-</select>
-<script>
-    new SlimSelect({ settings: slimSelectSettings,
-        select: '.users-select'
-    });
-</script>
-<label for="members-select">{% translate "Select Members" %}</label>
-<select class="members-select" name="members" multiple>
-    {% for member in form.members %}
-        <option value="{{ member.pk }}">{{ member }}</option>
-    {% endfor %}
-</select>
-<script>
-    new SlimSelect({ settings: slimSelectSettings,
-        select: '.members-select'
-    });
-</script>    
-        <button type="submit" class="btn btn-primary btn-lg">{% translate "Save" %}</button>
+        {% for error in form.non_field_errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.name.id_for_label }}">{% translate "Name" %}</label>
+            {{ form.name }}
+            {% for error in form.name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.description.id_for_label }}">{% translate "Description" %}</label>
+            {{ form.description }}
+            {% for error in form.description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        {% include "includes/group_member_fields.html" %}
+        <button type="submit" class="btn btn-primary btn-submit"><i class="bi bi-check-lg me-1"></i>{% translate "Save" %}</button>
     </form>
-</div>
-     
 </div>
 {% endblock %}

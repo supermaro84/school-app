@@ -1,174 +1,201 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %}{% translate "Calendar" %}{% endblock %}
-{% block content %}
-    
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.19/locales-all.global.min.js'></script>
-{% get_current_language as LANGUAGE_CODE %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        selectable: true,
-        locale: '{{ LANGUAGE_CODE }}',
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: '{% url "events" %}',
-        height: '100%',
-        eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
-        slotLabelFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
-        dateClick: function(info) {
-            document.getElementById('event_panel').hidden = true;
-            document.getElementById('edit_panel').hidden = false;
-            // Set the event_start_time field in the form to the clicked date
-            var eventStartInput = document.getElementById('id_event_start_time');
-            if (eventStartInput) {
-                eventStartInput.value = info.dateStr + 'T09:00'; // Default time at 9 AM
-            }
-        },
-        select: function(info) {
-            // Optionally handle event click to show details or edit
-            console.log('Event: ' + info);
-        },
-        eventClick: function(info) {
-            var event_panel=document.getElementById('event_panel')
-            event_panel.hidden = false
-            document.getElementById('edit_panel').hidden = true;
-            document.getElementById('event-panel-title').innerHTML = '<h5>' + info.event.title + '</h5>';
-            document.getElementById('event-panel-start').innerHTML = '<p>{% filter escapejs %}{% translate "Start:" %}{% endfilter %} ' + info.event.start.toLocaleString('{{ LANGUAGE_CODE }}') + '</p>';
-            document.getElementById('event-panel-end').innerHTML = '<p>{% filter escapejs %}{% translate "End:" %}{% endfilter %} ' + info.event.end.toLocaleString('{{ LANGUAGE_CODE }}') + '</p>';
-            document.getElementById('event-panel-description').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Description:" %}{% endfilter %} ' + info.event.extendedProps.description + '</p>';
-            document.getElementById('event-panel-status').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Status:" %}{% endfilter %} ' + info.event.extendedProps.status + '</p>';
-            document.getElementById('event-panel-type').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Type:" %}{% endfilter %} ' + info.event.extendedProps.type + '</p>';
-            document.getElementById('event-panel-groups').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Groups:" %}{% endfilter %} ' + info.event.extendedProps.list_of_groups + '</p>';
-            document.getElementById('event-panel-users').innerHTML = '<p>' + '{% filter escapejs %}{% translate "Users:" %}{% endfilter %} ' + info.event.extendedProps.users + '</p>';
-        },
-    });
-    calendar.render();
-});
-</script>
 
-<div class="container-fluid h-100 d-flex flex-column overflow-hidden p-0">
-    <div class="row flex-grow-1 g-0">
-        <div class="col-12">
-            <div class="card h-100 border-0">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="mb-0">
-                        <i class="fas fa-calendar me-2"></i>{% translate "Calendar" %}
-                    </h1>
-                </div>
-                <div class="card-body flex-grow-1 p-3 d-flex flex-column overflow-hidden">
-                    <div class="row flex-grow-1 overflow-hidden">
-                        <!-- Calendar: 2/3 width (8 columns) -->
-                        <div class="col-lg-8 col-md-12 d-flex">
-                            <div class="flex-grow-1 d-flex flex-column">
-                                <div class="card bg-light flex-grow-1">
-                                    <div id="calendar" class="h-100 p-2"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-12" id="event_panel" hidden>
-                            <div class="flex-grow-1 d-flex flex-column">
-                                <div class="card bg-light flex-grow-1 d-flex flex-column">
-                                    <div class="card-header bg-secondary text-white">
-                                        <h6 class="mb-0">
-                                            <i class="fas fa-plus me-2"></i>{% translate "Inspect Event" %}
-                                        </h6>
-                                    </div>
-                                    <div class="card-body flex-grow-1 overflow-auto p-3">
-                                        <form method="post" class="h-100 d-flex flex-column">
-                                            {% csrf_token %}                                            
-                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-title"></div>
-                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-start"></div>
-                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-end"></div>
-                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-description"></div>
-                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-status"></div>
-                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-type"></div>
-                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-groups"></div>
-                                            <div class="flex-grow-1 overflow-auto mb-3" id="event-panel-users"></div>
-                                          
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Edit Panel: 1/3 width (4 columns) -->
-                        <div class="col-lg-4 col-md-12" id="edit_panel" hidden>
-                            <div class="flex-grow-1 d-flex flex-column d-flex" >
-                                <div class="card bg-light flex-grow-1 d-flex flex-column">
-                                    <div class="card-header bg-secondary text-white">
-                                        <h6 class="mb-0">
-                                            <i class="fas fa-plus me-2"></i>{% translate "Create Event" %}
-                                        </h6>
-                                    </div>
-                                    <div class="card-body flex-grow-1 overflow-auto p-3">
-                                        <form method="post" class="h-100 d-flex flex-column" action="{% url 'calendar' %}">
-                                            {% csrf_token %}
-                                            
-                                            <!-- Scrollable form fields -->
-                                            <div class="flex-grow-1 overflow-auto mb-3" style="max-height: calc(100vh - 200px);">
-                                                <div class="mb-3">
-                                                    {{ event_form.event_name.label }}
-                                                    {{ event_form.event_name }}
-                                                </div>
-                                                <div class="mb-2">
-                                                    {{ event_form.event_description.label }}
-                                                    {{ event_form.event_description }}
-                                                </div>
-                                                <div class="mb-3">
-                                                    {{ event_form.event_start_time.label }}
-                                                    {{ event_form.event_start_time }}
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label small">{% translate "Duration" %}</label>
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        {{ event_form.duration_hours }}
-                                                        <small class="text-muted">{% translate "hours" %}</small>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        {{ event_form.duration_minutes }}
-                                                        <small class="text-muted">{% translate "minutes" %}</small>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    {{ event_form.status.label }}
-                                                    {{ event_form.status }}
-                                                </div>
-                                                <div class="mb-3">
-                                                    {{ event_form.event_type.label }}
-                                                    {{ event_form.event_type }}
-                                                </div>
-                                                <div class="mb-3">
-                                                    {{ event_form.groups.label }}
-                                                    {{ event_form.groups }}
-                                                </div>
-                                                <div class="mb-3">
-                                                    {{ event_form.users.label }}
-                                                    {{ event_form.users }}
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Fixed submit button at bottom -->
-                                            <div class="border-top pt-3">
-                                                <button type="submit" class="btn btn-success btn-sm w-100">
-                                                    <i class="fas fa-save me-1"></i>{% translate "Create Event" %}
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>                     
-                    </div>
-                </div>
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.19/locales-all.global.min.js"></script>
+{% endblock %}
+
+{% block content %}
+{% get_current_language as LANGUAGE_CODE %}
+<div class="page-header">
+    <h1><i class="bi bi-calendar3"></i>{% translate "Calendar" %}</h1>
+    <button type="button" class="btn btn-primary" id="new-event-btn"><i class="bi bi-plus-lg me-1"></i>{% translate "Create Event" %}</button>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-lg-8">
+        <section class="app-card p-2 p-md-3">
+            <div id="calendar" class="calendar-wrap"></div>
+        </section>
+    </div>
+
+    <div class="col-12 col-lg-4" id="side-panel">
+        <section class="app-card" id="hint_panel">
+            <div class="empty-state py-5">
+                <i class="bi bi-hand-index"></i>{% translate "Tap a day to create an event, or an event to see its details." %}
             </div>
-        </div>
+        </section>
+
+        <section class="app-card" id="event_panel" hidden>
+            <div class="card-header">
+                <h2 class="text-truncate" id="event-panel-title"></h2>
+                <button type="button" class="btn-close" data-close-panel aria-label="{% translate 'Close' %}"></button>
+            </div>
+            <div class="card-body">
+                <dl class="meta-list" id="event-panel-details"></dl>
+                <a href="#" class="btn btn-primary btn-sm mt-3" id="event-panel-edit" hidden><i class="bi bi-pencil me-1"></i>{% translate "Edit event" %}</a>
+            </div>
+        </section>
+
+        <section class="app-card" id="edit_panel" hidden>
+            <div class="card-header">
+                <h2><i class="bi bi-plus-circle me-2 text-primary"></i>{% translate "Create Event" %}</h2>
+                <button type="button" class="btn-close" data-close-panel aria-label="{% translate 'Close' %}"></button>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'calendar' %}" class="app-form">
+                    {% csrf_token %}
+                    {% for error in event_form.non_field_errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ event_form.event_name.id_for_label }}">{{ event_form.event_name.label|capfirst }}</label>
+                        {{ event_form.event_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ event_form.event_description.id_for_label }}">{{ event_form.event_description.label|capfirst }}</label>
+                        {{ event_form.event_description }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ event_form.event_start_time.id_for_label }}">{{ event_form.event_start_time.label }}</label>
+                        {{ event_form.event_start_time }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{% translate "Duration" %}</label>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="input-group">
+                                    {{ event_form.duration_hours }}
+                                    <span class="input-group-text">{% translate "hours" %}</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group">
+                                    {{ event_form.duration_minutes }}
+                                    <span class="input-group-text">{% translate "minutes" %}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label" for="{{ event_form.status.id_for_label }}">{{ event_form.status.label|capfirst }}</label>
+                            {{ event_form.status }}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="{{ event_form.event_type.id_for_label }}">{{ event_form.event_type.label|capfirst }}</label>
+                            {{ event_form.event_type }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ event_form.groups.label|capfirst }}</label>
+                        {{ event_form.groups }}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">{{ event_form.users.label|capfirst }}</label>
+                        {{ event_form.users }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-check-lg me-1"></i>{% translate "Create Event" %}</button>
+                </form>
+            </div>
+        </section>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var panels = {
+        hint: document.getElementById('hint_panel'),
+        event: document.getElementById('event_panel'),
+        edit: document.getElementById('edit_panel')
+    };
+    var isSmall = function () { return window.matchMedia('(max-width: 767.98px)').matches; };
+
+    function showPanel(name) {
+        Object.keys(panels).forEach(function (key) { panels[key].hidden = key !== name; });
+        // On phones the panel sits below the calendar, so bring it into view.
+        if (name !== 'hint' && window.matchMedia('(max-width: 991.98px)').matches) {
+            panels[name].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+    document.querySelectorAll('[data-close-panel]').forEach(function (button) {
+        button.addEventListener('click', function () { showPanel('hint'); });
+    });
+
+    function openCreate(dateStr) {
+        var startInput = document.getElementById('id_event_start_time');
+        if (startInput && dateStr) {
+            startInput.value = dateStr.length > 10 ? dateStr.slice(0, 16) : dateStr + 'T09:00';
+        }
+        showPanel('edit');
+    }
+    document.getElementById('new-event-btn').addEventListener('click', function () { openCreate(null); });
+
+    new SlimSelect({ settings: slimSelectSettings, select: '.event-groups-select' });
+    new SlimSelect({ settings: slimSelectSettings, select: '.event-users-select' });
+
+    var labels = {
+        start: '{% filter escapejs %}{% translate "Start:" %}{% endfilter %}',
+        end: '{% filter escapejs %}{% translate "End:" %}{% endfilter %}',
+        description: '{% filter escapejs %}{% translate "Description:" %}{% endfilter %}',
+        status: '{% filter escapejs %}{% translate "Status:" %}{% endfilter %}',
+        type: '{% filter escapejs %}{% translate "Type:" %}{% endfilter %}',
+        groups: '{% filter escapejs %}{% translate "Groups:" %}{% endfilter %}',
+        users: '{% filter escapejs %}{% translate "Users:" %}{% endfilter %}'
+    };
+
+    function showEvent(event) {
+        // Built with textContent so event texts are never interpreted as HTML.
+        document.getElementById('event-panel-title').textContent = event.title;
+        var details = document.getElementById('event-panel-details');
+        details.replaceChildren();
+        var props = event.extendedProps;
+        var format = { dateStyle: 'medium', timeStyle: 'short' };
+        [
+            [labels.start, event.start ? event.start.toLocaleString('{{ LANGUAGE_CODE }}', format) : ''],
+            [labels.end, event.end ? event.end.toLocaleString('{{ LANGUAGE_CODE }}', format) : ''],
+            [labels.type, props.type],
+            [labels.status, props.status],
+            [labels.groups, props.list_of_groups],
+            [labels.users, props.users],
+            [labels.description, props.description]
+        ].forEach(function (row) {
+            if (!row[1]) { return; }
+            var dt = document.createElement('dt');
+            dt.textContent = row[0].replace(/:$/, '');
+            var dd = document.createElement('dd');
+            dd.textContent = row[1];
+            details.append(dt, dd);
+        });
+        // Only the event's author gets an edit link (can_edit comes from the feed).
+        var edit = document.getElementById('event-panel-edit');
+        edit.hidden = !props.can_edit;
+        edit.href = props.edit_url || '#';
+        showPanel('event');
+    }
+
+    var calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+        locale: '{{ LANGUAGE_CODE }}',
+        initialView: isSmall() ? 'listWeek' : 'dayGridMonth',
+        initialDate: '{{ initial_date }}' || undefined,
+        headerToolbar: isSmall()
+            ? { left: 'prev,next', center: 'title', right: 'today' }
+            : { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek' },
+        footerToolbar: isSmall() ? { center: 'dayGridMonth,listWeek' } : false,
+        height: window.matchMedia('(min-width: 992px)').matches ? '100%' : 'auto',
+        events: '{% url "events" %}',
+        dayMaxEvents: true,
+        nowIndicator: true,
+        eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+        slotLabelFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+        dateClick: function (info) { openCreate(info.dateStr); },
+        eventClick: function (info) { showEvent(info.event); }
+    });
+    calendar.render();
+
+    {% if event_form.errors %}showPanel('edit');{% endif %}
+});
+</script>
 {% endblock %}

@@ -1,68 +1,28 @@
+{% extends "auth_base.html" %}
 {% load django_bootstrap5 i18n %}
-{% get_current_language as LANGUAGE_CODE %}
 
-<!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% translate "Login" %} - {% translate "School App" %}</title>
-    {% bootstrap_css %}
-</head>
-<body class="bg-light">
-    <div class="container">
-        <div class="row justify-content-center align-items-center min-vh-100">
-            <div class="col-md-6 col-lg-4">
-                <div class="text-end mb-2">{% include "includes/language_switcher.html" %}</div>
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h3 class="mb-0">
-                            <i class="fas fa-sign-in-alt me-2"></i>{% translate "Login" %}
-                        </h3>
-                    </div>
-                    <div class="card-body p-4">
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                        
-                        <form method="post">
-                            {% csrf_token %}
-                            {% bootstrap_form form %}
-                            
-                            <div class="d-grid gap-2 mb-3">
-                                {% translate "Login" as login_label %}{% bootstrap_button login_label button_type="submit" button_class="btn-primary" %}
-                            </div>
-                            
-                            <div class="text-center">
-                                <p class="mb-2">
-                                    <a href="{% url 'password_reset' %}" class="text-decoration-none">
-                                        {% translate "Forgot your password?" %}
-                                    </a>
-                                </p>
-                                <p class="mb-0">
-                                    {% translate "Don't have an account?" %} 
-                                    <a href="{% url 'signup' %}" class="text-decoration-none fw-bold">
-                                        {% translate "Sign up here" %}
-                                    </a>
-                                </p>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center bg-light">
-                        <a href="{% url 'landing' %}" class="btn btn-outline-secondary btn-sm">
-                            <i class="fas fa-home me-1"></i>{% translate "Back to Home" %}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+{% block title %}{% translate "Login" %}{% endblock %}
+{% block heading %}<i class="bi bi-box-arrow-in-right text-primary"></i>{% translate "Login" %}{% endblock %}
+
+{% block form %}
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-primary btn-lg">{% translate "Login" %}</button>
     </div>
-    
-    {% bootstrap_javascript %}
-</body>
-</html>
+    <p class="text-center mb-0">
+        <a href="{% url 'password_reset' %}" class="text-decoration-none">{% translate "Forgot your password?" %}</a>
+    </p>
+</form>
+{% endblock %}
+
+{% block below_card %}
+<p class="mb-1">
+    {% translate "Don't have an account?" %}
+    <a href="{% url 'signup' %}" class="fw-semibold text-decoration-none">{% translate "Sign up here" %}</a>
+</p>
+<a href="{% url 'landing' %}" class="small text-secondary text-decoration-none">
+    <i class="bi bi-arrow-left me-1"></i>{% translate "Back to Home" %}
+</a>
+{% endblock %}

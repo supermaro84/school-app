@@ -1,45 +1,49 @@
 {% extends 'groups.html' %}
 {% load i18n %}
 
-{% block title %}{% translate "Group detail" %}{% endblock %}
+{% block title %}{{ group_profile.group.name }}{% endblock %}
+{% block list_visibility %}d-none d-lg-block{% endblock %}
+{% block detail_visibility %}{% endblock %}
 
 {% block group %}
-<div class="card-header bg-success text-white">
-    <h5 class="mb-0">
-        <i class="fas fa-calendar-alt me-2"></i>
-        {% translate "Group Details" %}
-    </h5>
+<div class="card-header">
+    <h2><i class="bi bi-people me-2 text-primary"></i>{% translate "Group Details" %}</h2>
+    <div class="d-flex flex-wrap gap-2">
+        {% url 'groups' as list_url %}{% include "includes/back_link.html" with url=list_url %}
+        <a href="{% url 'group_edit' group_profile.pk %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil me-1"></i>{% translate "Edit" %}</a>
+    </div>
 </div>
-<div class="card-body flex-grow-1 overflow-auto p-2">                                            
-    <h1><h2>{{ group_profile.group.name }}</h2>
-</h1>
-    <p class="lead">{{ group_profile.description }}</p>
-    <hr class="my-4">
-    <p>{% blocktranslate with date=group_profile.group.created_at %}Created on {{ date }}{% endblocktranslate %}</p>
-    <h3>{% translate "Admins" %}</h3>
-<ul>
-  {% for admin in group_profile.admins.all %}
-    <li>{{ admin.username }}</li>
-  {% empty %}
-    <li>{% translate "No admins yet." %}</li>
-  {% endfor %}
-</ul>
+<div class="card-body">
+    <h1 class="detail-title mb-1">{{ group_profile.group.name }}</h1>
+    {% if group_profile.description %}<p class="text-secondary">{{ group_profile.description }}</p>{% endif %}
+    <p class="mb-3">
+        {% if is_admin %}<span class="badge text-bg-primary"><i class="bi bi-star me-1"></i>{% translate "You are an admin." %}</span>
+        {% elif is_member %}<span class="badge text-bg-info">{% translate "You are a member of this group." %}</span>
+        {% else %}<span class="badge text-bg-light border">{% translate "You are not part of this group." %}</span>{% endif %}
+    </p>
 
-<h3>{% translate "Members" %}</h3>
-<ul>
-  {% for member in group_profile.members.all %}
-    <li>{{ member.username }}</li>
-  {% empty %}
-    <li>{% translate "No members yet." %}</li>
-  {% endfor %}
-</ul>
-
-{% if is_admin %}
-  <p><strong>{% translate "You are an admin." %}</strong></p>
-{% elif is_member %}
-  <p>{% translate "You are a member of this group." %}</p>
-{% else %}
-  <p>{% translate "You are not part of this group." %}</p>
-{% endif %}
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            <h3 class="h6">{% translate "Admins" %} <span class="badge text-bg-secondary">{{ group_profile.admins.count }}</span></h3>
+            <ul class="list-group">
+                {% for admin in group_profile.admins.all %}
+                <li class="list-group-item">{{ admin.get_full_name|default:admin.username }}</li>
+                {% empty %}
+                <li class="list-group-item text-secondary">{% translate "No admins yet." %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-12 col-md-6">
+            <h3 class="h6">{% translate "Members" %} <span class="badge text-bg-secondary">{{ group_profile.members.count }}</span></h3>
+            <ul class="list-group">
+                {% for member in group_profile.members.all %}
+                <li class="list-group-item">{{ member.get_full_name|default:member.username }}</li>
+                {% empty %}
+                <li class="list-group-item text-secondary">{% translate "No members yet." %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <p class="small text-secondary mt-3 mb-0">{% blocktranslate with date=group_profile.group.created_at %}Created on {{ date }}{% endblocktranslate %}</p>
 </div>
 {% endblock %}

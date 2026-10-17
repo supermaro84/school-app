@@ -37,7 +37,7 @@ def show_message_thread_by_id(request, pk):
         {
             "message_threads": message_threads,
             "thread": message_thread,
-            "messages": messages,
+            "thread_messages": messages,
         },
     )
 
@@ -58,7 +58,6 @@ class CreateMessageView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["messages"] = Message.objects.all().order_by("-pub_date")
         context["message_threads"] = get_users_messages(self.request.user)
         return context
 
@@ -94,7 +93,7 @@ class ReplyMessageView(CreateView):
         # The reply form sits under the thread, so show its messages too.
         thread = get_object_or_404(MessageThread, pk=self.kwargs["pk"])
         context["thread"] = thread
-        context["messages"] = thread.messages.prefetch_related("images").order_by("pub_date")
+        context["thread_messages"] = thread.messages.prefetch_related("images").order_by("pub_date")
         return context
 
     def get_success_url(self):

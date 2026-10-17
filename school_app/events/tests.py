@@ -150,3 +150,142 @@ class EventsFeedTests(TestCase):
     def test_anonymous_gets_empty_list(self):
         self.client.logout()
         self.assertEqual(self.feed(), [])
+
+
+class EventEditTests(TestCase):
+    def setUp(self):
+        self.author = User.objects.create_user(username="author", password="pw")
+        self.other = User.objects.create_user(username="other", password="pw")
+        self.lucy = User.objects.create_user(username="lucy", password="pw")
+        self.class_a = GroupProfile.objects.create(group=Group.objects.create(name="Class 1A"))
+        self.class_b = GroupProfile.objects.create(group=Group.objects.create(name="Class 2B"))
+        self.lesson = EventType.objects.create(name="Lesson")
+        self.trip = EventType.objects.create(name="Trip")
+        self.active = EventStatus.objects.create(name="Active")
+        self.cancelled = EventStatus.objects.create(name="Cancelled")
+        start = timezone.make_aware(datetime(2026, 10, 20, 9, 0))
+        self.event = Event.objects.create(
+            owner=self.author.profile, event_name="Maths", event_description="Fractions",
+            event_type=self.lesson, status=self.active,
+            event_start_time=start, event_end_time=start + timedelta(hours=1),
+        )
+        self.event.groups.add(self.class_a)
+        self.event.users.add(self.author.profile)
+        self.client.force_login(self.author)
+
+    def edit_data(self, **changes):
+        data = {
+            "event_name": "Museum trip", "event_description": "Bring lunch",
+            "event_type": self.trip.pk, "status": self.cancelled.pk,
+            "event_start_time": "2026-10-22T08:30", "event_end_time": "2026-10-23T14:00",
+            "groups": [self.class_b.pk], "users": [self.lucy.profile.pk],
+        }
+        data.update(changes)
+        return data
+
+    def test_edit_page_is_prefilled(self):
+        response = self.client.get(reverse("event_edit", args=[self.event.pk]))
+        self.assertContains(response, 'value="Maths"')
+        self.assertContains(response, 'value="2026-10-20T09:00"')
+        self.assertContains(response, 'value="2026-10-20T10:00"')
+
+    def test_author_can_change_every_field(self):
+        response = self.client.post(reverse("event_edit", args=[self.event.pk]), self.edit_data())
+        self.assertRedirects(response, reverse("calendar") + "?date=2026-10-22", fetch_redirect_response=False)
+        self.event.refresh_from_db()
+        self.assertEqual(self.event.event_name, "Museum trip")
+        self.assertEqual(self.event.event_description, "Bring lunch")
+        self.assertEqual(self.event.event_type, self.trip)
+        self.assertEqual(self.event.status, self.cancelled)
+        self.assertEqual(self.event.event_start_time, timezone.make_aware(datetime(2026, 10, 22, 8, 30)))
+        self.assertEqual(self.event.event_end_time, timezone.make_aware(datetime(2026, 10, 23, 14, 0)))
+        self.assertEqual(list(self.event.groups.all()), [self.class_b])
+        # The author always stays involved, as when creating an event.
+        self.assertEqual(set(self.event.users.all()), {self.lucy.profile, self.author.profile})
+
+    def test_end_must_be_after_start(self):
+        response = self.client.post(
+            reverse("event_edit", args=[self.event.pk]), self.edit_data(event_end_time="2026-10-22T08:00")
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context["form"].errors["event_end_time"])
+        self.event.refresh_from_db()
+        self.assertEqual(self.event.event_name, "Maths")
+
+    def test_only_the_author_can_edit_or_delete(self):
+        self.client.force_login(self.other)
+        self.assertEqual(self.client.get(reverse("event_edit", args=[self.event.pk])).status_code, 404)
+        self.assertEqual(self.client.post(reverse("event_edit", args=[self.event.pk]), self.edit_data()).status_code, 404)
+        self.assertEqual(self.client.post(reverse("event_delete", args=[self.event.pk])).status_code, 404)
+        self.event.refresh_from_db()
+        self.assertEqual(self.event.event_name, "Maths")
+
+    def test_author_can_delete(self):
+        self.assertEqual(self.client.get(reverse("event_delete", args=[self.event.pk])).status_code, 405)
+        response = self.client.post(reverse("event_delete", args=[self.event.pk]))
+        self.assertRedirects(response, reverse("calendar") + "?date=2026-10-20", fetch_redirect_response=False)
+        self.assertFalse(Event.objects.filter(pk=self.event.pk).exists())
+
+    def test_feed_offers_edit_only_to_the_author(self):
+        self.event.users.add(self.other.profile)
+        entry = self.client.get(reverse("events")).json()[0]
+        self.assertTrue(entry["can_edit"])
+        self.assertEqual(entry["edit_url"], reverse("event_edit", args=[self.event.pk]))
+        self.client.force_login(self.other)
+        entry = self.client.get(reverse("events")).json()[0]
+        self.assertFalse(entry["can_edit"])
+        self.assertEqual(entry["edit_url"], "")
+
+    def test_calendar_opens_at_requested_date(self):
+        self.assertContains(self.client.get(reverse("calendar") + "?date=2026-10-22"), "initialDate: '2026-10-22'")
+        self.assertContains(self.client.get(reverse("calendar") + "?date=nonsense"), "initialDate: ''")
+
+
+class EventRecipientsTests(TestCase):
+    def setUp(self):
+        self.teacher = User.objects.create_user(username="teacher", password="pw")
+        self.lucy = User.objects.create_user(username="lucy", password="pw")
+        self.group = GroupProfile.objects.create(group=Group.objects.create(name="Class 1A"))
+        self.type = EventType.objects.create(name="Lesson")
+        self.status = EventStatus.objects.create(name="Active")
+        self.client.force_login(self.teacher)
+
+    def create(self, **recipients):
+        data = {
+            "event_name": "Maths", "event_description": "x", "event_start_time": "2026-10-20T09:00",
+            "duration_hours": 1, "duration_minutes": 0, "event_type": self.type.pk, "status": self.status.pk,
+            **recipients,
+        }
+        return self.client.post(reverse("calendar"), data)
+
+    def test_groups_alone_are_enough(self):
+        self.assertRedirects(self.create(groups=[self.group.pk]), reverse("calendar"), fetch_redirect_response=False)
+        event = Event.objects.get(event_name="Maths")
+        self.assertEqual(list(event.groups.all()), [self.group])
+        self.assertEqual(list(event.users.all()), [self.teacher.profile])  # the author is added
+
+    def test_users_alone_are_enough(self):
+        self.create(users=[self.lucy.profile.pk])
+        event = Event.objects.get(event_name="Maths")
+        self.assertFalse(event.groups.exists())
+        self.assertEqual(set(event.users.all()), {self.lucy.profile, self.teacher.profile})
+
+    def test_create_needs_groups_or_users(self):
+        response = self.create()
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Select at least one group or user.")
+        self.assertFalse(Event.objects.exists())
+
+    def test_edit_needs_groups_or_users(self):
+        self.create(groups=[self.group.pk])
+        event = Event.objects.get(event_name="Maths")
+        data = {
+            "event_name": "Maths", "event_description": "x", "event_type": self.type.pk, "status": self.status.pk,
+            "event_start_time": "2026-10-20T09:00", "event_end_time": "2026-10-20T10:00",
+        }
+        response = self.client.post(reverse("event_edit", args=[event.pk]), data)
+        self.assertContains(response, "Select at least one group or user.")
+        data["users"] = [self.lucy.profile.pk]
+        self.client.post(reverse("event_edit", args=[event.pk]), data)
+        self.assertFalse(event.groups.exists())
+        self.assertIn(self.lucy.profile, event.users.all())

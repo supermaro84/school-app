@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 
 # Create your views here.
 from django.http import JsonResponse
-from .forms import EventForm
+from .forms import EventEditForm, EventForm
 from .models import Event
 from django.views.generic import CreateView, UpdateView
 from accounts.models import UserProfile
@@ -11,6 +11,11 @@ from datetime import datetime, time
 from django.db.models import Prefetch, Q
 from django.utils import timezone
 from django.utils.dateparse import parse_date, parse_datetime
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.utils.translation import gettext as _
+from django.views.decorators.http import require_POST
 
 
 def parse_range_param(value):
@@ -67,6 +72,7 @@ def events(request):
     events_list = []
     for event in queryset:
         involved = event.all_involved_users  # computed once, from prefetched data
+        can_edit = event.owner.user_id == request.user.id
         for u in people:
             if u in involved:
                 events_list.append(
@@ -83,6 +89,8 @@ def events(request):
                         "users": ", ".join([user.user.username for user in event.users.all()]),
                         "all_involved_users": [user.username for user in involved],
                         "affiliated_users": affiliated_usernames,
+                        "can_edit": can_edit,
+                        "edit_url": reverse("event_edit", args=[event.id]) if can_edit else "",
                     }
                 )
     return JsonResponse(events_list, safe=False)
@@ -105,6 +113,45 @@ def event_editing(request):
             print("Form errors:", form.errors)
     else:
         form = EventForm()
+    # ?date=YYYY-MM-DD opens the calendar at that day (used after editing).
+    initial_date = parse_date(request.GET.get("date", ""))
     return render(
-        request, "calendar.html", {"event_form": form, "events": Event.objects.all()}
+        request,
+        "calendar.html",
+        {"event_form": form, "initial_date": initial_date.isoformat() if initial_date else ""},
     )
+
+
+def get_own_event(request, pk):
+    # Only the event's author may change it; for anyone else it doesn't exist.
+    return get_object_or_404(Event, pk=pk, owner__user=request.user)
+
+
+def calendar_at(event):
+    day = timezone.localtime(event.event_start_time).date()
+    return f"{reverse('calendar')}?date={day.isoformat()}"
+
+
+@login_required
+def event_edit(request, pk):
+    event = get_own_event(request, pk)
+    if request.method == "POST":
+        form = EventEditForm(request.POST, instance=event)
+        if form.is_valid():
+            event = form.save()
+            event.users.add(event.owner)  # the author stays involved, as on create
+            messages.success(request, _("Event saved."))
+            return redirect(calendar_at(event))
+    else:
+        form = EventEditForm(instance=event)
+    return render(request, "event_edit.html", {"form": form, "event": event})
+
+
+@login_required
+@require_POST
+def event_delete(request, pk):
+    event = get_own_event(request, pk)
+    url = calendar_at(event)
+    event.delete()
+    messages.success(request, _("Event deleted."))
+    return redirect(url)
