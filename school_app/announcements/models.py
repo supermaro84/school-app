@@ -29,6 +29,25 @@ class Announcement(models.Model):
         )
 
 
+class AnnouncementRead(models.Model):
+    """Records that a user opened an announcement's detail page."""
+
+    announcement = models.ForeignKey(
+        Announcement, related_name="reads", on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        User, related_name="announcement_reads", on_delete=models.CASCADE
+    )
+    read_at = models.DateTimeField("first opened", auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["announcement", "user"], name="unique_announcement_read"
+            )
+        ]
+
+
 class AnnouncementComment(models.Model):
     announcement = models.ForeignKey(
         Announcement, related_name="comments", on_delete=models.CASCADE

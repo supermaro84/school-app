@@ -40,6 +40,7 @@
                                             {% for ann in announcements_data %}
                                                 <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
                                                     <h6 class="alert-heading">{{ ann.announcement.title }}
+                                                        {% if ann.opened %}<span class="badge text-bg-secondary">Opened</span>{% else %}<span class="badge text-bg-warning">New</span>{% endif %}
                                                         {% for user in ann.users_present %}<span class="badge rounded-pill text-bg-primary">{{ user.get_full_name }}</span>{% if not forloop.last %} {% endif %}{% endfor %}
                                                     </h6>
                                                    

@@ -15,9 +15,22 @@ REQUIRED_COLUMNS = {"username", "first_name", "last_name", "email", "role"}
 PASSWORD_ALPHABET = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789"
 
 
+TRUE_VALUES = {"yes", "y", "true", "1"}
+FALSE_VALUES = {"no", "n", "false", "0", ""}
+
+
 def generate_password(username, suffix_length=6):
     suffix = "".join(secrets.choice(PASSWORD_ALPHABET) for _ in range(suffix_length))
     return f"{username}-{suffix}"
+
+
+def parse_flag(row, column, line):
+    value = row.get(column, "").lower()
+    if value in TRUE_VALUES:
+        return True
+    if value in FALSE_VALUES:
+        return False
+    raise CommandError(f"Line {line}: {column} must be yes or no, got '{row[column]}'")
 
 
 class Command(BaseCommand):
@@ -26,7 +39,7 @@ class Command(BaseCommand):
         "(username + random suffix) that must be changed after the first login. "
         "Columns: username, first_name, last_name, email, role, and optionally "
         "birthdate (YYYY-MM-DD), phone_number, affiliated_users "
-        "(usernames separated by ';')."
+        "(usernames separated by ';'), is_staff and is_superuser (yes/no)."
     )
 
     def add_arguments(self, parser):
@@ -89,6 +102,9 @@ class Command(BaseCommand):
                             "is not in YYYY-MM-DD format"
                         )
 
+                is_staff = parse_flag(row, "is_staff", line)
+                is_superuser = parse_flag(row, "is_superuser", line)
+
                 password = generate_password(username)
                 user = User.objects.create_user(
                     username=username,
@@ -96,6 +112,8 @@ class Command(BaseCommand):
                     email=row["email"],
                     first_name=row["first_name"],
                     last_name=row["last_name"],
+                    is_staff=is_staff or is_superuser,
+                    is_superuser=is_superuser,
                 )
                 profile = user.profile
                 profile.user_role = role

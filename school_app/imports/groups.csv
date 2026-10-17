@@ -1,0 +1,7 @@
+name,description,admins,members
+Class 1A,"First grade: reading, writing and basic mathematics.",t_kovac;t_novak,ema_kovacova;jakub_toth;sofia_varga;lukas_molnar
+Class 1A Parents,Guardians of Class 1A students.,t_kovac;t_novak,eva_kovacova;peter_toth;zuzana_varga;martin_molnar
+Class 2B,Second grade: building on the foundations with more advanced topics.,t_horvath;t_novak,nina_toth;adam_varga;lea_simon
+Class 2B Parents,Guardians of Class 2B students.,t_horvath;t_novak,peter_toth;zuzana_varga;jana_simon
+Class 3C,Third grade: science projects and longer texts.,t_balaz,tomas_molnar;mia_farkas;filip_simon
+Class 3C Parents,Guardians of Class 3C students.,t_balaz,martin_molnar;jana_simon;robert_farkas
