@@ -41,8 +41,9 @@ class Event(models.Model):
     event_type = models.ForeignKey(EventType, on_delete=models.CASCADE, verbose_name=_("type"))
     event_start_time = models.DateTimeField(_("event start time"))
     event_end_time = models.DateTimeField(_("event end time"))
-    groups = models.ManyToManyField(GroupProfile, related_name="events", verbose_name=_("groups"))
-    users = models.ManyToManyField(UserProfile, related_name="events", verbose_name=_("users"))
+    # Either may be empty; forms require at least one of them.
+    groups = models.ManyToManyField(GroupProfile, related_name="events", verbose_name=_("groups"), blank=True)
+    users = models.ManyToManyField(UserProfile, related_name="events", verbose_name=_("users"), blank=True)
     status = models.ForeignKey(EventStatus, on_delete=models.CASCADE, verbose_name=_("status"))
     participations = models.ManyToManyField(EventParticipation, related_name="events")
 

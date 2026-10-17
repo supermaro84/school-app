@@ -15,6 +15,7 @@ Components:
 5. Messages – *TODO*
 6. Media (images & documents) – *TODO*
 7. Landing / Dashboard – *TODO*
+8. [Theme and layout](#8-theme-and-layout)
 
 ---
 
@@ -171,3 +172,39 @@ Note that sophia_martinez lists lisa_thompson, but lisa_thompson does not list s
 7. **No profile self-service.** Users can't edit their own profile (phone, birthdate) or change their password in the app.
 8. **Two kinds of "admin".** `Admin` role, `is_staff`/`is_superuser` and group admin (`GroupProfile.admins`) are separate concepts; the spec should define how they relate.
 9. **Small code issues:** `user_detail` raises a 500 for an unknown `pk` (use `get_object_or_404`); a comment in `user_list` says "15 per page" but the code uses 5; `user_and_affiliated_usernames` returns users, not usernames.
+
+---
+
+## 8. Theme and layout
+
+### 8.1 Layout
+
+| Part | Where | Behaviour |
+|---|---|---|
+| Page shell | `templates/base.html` | Sticky navbar (collapses into a menu below 1200 px), flash messages, page content in a centred container, footer. Pages scroll normally. |
+| Shared `<head>` | `templates/includes/head.html` | Bootstrap 5.3, Bootstrap Icons, `static/css/app.css` and the theme's CSS variables. |
+| Auth pages | `templates/auth_base.html` | Login, sign-up and password pages: a centred card with brand and language switcher. |
+| List and detail pages | Announcements, Messages, Groups | List (left) and detail (right) side by side on large screens, each scrolling on its own. On phones, list pages show only the list and detail pages only the detail, with a Back link (`list_visibility` / `detail_visibility` blocks). |
+| Calendar | `events/templates/calendar.html` | Month view with a side panel on desktop; list view below 768 px; the panel appears under the calendar on phones. |
+| Styles | `static/css/app.css` | All app styles; templates use Bootstrap classes and avoid inline styles. |
+
+### 8.2 Deployment theme
+
+Each deployment sets its look with environment variables (in `.env`; documented in `.env.example`). Nothing is stored in the database; restart the app after a change. `school_app/theme.py` reads them once at startup into `settings.THEME`, and the `theme` context processor gives every template `theme`, `app_name` and `nav_section`.
+
+| Variable | Values | Default |
+|---|---|---|
+| `APP_NAME` | Any text, shown as entered | "School App", translated |
+| `THEME_PRESET` | `default`, `ocean`, `forest`, `sunset`, `plum` | `default` |
+| `THEME_PRIMARY_COLOR`, `THEME_SECONDARY_COLOR` | Hex colour (`#2563eb`, `#26e`) | From the preset |
+| `THEME_NAVBAR` | `dark`, `light`, `primary` | `dark` |
+| `THEME_MODE` | `auto` (follows the device), `light`, `dark`: the default before a viewer picks one with the theme toggle | `auto` |
+| `THEME_LOGO_URL`, `THEME_FAVICON_URL` | URL | Graduation cap icon |
+| `THEME_FOOTER_TEXT` | Any text | "© year app name. All rights reserved." |
+
+- Colours are mapped onto Bootstrap's CSS variables (buttons, links, badges, form focus, pagination, calendar), so the whole app follows the primary colour.
+- Text on primary-coloured surfaces turns dark or white depending on the colour's contrast.
+- Invalid values fall back to the default and log a warning at startup.
+- The theme toggle (sun / moon / half-circle button in the navbar and on the auth pages) lets each viewer choose Light, Dark or System. The choice is saved in the browser (`localStorage`, key `theme-mode`) and applied before the page is drawn; System follows the device and changes with it.
+- For production, run `manage.py collectstatic` (files go to `STATIC_ROOT`, `school_app/staticfiles/`, git-ignored) and serve them from the web server.
+

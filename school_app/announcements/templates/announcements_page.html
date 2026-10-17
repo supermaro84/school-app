@@ -4,97 +4,51 @@
 {% block title %}{% translate "Announcements" %}{% endblock %}
 
 {% block content %}
-<div class="container-fluid d-flex flex-column" style="height: calc(100vh - var(--navbar-height, 80px)); overflow-y: auto;"> <!-- Adjust based on your navbar height -->
-    <div class="row flex-grow-1 g-0">
-        <div class="col-12">
-            <div class="card h-100 border-0">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="mb-0">
-                        <i class="fas fa-bullhorn me-2"></i>
-                        {% translate "Announcements" %}
-                    </h1>
-                </div>
-                <div class="card-body flex-grow-1 p-3 d-flex flex-column overflow-hidden">
-                    {% if user.is_authenticated %}
-                        <div class="row flex-grow-1 overflow-hidden g-3">
-                            <!-- Announcements card: 1/3 width (4 columns) -->
-                            <div class="col-lg-4 col-md-12 d-flex">
-                                <div class="flex-grow-1 d-flex flex-column">
-                                    <div class="card bg-light flex-grow-1 d-flex flex-column">
-                                        <div class="accordion" id="accordionExample">
-                                    <div class="accordion-item">
-            <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-               <i class="fas fa-bullhorn me-2"></i>
-                                                {% translate "All Announcements" %} {{ user.get_full_name }}
-            </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                
-                <div class="card-body flex-grow-1 overflow-auto p-2">
-                      <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
-<a href="{% url 'announcement_create' %}"><i class="bi bi-plus-circle-dotted">{% translate "Add new" %}</i></a>
+{% if user.is_authenticated %}
+<div class="page-header">
+    <h1><i class="bi bi-megaphone"></i>{% translate "Announcements" %}</h1>
+    <a href="{% url 'announcement_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>{% translate "Add new" %}</a>
+</div>
 
-                      </div>
-                    
-                                            {% for ann in announcements_data %}
-                                                <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
-                                                    <h6 class="alert-heading">{{ ann.announcement.title }}
-                                                        {% if ann.opened %}<span class="badge text-bg-secondary">{% translate "Opened" %}</span>{% else %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
-                                                        {% for user in ann.users_present %}<span class="badge rounded-pill text-bg-primary">{{ user.get_full_name }}</span>{% if not forloop.last %} {% endif %}{% endfor %}
-                                                    </h6>
-                                                   
-                                                    <a href="{% url 'announcement_detail' ann.announcement.pk %}" class="btn btn-primary btn-sm">{% translate "View" %}</a>
-                                                </div>
-                                            {% endfor %}                                            
-                                        </div>
+<div class="row g-3 master-detail">
+    {# On phones, detail pages hide the list (list_visibility) and show the detail #}
+    <div class="col-12 col-lg-4 {% block list_visibility %}{% endblock %}">
+        <section class="app-card">
+            <div class="card-header">
+                <h2>{% translate "All Announcements" %}</h2>
+                <span class="badge text-bg-secondary">{{ announcements_data|length }}</span>
             </div>
+            <div class="list-group list-group-flush app-list md-scroll">
+                {% for ann in announcements_data %}
+                <a href="{% url 'announcement_detail' ann.announcement.pk %}"
+                   class="list-group-item list-group-item-action{% if not ann.opened %} is-unread{% endif %}{% if ann.announcement.pk == announcement.pk %} active{% endif %}">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <span class="item-title">{{ ann.announcement.title }}</span>
+                        {% if ann.opened %}<span class="badge text-bg-secondary">{% translate "Opened" %}</span>{% else %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center gap-1 mt-1">
+                        <small class="text-secondary me-1">{{ ann.announcement.pub_date|date:"SHORT_DATE_FORMAT" }}</small>
+                        {% for person in ann.users_present %}<span class="badge rounded-pill text-bg-primary">{{ person.get_full_name|default:person.username }}</span>{% endfor %}
+                    </div>
+                </a>
+                {% empty %}
+                <div class="empty-state"><i class="bi bi-inbox"></i>{% translate "No announcements." %}</div>
+                {% endfor %}
             </div>
-        </div>
-        </div>
-                                    </div>
-                                </div>
-                            </div>
+        </section>
+    </div>
 
-                            <!-- Calendar/Events card: 2/3 width (8 columns) -->
-                            <div class="col-lg-8 col-md-12 d-flex">
-                                <div class="flex-grow-1 d-flex flex-column">
-                                    <div class="card bg-light flex-grow-1 d-flex flex-column">
-                                        {% block announcement %}
-                                        <div class="card-header bg-success text-white">
-                                            <h5 class="mb-0">
-                                                <i class="fas fa-calendar-alt me-2"></i>
-                                                {% translate "Calendar / Events" %}
-                                            </h5>
-                                        </div>
-                                        <div class="card-body flex-grow-1 overflow-auto p-2">                                            
-                                                
-                                        </div>
-                                        {% endblock %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                            
-                    {% else %}
-                        <div class="text-center flex-grow-1 d-flex align-items-center justify-content-center">
-                            <div>
-                                <p class="lead">{% translate "Please log in to access all features of the school application." %}</p>
-                                <div class="d-grid gap-2 d-md-block">
-                                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
-                                        <i class="fas fa-sign-in-alt me-2"></i>{% translate "Login" %}
-                                    </a>
-                                    <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg">
-                                        <i class="fas fa-user-plus me-2"></i>{% translate "Create Account" %}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
+    <div class="col-12 col-lg-8 {% block detail_visibility %}d-none d-lg-block{% endblock %}">
+        <section class="app-card">
+            {% block announcement %}
+            <div class="empty-state py-5">
+                <i class="bi bi-megaphone"></i>{% translate "Select an announcement to read it." %}
             </div>
-        </div>
+            {% endblock %}
+        </section>
     </div>
 </div>
+{% else %}
+{% include "includes/login_prompt.html" %}
+{% endif %}
 {% endblock %}

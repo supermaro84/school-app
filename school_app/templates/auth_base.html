@@ -1,0 +1,43 @@
+{% load django_bootstrap5 i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" data-bs-theme="{% if theme.mode == 'dark' %}dark{% else %}light{% endif %}">
+<head>
+    <title>{% block title %}{% endblock %} · {{ app_name }}</title>
+    {% include "includes/head.html" %}
+</head>
+<body>
+    <div class="auth-page">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="{% block column_class %}col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4{% endblock %}">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <a class="auth-brand" href="{% url 'landing' %}">
+                            {% if theme.logo_url %}<img src="{{ theme.logo_url }}" alt="">{% else %}<i class="bi bi-mortarboard-fill"></i>{% endif %}
+                            <span>{{ app_name }}</span>
+                        </a>
+                        <div class="d-flex align-items-center gap-2">
+                            {% include "includes/theme_toggle.html" %}
+                            {% include "includes/language_switcher.html" %}
+                        </div>
+                    </div>
+                    <div class="app-card">
+                        <div class="card-body p-4">
+                            <h1 class="h4 mb-3 d-flex align-items-center gap-2">{% block heading %}{% endblock %}</h1>
+                            {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags|default:'info' }}{% endif %} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% translate 'Close' %}"></button>
+                            </div>
+                            {% endfor %}
+                            {% block form %}{% endblock %}
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">{% block below_card %}{% endblock %}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% bootstrap_javascript %}
+</body>
+</html>

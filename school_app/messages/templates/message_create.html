@@ -2,21 +2,45 @@
 {% load i18n %}
 
 {% block title %}{% translate "New message" %}{% endblock %}
+{% block list_visibility %}d-none d-lg-block{% endblock %}
+{% block detail_visibility %}{% endblock %}
 
 {% block message %}
-<div class="card-header bg-success text-white">
-    <h5 class="mb-0">
-        <i class="fas fa-calendar-alt me-2"></i>
-        {% translate "Add a New Message" %}
-    </h5>
+<div class="card-header">
+    <h2><i class="bi bi-pencil-square me-2 text-primary"></i>{% translate "Add a New Message" %}</h2>
+    {% url 'messages_page' as list_url %}{% include "includes/back_link.html" with url=list_url %}
 </div>
-<div class="card-body flex-grow-1 overflow-auto p-2">                                            
-    <form method="post" enctype="multipart/form-data">
+<div class="card-body">
+    <form method="post" enctype="multipart/form-data" class="app-form">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary btn-lg">{% translate "Save" %}</button>
+        {% for error in form.non_field_errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+            {{ form.title }}
+            {% for error in form.title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ form.recipients.label|capfirst }}</label>
+            <select name="recipients" class="recipients-select" multiple>
+                {% for option in form.recipients %}
+                <option value="{{ option.data.value }}"{% if option.data.selected %} selected{% endif %}>{{ option.data.label }}</option>
+                {% endfor %}
+            </select>
+            {% for error in form.recipients.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="{{ form.text.id_for_label }}">{{ form.text.label }}</label>
+            {{ form.text }}
+            {% for error in form.text.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="{{ form.images.id_for_label }}">{% translate "Images" %}</label>
+            {{ form.images }}
+            <div class="form-text">{% translate "You can select several images. They are compressed when uploaded." %}</div>
+            {% for error in form.images.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit"><i class="bi bi-send me-1"></i>{% translate "Save" %}</button>
     </form>
-</div>
-     
+    <script>new SlimSelect({ settings: slimSelectSettings, select: '.recipients-select' });</script>
 </div>
 {% endblock %}

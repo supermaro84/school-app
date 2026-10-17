@@ -3,9 +3,10 @@ from django.utils.translation import gettext_lazy as _
 from .models import Announcement, AnnouncementComment, AnnouncementImage
 from groups.models import GroupProfile
 from media.forms import MultipleImageField
+from school_app.forms import GroupsOrUsersRequiredMixin
 
 
-class AnnouncementForm(forms.ModelForm):
+class AnnouncementForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
     groups = forms.ModelMultipleChoiceField(
         queryset=GroupProfile.objects.all(),
         widget=forms.CheckboxSelectMultiple,  # optional: renders as checkboxes

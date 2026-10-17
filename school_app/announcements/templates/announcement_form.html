@@ -2,75 +2,18 @@
 {% load i18n %}
 
 {% block title %}{% translate "New announcement" %}{% endblock %}
+{% block list_visibility %}d-none d-lg-block{% endblock %}
+{% block detail_visibility %}{% endblock %}
 
 {% block announcement %}
-<div class="card-header bg-success text-white">
-    <h5 class="mb-0">
-        <i class="fas fa-calendar-alt me-2"></i>
-        {% translate "Add a New Announcement" %}
-    </h5>
+<div class="card-header">
+    <h2><i class="bi bi-plus-circle me-2 text-primary"></i>{% translate "Add a New Announcement" %}</h2>
+    {% url 'announcements_page' as list_url %}{% include "includes/back_link.html" with url=list_url %}
 </div>
-<div class="card-body flex-grow-1 overflow-auto p-2">
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        <div class="mb-3">
-            <label class="form-label">{% translate "Title" %}</label>
-            {{ form.title }}
-        </div>
-        
-        <div class="mb-3">
-            <label class="form-label">{% translate "Text" %}</label>
-            {{ form.text }}
-        </div>
-        
-        <div class="mb-3">
-            <label class="form-label">{% translate "Groups" %}</label>
-            <select name="groups" class="group-select" multiple>
-                {% for gp in form.groups.field.queryset %}
-                    <option value="{{ gp.pk }}"
-                        {% if form.instance.pk and gp in form.instance.groups.all %}selected{% endif %}>
-                        {{ gp.group.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <div class="mb-3">
-            <label class="form-label">{% translate "Users" %}</label>
-            <select class="users-select" name="users" multiple>
-                {% for user in form.users %}
-                    <option value="{{ user.data.value }}">{{ user.data.label }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <div class="mb-3">
-            <label class="form-label">{% translate "Expiration Date" %}</label>
-            {{ form.exp_date }}
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" for="{{ form.images.id_for_label }}">{% translate "Images" %}</label>
-            {{ form.images }}
-            <div class="form-text">{% translate "You can select several images. They are compressed when uploaded." %}</div>
-            {% for error in form.images.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-lg">{% translate "Save" %}</button>
+<div class="card-body">
+    <form method="post" enctype="multipart/form-data" class="app-form">
+        {% include "includes/announcement_fields.html" %}
+        <button type="submit" class="btn btn-primary btn-submit"><i class="bi bi-check-lg me-1"></i>{% translate "Save" %}</button>
     </form>
-    
-    <!-- Load media files for CKEditor -->
-    {{ form.media }}
-    
-    <!-- Initialize SlimSelect -->
-    <script>
-        new SlimSelect({ settings: slimSelectSettings,
-            select: '.group-select'
-        });
-        new SlimSelect({ settings: slimSelectSettings,
-            select: '.users-select'
-        });
-    </script>
 </div>
 {% endblock %}

@@ -27,11 +27,14 @@ def summary(request):
         Q(groups__admins__in=affiliated_users) | 
         Q(groups__members__in=affiliated_users),event_start_time__gte=today,
         event_start_time__lte=two_days_ahead
-    ).select_related("event_type", "status").distinct()
+    ).select_related("event_type", "status").distinct().order_by("event_start_time")
+    # Who each event involves, worked out once per event rather than per tab.
+    involved = [(event, event.all_involved_users) for event in events]
     # Read status is the logged-in user's, as on the announcements page.
     announcements_data = get_announcements_data(request.user)
     for user in affiliated_users:
-        user.event_count = sum(1 for event in events if user in event.all_involved_users)
+        user.upcoming_events = [event for event, people in involved if user in people]
+        user.event_count = len(user.upcoming_events)
         user.announcement_items = [
             item for item in announcements_data if user in item["users_present"]
         ]

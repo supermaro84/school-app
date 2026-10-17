@@ -22,3 +22,4 @@ class MessageReplyForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ["text"]
+        widgets = {"text": forms.Textarea(attrs={"rows": 3})}

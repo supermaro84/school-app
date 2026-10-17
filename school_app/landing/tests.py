@@ -24,7 +24,7 @@ class LanguageSwitchTests(TestCase):
 
     def test_english_by_default(self):
         response = self.client.get(reverse("groups"))
-        self.assertContains(response, '<html lang="en">')
+        self.assertContains(response, '<html lang="en" ')
         self.assertContains(response, "My groups")
 
     def test_switching_to_polish_translates_pages_and_persists(self):
@@ -33,7 +33,7 @@ class LanguageSwitchTests(TestCase):
         self.assertEqual(self.client.cookies[settings.LANGUAGE_COOKIE_NAME].value, "pl")
 
         response = self.client.get(reverse("groups"))
-        self.assertContains(response, '<html lang="pl">')
+        self.assertContains(response, '<html lang="pl" ')
         self.assertContains(response, "Moje grupy")
         self.assertContains(response, "Witaj, Lucy!")
 
@@ -42,7 +42,7 @@ class LanguageSwitchTests(TestCase):
     def test_switching_to_norwegian(self):
         self.switch_to("nb")
         response = self.client.get(reverse("groups"))
-        self.assertContains(response, '<html lang="nb">')
+        self.assertContains(response, '<html lang="nb" ')
         self.assertContains(response, "Mine grupper")
         self.assertContains(response, "Velkommen, Lucy!")
         self.assertContains(response, 'value="nb"')  # switcher offers all three

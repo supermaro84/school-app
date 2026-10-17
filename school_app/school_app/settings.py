@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
+from school_app.theme import load_theme
 
 load_dotenv()
 
@@ -78,6 +79,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "school_app.theme.theme",
             ],
         },
     },
@@ -148,6 +150,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic target for deployment
+
+# Deployment theme (APP_NAME, THEME_* in .env; see .env.example and theme.py)
+THEME = load_theme(os.environ)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

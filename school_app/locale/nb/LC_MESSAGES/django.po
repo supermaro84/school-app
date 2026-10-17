@@ -14,35 +14,39 @@ msgstr ""
 msgid "%(username)s's Profile"
 msgstr "Profilen til %(username)s"
 
-#: accounts/templates/user_detail.html:11
-msgid "User Details"
-msgstr "Brukerdetaljer"
+#: accounts/templates/user_detail.html:24 landing/forms.py:15
+msgid "Birthdate"
+msgstr "Fødselsdato"
 
-#: accounts/templates/user_detail.html:18
+#: accounts/templates/user_detail.html:25
 msgid "Phone:"
 msgstr "Telefon:"
 
-#: accounts/templates/user_detail.html:19
+#: accounts/templates/user_detail.html:26
 msgid "Role:"
 msgstr "Rolle:"
 
-#: accounts/templates/user_detail.html:20
+#: accounts/templates/user_detail.html:27
 msgid "Affiliated users:"
 msgstr "Tilknyttede brukere:"
-
-#: accounts/templates/user_detail.html:23
-msgid "Back to Users"
-msgstr "Tilbake til brukere"
 
 #: accounts/templates/user_detail.html:4
 msgid "User Detail"
 msgstr "Brukerdetaljer"
 
-#: accounts/templates/users.html:12
+#: accounts/templates/user_detail.html:8
+msgid "User Details"
+msgstr "Brukerdetaljer"
+
+#: accounts/templates/user_detail.html:9
+msgid "Back to Users"
+msgstr "Tilbake til brukere"
+
+#: accounts/templates/users.html:14
 msgid "Search users..."
 msgstr "Søk etter brukere ..."
 
-#: accounts/templates/users.html:16
+#: accounts/templates/users.html:18 accounts/templates/users.html:19
 msgid "Filter by role"
 msgstr "Filtrer etter rolle"
 
@@ -54,15 +58,19 @@ msgstr "Bruk filtre"
 msgid "Clear"
 msgstr "Tøm"
 
-#: accounts/templates/users.html:3 announcements/templates/announcement_edit_form.html:37 announcements/templates/announcement_form.html:40 templates/base.html:78
+#: accounts/templates/users.html:3 announcements/templates/includes/announcement_fields.html:29 templates/base.html:63
 msgid "Users"
 msgstr "Brukere"
 
-#: accounts/templates/users.html:42
+#: accounts/templates/users.html:46
 msgid "No users match your criteria."
 msgstr "Ingen brukere samsvarer med kriteriene."
 
 #: accounts/templates/users.html:52
+msgid "Pages"
+msgstr "Sider"
+
+#: accounts/templates/users.html:56
 msgid "Prev"
 msgstr "Forrige"
 
@@ -70,74 +78,70 @@ msgstr "Forrige"
 msgid "User Directory"
 msgstr "Brukerkatalog"
 
-#: accounts/templates/users.html:64
+#: accounts/templates/users.html:62
 msgid "Next"
 msgstr "Neste"
 
-#: announcements/forms.py:23
+#: announcements/forms.py:24
 msgid "Remove images"
 msgstr "Fjern bilder"
 
-#: announcements/models.py:62
+#: announcements/models.py:63
 msgid "comment"
 msgstr "kommentar"
 
-#: announcements/models.py:76 media/models.py:16 media/models.py:47 messages/models.py:45
+#: announcements/models.py:77 media/models.py:16 media/models.py:47 messages/models.py:45
 msgid "image"
 msgstr "bilde"
 
-#: announcements/templates/announcement.html:11
+#: announcements/templates/announcement.html:10
 msgid "Read Announcement"
 msgstr "Les kunngjøring"
 
-#: announcements/templates/announcement.html:16
+#: announcements/templates/announcement.html:14
 msgid "Are you sure you want to delete this announcement?"
 msgstr "Er du sikker på at du vil slette denne kunngjøringen?"
 
-#: announcements/templates/announcement.html:16 groups/templates/groups.html:39
+#: announcements/templates/announcement.html:15 groups/templates/group_detail.html:13 groups/templates/groups.html:29
 msgid "Edit"
 msgstr "Rediger"
 
-#: announcements/templates/announcement.html:16 media/templates/images_list.html:50
+#: announcements/templates/announcement.html:18 events/templates/event_edit.html:69 media/templates/images_list.html:50
 msgid "Delete"
 msgstr "Slett"
 
-#: announcements/templates/announcement.html:22
+#: announcements/templates/announcement.html:26
 #, python-format
 msgid "Published by %(author)s on %(date)s"
 msgstr "Publisert av %(author)s %(date)s"
 
-#: announcements/templates/announcement.html:23
+#: announcements/templates/announcement.html:27
 #, python-format
 msgid "Expires on %(date)s"
 msgstr "Utløper %(date)s"
 
-#: announcements/templates/announcement.html:24
+#: announcements/templates/announcement.html:34
 msgid "Recipients:"
 msgstr "Mottakere:"
 
-#: announcements/templates/announcement.html:27
+#: announcements/templates/announcement.html:38
 msgid "Comments"
 msgstr "Kommentarer"
 
-#: announcements/templates/announcement.html:33
+#: announcements/templates/announcement.html:42
 #, python-format
 msgid "%(author)s on %(date)s"
 msgstr "%(author)s %(date)s"
 
-#: announcements/templates/announcement.html:41
+#: announcements/templates/announcement.html:46
 msgid "No comments yet."
 msgstr "Ingen kommentarer ennå."
 
-#: announcements/templates/announcement.html:45
+#: announcements/templates/announcement.html:52
 msgid "Add a Comment"
 msgstr "Legg til en kommentar"
 
-#: announcements/templates/announcement.html:5
-msgid "Announcement detail"
-msgstr "Kunngjøring"
-
-#: announcements/templates/announcement.html:52 announcements/templates/announcement_edit_form.html:77 announcements/templates/announcement_form.html:60 groups/templates/group_edit.html:43 groups/templates/group_form.html:43 messages/templates/message_create.html:17 messages/templates/message_thread_reply.html:8
+#: announcements/templates/announcement.html:55 announcements/templates/announcement_edit_form.html:17 announcements/templates/announcement_form.html:16 events/templates/event_edit.html:64 groups/templates/group_edit.html:25 groups/templates/group_form.html:28 messages/templates/message_create.html:42 messages/templates/message_thread_reply.html:18
 msgid "Save"
 msgstr "Lagre"
 
@@ -145,37 +149,9 @@ msgstr "Lagre"
 msgid "Edit Announcement"
 msgstr "Rediger kunngjøring"
 
-#: announcements/templates/announcement_edit_form.html:17 announcements/templates/announcement_form.html:18
-msgid "Title"
-msgstr "Tittel"
-
-#: announcements/templates/announcement_edit_form.html:22 announcements/templates/announcement_form.html:23
-msgid "Text"
-msgstr "Tekst"
-
-#: announcements/templates/announcement_edit_form.html:26 announcements/templates/announcement_form.html:28 groups/templates/groups.html:15 groups/templates/groups.html:29 groups/templates/groups.html:4 groups/templates/groups.html:66 templates/base.html:74
-msgid "Groups"
-msgstr "Grupper"
-
-#: announcements/templates/announcement_edit_form.html:49 announcements/templates/announcement_form.html:49
-msgid "Expiration Date"
-msgstr "Utløpsdato"
-
-#: announcements/templates/announcement_edit_form.html:55
-msgid "Attached images"
-msgstr "Vedlagte bilder"
-
-#: announcements/templates/announcement_edit_form.html:62
-msgid "Remove"
-msgstr "Fjern"
-
-#: announcements/templates/announcement_edit_form.html:71 announcements/templates/announcement_form.html:54 media/forms.py:20 media/templates/images_list.html:4
-msgid "Images"
-msgstr "Bilder"
-
-#: announcements/templates/announcement_edit_form.html:73 announcements/templates/announcement_form.html:56
-msgid "You can select several images. They are compressed when uploaded."
-msgstr "Du kan velge flere bilder. De komprimeres når de lastes opp."
+#: announcements/templates/announcement_edit_form.html:18 events/templates/event_edit.html:65 groups/templates/group_edit.html:26 messages/templates/message_thread_reply.html:19
+msgid "Cancel"
+msgstr "Avbryt"
 
 #: announcements/templates/announcement_form.html:10
 msgid "Add a New Announcement"
@@ -185,53 +161,81 @@ msgstr "Legg til en ny kunngjøring"
 msgid "New announcement"
 msgstr "Ny kunngjøring"
 
-#: announcements/templates/announcements_page.html:14 announcements/templates/announcements_page.html:4 templates/base.html:68
-msgid "Announcements"
-msgstr "Kunngjøringer"
-
-#: announcements/templates/announcements_page.html:29
-msgid "All Announcements"
-msgstr "Alle kunngjøringer"
-
-#: announcements/templates/announcements_page.html:37 groups/templates/groups.html:29 messages/templates/messages_page.html:28
+#: announcements/templates/announcements_page.html:10
 msgid "Add new"
 msgstr "Legg til ny"
 
-#: announcements/templates/announcements_page.html:44
+#: announcements/templates/announcements_page.html:18
+msgid "All Announcements"
+msgstr "Alle kunngjøringer"
+
+#: announcements/templates/announcements_page.html:27
 msgid "Opened"
 msgstr "Åpnet"
 
-#: announcements/templates/announcements_page.html:44 landing/templates/landing.html:71
+#: announcements/templates/announcements_page.html:27 landing/templates/landing.html:71
 msgid "New"
 msgstr "Ny"
 
-#: announcements/templates/announcements_page.html:48 groups/templates/groups.html:39 messages/templates/messages_page.html:36
-msgid "View"
-msgstr "Vis"
+#: announcements/templates/announcements_page.html:35 landing/templates/landing.html:77
+msgid "No announcements."
+msgstr "Ingen kunngjøringer."
 
-#: announcements/templates/announcements_page.html:68
-msgid "Calendar / Events"
-msgstr "Kalender / hendelser"
+#: announcements/templates/announcements_page.html:4 announcements/templates/announcements_page.html:9 templates/base.html:48
+msgid "Announcements"
+msgstr "Kunngjøringer"
 
-#: announcements/templates/announcements_page.html:83 groups/templates/groups.html:81 landing/templates/landing.html:104 messages/templates/messages_page.html:67
-msgid "Please log in to access all features of the school application."
-msgstr "Logg inn for å få tilgang til alle funksjonene i skoleappen."
+#: announcements/templates/announcements_page.html:45
+msgid "Select an announcement to read it."
+msgstr "Velg en kunngjøring for å lese den."
 
-#: announcements/templates/announcements_page.html:86 groups/templates/groups.html:84 landing/templates/landing.html:107 landing/templates/registration/login.html:20 landing/templates/registration/login.html:38 landing/templates/registration/login.html:9 messages/templates/messages_page.html:70 templates/base.html:98
-msgid "Login"
-msgstr "Logg inn"
+#: announcements/templates/includes/announcement_fields.html:13
+msgid "Text"
+msgstr "Tekst"
 
-#: announcements/templates/announcements_page.html:89 groups/templates/groups.html:87 landing/templates/landing.html:110 landing/templates/registration/signup.html:20 landing/templates/registration/signup.html:45 messages/templates/messages_page.html:73
-msgid "Create Account"
-msgstr "Opprett konto"
+#: announcements/templates/includes/announcement_fields.html:20 groups/templates/groups.html:4 groups/templates/groups.html:9 templates/base.html:58
+msgid "Groups"
+msgstr "Grupper"
+
+#: announcements/templates/includes/announcement_fields.html:41
+msgid "Expiration Date"
+msgstr "Utløpsdato"
+
+#: announcements/templates/includes/announcement_fields.html:49
+msgid "Attached images"
+msgstr "Vedlagte bilder"
+
+#: announcements/templates/includes/announcement_fields.html:56
+msgid "Remove"
+msgstr "Fjern"
+
+#: announcements/templates/includes/announcement_fields.html:65 media/forms.py:20 media/templates/images_list.html:4 messages/templates/message_create.html:37 messages/templates/message_thread_reply.html:13
+msgid "Images"
+msgstr "Bilder"
+
+#: announcements/templates/includes/announcement_fields.html:67 messages/templates/message_create.html:39
+msgid "You can select several images. They are compressed when uploaded."
+msgstr "Du kan velge flere bilder. De komprimeres når de lastes opp."
+
+#: announcements/templates/includes/announcement_fields.html:7
+msgid "Title"
+msgstr "Tittel"
 
 #: announcements/views.py:135
 msgid "Announcement deleted successfully."
 msgstr "Kunngjøringen er slettet."
 
-#: events/forms.py:12
+#: events/forms.py:110
+msgid "The end must be after the start."
+msgstr "Slutten må være etter starten."
+
+#: events/forms.py:33 events/forms.py:89
 msgid "Start time"
 msgstr "Starttid"
+
+#: events/forms.py:90
+msgid "End time"
+msgstr "Sluttid"
 
 #: events/models.py:39
 msgid "event name"
@@ -253,69 +257,93 @@ msgstr "starttid for hendelsen"
 msgid "event end time"
 msgstr "sluttid for hendelsen"
 
-#: events/models.py:44
+#: events/models.py:45
 msgid "groups"
 msgstr "grupper"
 
-#: events/models.py:45
+#: events/models.py:46
 msgid "users"
 msgstr "brukere"
 
-#: events/models.py:46
+#: events/models.py:47
 msgid "status"
 msgstr "status"
 
-#: events/templates/calendar.html:106 events/templates/calendar.html:160
-msgid "Create Event"
-msgstr "Opprett hendelse"
-
-#: events/templates/calendar.html:128
-msgid "Duration"
-msgstr "Varighet"
-
-#: events/templates/calendar.html:132
-msgid "hours"
-msgstr "timer"
-
-#: events/templates/calendar.html:136
-msgid "minutes"
-msgstr "minutter"
-
-#: events/templates/calendar.html:3 events/templates/calendar.html:62 templates/base.html:65
+#: events/templates/calendar.html:13 events/templates/calendar.html:3 templates/base.html:43
 msgid "Calendar"
 msgstr "Kalender"
 
-#: events/templates/calendar.html:43
+#: events/templates/calendar.html:14 events/templates/calendar.html:44 events/templates/calendar.html:98
+msgid "Create Event"
+msgstr "Opprett hendelse"
+
+#: events/templates/calendar.html:140
 msgid "Start:"
 msgstr "Start:"
 
-#: events/templates/calendar.html:44
+#: events/templates/calendar.html:141
 msgid "End:"
 msgstr "Slutt:"
 
-#: events/templates/calendar.html:45
+#: events/templates/calendar.html:142
 msgid "Description:"
 msgstr "Beskrivelse:"
 
-#: events/templates/calendar.html:46
+#: events/templates/calendar.html:143
 msgid "Status:"
 msgstr "Status:"
 
-#: events/templates/calendar.html:47
+#: events/templates/calendar.html:144
 msgid "Type:"
 msgstr "Type:"
 
-#: events/templates/calendar.html:48
+#: events/templates/calendar.html:145
 msgid "Groups:"
 msgstr "Grupper:"
 
-#: events/templates/calendar.html:49
+#: events/templates/calendar.html:146
 msgid "Users:"
 msgstr "Brukere:"
 
-#: events/templates/calendar.html:80
-msgid "Inspect Event"
-msgstr "Vis hendelse"
+#: events/templates/calendar.html:27
+msgid "Tap a day to create an event, or an event to see its details."
+msgstr "Trykk på en dag for å opprette en hendelse, eller på en hendelse for å se detaljene."
+
+#: events/templates/calendar.html:34 events/templates/calendar.html:45 templates/auth_base.html:30 templates/base.html:122
+msgid "Close"
+msgstr "Lukk"
+
+#: events/templates/calendar.html:38 events/templates/event_edit.html:3 events/templates/event_edit.html:7
+msgid "Edit event"
+msgstr "Rediger hendelse"
+
+#: events/templates/calendar.html:64
+msgid "Duration"
+msgstr "Varighet"
+
+#: events/templates/calendar.html:69
+msgid "hours"
+msgstr "timer"
+
+#: events/templates/calendar.html:75
+msgid "minutes"
+msgstr "minutter"
+
+#: events/templates/event_edit.html:66
+msgid "Are you sure you want to delete this event?"
+msgstr "Er du sikker på at du vil slette denne hendelsen?"
+
+#: events/templates/event_edit.html:8
+msgid "Back to calendar"
+msgstr "Tilbake til kalenderen"
+
+#: events/views.py:143
+msgid "Event saved."
+msgstr "Hendelsen er lagret."
+
+#: events/views.py:156
+msgid "Event deleted."
+msgstr "Hendelsen er slettet."
 
 #: groups/forms.py:8
 msgid "Group name"
@@ -325,58 +353,46 @@ msgstr "Gruppenavn"
 msgid "Group Details"
 msgstr "Gruppedetaljer"
 
-#: groups/templates/group_detail.html:18
+#: groups/templates/group_detail.html:20
+msgid "You are an admin."
+msgstr "Du er administrator."
+
+#: groups/templates/group_detail.html:21
+msgid "You are a member of this group."
+msgstr "Du er medlem av denne gruppen."
+
+#: groups/templates/group_detail.html:22
+msgid "You are not part of this group."
+msgstr "Du er ikke med i denne gruppen."
+
+#: groups/templates/group_detail.html:27
+msgid "Admins"
+msgstr "Administratorer"
+
+#: groups/templates/group_detail.html:32
+msgid "No admins yet."
+msgstr "Ingen administratorer ennå."
+
+#: groups/templates/group_detail.html:37
+msgid "Members"
+msgstr "Medlemmer"
+
+#: groups/templates/group_detail.html:42
+msgid "No members yet."
+msgstr "Ingen medlemmer ennå."
+
+#: groups/templates/group_detail.html:47
 #, python-format
 msgid "Created on %(date)s"
 msgstr "Opprettet %(date)s"
 
-#: groups/templates/group_detail.html:19
-msgid "Admins"
-msgstr "Administratorer"
-
-#: groups/templates/group_detail.html:24
-msgid "No admins yet."
-msgstr "Ingen administratorer ennå."
-
-#: groups/templates/group_detail.html:28
-msgid "Members"
-msgstr "Medlemmer"
-
-#: groups/templates/group_detail.html:33
-msgid "No members yet."
-msgstr "Ingen medlemmer ennå."
-
-#: groups/templates/group_detail.html:38
-msgid "You are an admin."
-msgstr "Du er administrator."
-
-#: groups/templates/group_detail.html:4
-msgid "Group detail"
-msgstr "Gruppe"
-
-#: groups/templates/group_detail.html:40
-msgid "You are a member of this group."
-msgstr "Du er medlem av denne gruppen."
-
-#: groups/templates/group_detail.html:42
-msgid "You are not part of this group."
-msgstr "Du er ikke med i denne gruppen."
-
-#: groups/templates/group_edit.html:11
+#: groups/templates/group_edit.html:10
 msgid "Edit Group"
 msgstr "Rediger gruppe"
 
-#: groups/templates/group_edit.html:18 groups/templates/group_form.html:18
+#: groups/templates/group_edit.html:19 groups/templates/group_form.html:23
 msgid "Description"
 msgstr "Beskrivelse"
-
-#: groups/templates/group_edit.html:21 groups/templates/group_form.html:21
-msgid "Select Admins"
-msgstr "Velg administratorer"
-
-#: groups/templates/group_edit.html:32 groups/templates/group_form.html:32
-msgid "Select Members"
-msgstr "Velg medlemmer"
 
 #: groups/templates/group_edit.html:4
 msgid "Group edit"
@@ -386,37 +402,49 @@ msgstr "Rediger gruppe"
 msgid "Add a New Group"
 msgstr "Legg til en ny gruppe"
 
-#: groups/templates/group_form.html:16
+#: groups/templates/group_form.html:18
 msgid "Name"
 msgstr "Navn"
 
-#: groups/templates/group_form.html:4
+#: groups/templates/group_form.html:4 groups/templates/groups.html:10
 msgid "New group"
 msgstr "Ny gruppe"
 
-#: groups/templates/groups.html:30
+#: groups/templates/groups.html:18
 msgid "Group filter"
 msgstr "Gruppefilter"
 
-#: groups/templates/groups.html:31
+#: groups/templates/groups.html:19
 msgid "My groups"
 msgstr "Mine grupper"
 
-#: groups/templates/groups.html:32
+#: groups/templates/groups.html:20
 msgid "All groups"
 msgstr "Alle grupper"
 
-#: groups/templates/groups.html:42
+#: groups/templates/groups.html:35
 msgid "You"
 msgstr "Du"
 
-#: groups/templates/groups.html:48
+#: groups/templates/groups.html:43
 msgid "You're not in any group."
 msgstr "Du er ikke med i noen gruppe."
 
-#: groups/templates/groups.html:49
+#: groups/templates/groups.html:44
 msgid "Show all groups"
 msgstr "Vis alle grupper"
+
+#: groups/templates/groups.html:55
+msgid "Select a group to see its members."
+msgstr "Velg en gruppe for å se medlemmene."
+
+#: groups/templates/includes/group_member_fields.html:14
+msgid "Select Members"
+msgstr "Velg medlemmer"
+
+#: groups/templates/includes/group_member_fields.html:5
+msgid "Select Admins"
+msgstr "Velg administratorer"
 
 #: landing/forms.py:10
 msgid "First name"
@@ -426,10 +454,6 @@ msgstr "Fornavn"
 msgid "Last name"
 msgstr "Etternavn"
 
-#: landing/forms.py:15
-msgid "Birthdate"
-msgstr "Fødselsdato"
-
 #: landing/forms.py:16
 msgid "Optional: Your date of birth"
 msgstr "Valgfritt: fødselsdatoen din"
@@ -438,125 +462,128 @@ msgstr "Valgfritt: fødselsdatoen din"
 msgid "Email"
 msgstr "E-post"
 
-#: landing/templates/landing.html:12
+#: landing/templates/landing.html:100
 msgid "Welcome Guest!"
 msgstr "Velkommen, gjest!"
 
-#: landing/templates/landing.html:12
-#, python-format
-msgid "Welcome %(name)s!"
-msgstr "Velkommen, %(name)s!"
+#: landing/templates/landing.html:101 templates/includes/login_prompt.html:6
+msgid "Please log in to access all features of the school application."
+msgstr "Logg inn for å få tilgang til alle funksjonene i skoleappen."
+
+#: landing/templates/landing.html:103 landing/templates/registration/login.html:12 landing/templates/registration/login.html:4 landing/templates/registration/login.html:5 templates/base.html:106 templates/includes/login_prompt.html:8
+msgid "Login"
+msgstr "Logg inn"
+
+#: landing/templates/landing.html:104 landing/templates/registration/signup.html:16 landing/templates/registration/signup.html:6 templates/includes/login_prompt.html:9
+msgid "Create Account"
+msgstr "Opprett konto"
 
 #: landing/templates/landing.html:3
 msgid "Welcome"
 msgstr "Velkommen"
 
-#: landing/templates/landing.html:32
-#, python-format
-msgid "%(name)s's information here..."
-msgstr "Informasjon om %(name)s her ..."
-
-#: landing/templates/landing.html:37
+#: landing/templates/landing.html:33
 msgid "Upcoming Events"
 msgstr "Kommende hendelser"
 
-#: landing/templates/landing.html:46
+#: landing/templates/landing.html:43
 msgid "Type"
 msgstr "Type"
 
-#: landing/templates/landing.html:47
+#: landing/templates/landing.html:44
 msgid "Status"
 msgstr "Status"
 
-#: landing/templates/landing.html:57
+#: landing/templates/landing.html:50
+msgid "No upcoming events."
+msgstr "Ingen kommende hendelser."
+
+#: landing/templates/landing.html:58
 msgid "My announcements"
 msgstr "Mine kunngjøringer"
 
-#: landing/templates/landing.html:59
+#: landing/templates/landing.html:61
 msgid "Unread"
 msgstr "Ulest"
 
-#: landing/templates/landing.html:77
-msgid "No announcements."
-msgstr "Ingen kunngjøringer."
+#: landing/templates/landing.html:7
+#, python-format
+msgid "Welcome %(name)s!"
+msgstr "Velkommen, %(name)s!"
 
 #: landing/templates/landing.html:85
 msgid "My messages"
 msgstr "Mine meldinger"
 
-#: landing/templates/landing.html:90
+#: landing/templates/landing.html:87
 msgid "Coming soon."
 msgstr "Kommer snart."
 
-#: landing/templates/registration/login.html:44
+#: landing/templates/registration/login.html:15
 msgid "Forgot your password?"
 msgstr "Glemt passordet?"
 
-#: landing/templates/registration/login.html:48
+#: landing/templates/registration/login.html:22
 msgid "Don't have an account?"
 msgstr "Har du ikke en konto?"
 
-#: landing/templates/registration/login.html:50
+#: landing/templates/registration/login.html:23
 msgid "Sign up here"
 msgstr "Registrer deg her"
 
-#: landing/templates/registration/login.html:58 landing/templates/registration/signup.html:60
+#: landing/templates/registration/login.html:26 landing/templates/registration/password_change_form.html:25 landing/templates/registration/signup.html:27
 msgid "Back to Home"
 msgstr "Tilbake til forsiden"
 
-#: landing/templates/registration/login.html:9 landing/templates/registration/password_change_form.html:9 landing/templates/registration/password_reset_form.html:9 landing/templates/registration/signup.html:9 templates/base.html:9
-msgid "School App"
-msgstr "Skoleapp"
-
-#: landing/templates/registration/password_change_form.html:20 landing/templates/registration/password_change_form.html:35 landing/templates/registration/password_change_form.html:9
-msgid "Change Password"
-msgstr "Endre passord"
-
-#: landing/templates/registration/password_change_form.html:26
+#: landing/templates/registration/password_change_form.html:10
 msgid "You are using a temporary password. Please choose a new password to continue."
 msgstr "Du bruker et midlertidig passord. Velg et nytt passord for å fortsette."
 
-#: landing/templates/registration/password_change_form.html:41
+#: landing/templates/registration/password_change_form.html:17 landing/templates/registration/password_change_form.html:4 landing/templates/registration/password_change_form.html:5 templates/base.html:89
+msgid "Change Password"
+msgstr "Endre passord"
+
+#: landing/templates/registration/password_change_form.html:30
 msgid "Log out"
 msgstr "Logg ut"
 
-#: landing/templates/registration/password_reset_form.html:20 landing/templates/registration/password_reset_form.html:9
-msgid "Reset Password"
-msgstr "Tilbakestill passord"
-
-#: landing/templates/registration/password_reset_form.html:25
-msgid "Enter your email address and we'll send you a link to reset your password."
-msgstr "Skriv inn e-postadressen din, så sender vi deg en lenke for å tilbakestille passordet."
-
-#: landing/templates/registration/password_reset_form.html:33
+#: landing/templates/registration/password_reset_form.html:15
 msgid "Send Reset Link"
 msgstr "Send lenke"
 
-#: landing/templates/registration/password_reset_form.html:38
+#: landing/templates/registration/password_reset_form.html:22
 msgid "Back to Login"
 msgstr "Tilbake til innlogging"
 
-#: landing/templates/registration/signup.html:50
+#: landing/templates/registration/password_reset_form.html:4 landing/templates/registration/password_reset_form.html:5
+msgid "Reset Password"
+msgstr "Tilbakestill passord"
+
+#: landing/templates/registration/password_reset_form.html:9
+msgid "Enter your email address and we'll send you a link to reset your password."
+msgstr "Skriv inn e-postadressen din, så sender vi deg en lenke for å tilbakestille passordet."
+
+#: landing/templates/registration/signup.html:23
 msgid "Already have an account?"
 msgstr "Har du allerede en konto?"
 
-#: landing/templates/registration/signup.html:52
+#: landing/templates/registration/signup.html:24
 msgid "Login here"
 msgstr "Logg inn her"
 
-#: landing/templates/registration/signup.html:9 templates/base.html:101
+#: landing/templates/registration/signup.html:4 templates/base.html:109
 msgid "Sign Up"
 msgstr "Registrer deg"
 
-#: landing/views.py:51
+#: landing/views.py:54
 msgid "Invalid username or password."
 msgstr "Ugyldig brukernavn eller passord."
 
-#: landing/views.py:70
+#: landing/views.py:73
 msgid "Your password has been changed."
 msgstr "Passordet ditt er endret."
 
-#: landing/views.py:84
+#: landing/views.py:87
 #, python-format
 msgid "Account created for %(username)s! You can now log in."
 msgstr "Kontoen for %(username)s er opprettet! Du kan nå logge inn."
@@ -566,19 +593,15 @@ msgstr "Kontoen for %(username)s er opprettet! Du kan nå logge inn."
 msgid "You can attach at most %(max)d images."
 msgstr "Du kan legge ved maks %(max)d bilder."
 
-#: media/templates/images_list.html:12
-msgid "Close"
-msgstr "Lukk"
-
-#: media/templates/images_list.html:18
+#: media/templates/images_list.html:14 media/templates/images_list.html:17
 msgid "Upload"
 msgstr "Last opp"
 
-#: media/templates/images_list.html:24
+#: media/templates/images_list.html:25
 msgid "My images"
 msgstr "Mine bilder"
 
-#: media/templates/images_list.html:27
+#: media/templates/images_list.html:26
 msgid "Delete this image? It will also be removed from where it is posted."
 msgstr "Slette dette bildet? Det fjernes også fra der det er publisert."
 
@@ -594,7 +617,7 @@ msgstr "Kunngjøring"
 msgid "Message"
 msgstr "Melding"
 
-#: media/templates/images_list.html:57
+#: media/templates/images_list.html:58
 msgid "You have not posted any images yet."
 msgstr "Du har ikke publisert noen bilder ennå."
 
@@ -602,9 +625,13 @@ msgstr "Du har ikke publisert noen bilder ennå."
 msgid "Documents"
 msgstr "Dokumenter"
 
-#: media/templates/images_list.html:73
+#: media/templates/images_list.html:71
 msgid "Download"
 msgstr "Last ned"
+
+#: media/templates/images_list.html:74
+msgid "No documents yet."
+msgstr "Ingen dokumenter ennå."
 
 #: media/templates/images_list.html:8
 msgid "Image Gallery"
@@ -639,93 +666,119 @@ msgstr "melding"
 msgid "Add a New Message"
 msgstr "Legg til en ny melding"
 
-#: messages/templates/message_create.html:4
+#: messages/templates/message_create.html:4 messages/templates/messages_page.html:10
 msgid "New message"
 msgstr "Ny melding"
 
-#: messages/templates/message_thread_detail.html:10 messages/templates/message_thread_detail.html:4
-msgid "Read Message"
-msgstr "Les melding"
-
-#: messages/templates/message_thread_detail.html:25
-#, python-format
-msgid "%(sender)s said: %(text)s"
-msgstr "%(sender)s skrev: %(text)s"
-
-#: messages/templates/message_thread_detail.html:27
-#, python-format
-msgid "Published on %(date)s"
-msgstr "Publisert %(date)s"
-
-#: messages/templates/message_thread_detail.html:33
+#: messages/templates/message_thread_detail.html:27 messages/templates/message_thread_reply.html:8
 msgid "Reply"
 msgstr "Svar"
 
-#: messages/templates/messages_page.html:14 messages/templates/messages_page.html:4 messages/templates/messages_page.html:52 templates/base.html:71
-msgid "Messages"
-msgstr "Meldinger"
-
-#: messages/templates/messages_page.html:27
+#: messages/templates/messages_page.html:18
 msgid "All Messages"
 msgstr "Alle meldinger"
 
-#: messages/views.py:79
+#: messages/templates/messages_page.html:29
+msgid "No messages yet."
+msgstr "Ingen meldinger ennå."
+
+#: messages/templates/messages_page.html:39
+msgid "Select a conversation to read it."
+msgstr "Velg en samtale for å lese den."
+
+#: messages/templates/messages_page.html:4 messages/templates/messages_page.html:9 templates/base.html:53
+msgid "Messages"
+msgstr "Meldinger"
+
+#: messages/views.py:78
 msgid "You don't have permission to reply to this message thread."
 msgstr "Du har ikke tillatelse til å svare i denne meldingstråden."
 
-#: school_app/settings.py:133
+#: school_app/forms.py:11
+msgid "Select at least one group or user."
+msgstr "Velg minst én gruppe eller én bruker."
+
+#: school_app/settings.py:135
 msgid "English"
 msgstr "Engelsk"
 
-#: school_app/settings.py:134
+#: school_app/settings.py:136
 msgid "Polish"
 msgstr "Polsk"
 
-#: school_app/settings.py:135
+#: school_app/settings.py:137
 msgid "Norwegian"
 msgstr "Norsk"
 
-#: templates/base.html:118
-msgid "School App. All rights reserved."
-msgstr "Skoleapp. Alle rettigheter forbeholdt."
+#: school_app/theme.py:110
+msgid "School App"
+msgstr "Skoleapp"
 
-#: templates/base.html:17
+#: templates/base.html:13
 msgid "Select..."
 msgstr "Velg ..."
 
-#: templates/base.html:18
+#: templates/base.html:131
+msgid "All rights reserved."
+msgstr "Alle rettigheter forbeholdt."
+
+#: templates/base.html:14
 msgid "Search"
 msgstr "Søk"
 
-#: templates/base.html:19
+#: templates/base.html:15
 msgid "No results"
 msgstr "Ingen resultater"
 
-#: templates/base.html:20
+#: templates/base.html:16
 msgid "Searching..."
 msgstr "Søker ..."
 
-#: templates/base.html:61
+#: templates/base.html:29
+msgid "Menu"
+msgstr "Meny"
+
+#: templates/base.html:38
 msgid "Home"
 msgstr "Hjem"
 
-#: templates/base.html:81
+#: templates/base.html:68
 msgid "Media"
 msgstr "Media"
 
-#: templates/base.html:88
+#: templates/base.html:81
 #, python-format
 msgid "Welcome, %(name)s!"
 msgstr "Velkommen, %(name)s!"
 
-#: templates/base.html:93
+#: templates/base.html:83 templates/includes/language_switcher.html:10
+msgid "Language"
+msgstr "Språk"
+
+#: templates/base.html:97
 msgid "Logout"
 msgstr "Logg ut"
+
+#: templates/includes/back_link.html:3
+msgid "Back"
+msgstr "Tilbake"
 
 #: templates/includes/image_gallery.html:6
 msgid "Open full size"
 msgstr "Åpne i full størrelse"
 
-#: templates/includes/language_switcher.html:10
-msgid "Language"
-msgstr "Språk"
+#: templates/includes/theme_toggle.html:12
+msgid "Light"
+msgstr "Lys"
+
+#: templates/includes/theme_toggle.html:13
+msgid "Dark"
+msgstr "Mørk"
+
+#: templates/includes/theme_toggle.html:14
+msgid "System"
+msgstr "System"
+
+#: templates/includes/theme_toggle.html:8
+msgid "Theme"
+msgstr "Tema"

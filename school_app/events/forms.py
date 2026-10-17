@@ -3,37 +3,47 @@ from .models import Event
 from django.contrib.auth.models import Group, User
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
+from school_app.forms import GroupsOrUsersRequiredMixin
 
 
-class EventForm(forms.ModelForm):
-    event_start_time = forms.DateTimeField(
-        widget=forms.DateTimeInput(attrs={"type": "datetime-local"}),
-        input_formats=["%Y-%m-%dT%H:%M"],
-        label=_("Start time"),
+DATETIME_LOCAL = "%Y-%m-%dT%H:%M"  # value format of <input type="datetime-local">
+
+
+def datetime_field(label):
+    return forms.DateTimeField(
+        widget=forms.DateTimeInput(
+            attrs={"type": "datetime-local", "class": "form-control"}, format=DATETIME_LOCAL
+        ),
+        input_formats=[DATETIME_LOCAL],
+        label=label,
     )
+
+
+EVENT_WIDGETS = {
+    "event_name": forms.TextInput(attrs={"class": "form-control"}),
+    "event_description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+    "users": forms.SelectMultiple(attrs={"class": "event-users-select"}),
+    "status": forms.Select(attrs={"class": "form-select"}),
+    "event_type": forms.Select(attrs={"class": "form-select"}),
+    "groups": forms.SelectMultiple(attrs={"class": "event-groups-select"}),
+}
+
+
+class EventForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
+    event_start_time = datetime_field(_("Start time"))
     # Separate hour and minute fields for better UX
     duration_hours = forms.IntegerField(
         min_value=0,
         max_value=23,
         initial=1,
-        widget=forms.NumberInput(
-            attrs={
-                "class": "form-control form-control-sm",
-                "style": "width: 60px; display: inline-block;",
-            }
-        ),
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
     )
 
     duration_minutes = forms.IntegerField(
         min_value=0,
         max_value=59,
         initial=0,
-        widget=forms.NumberInput(
-            attrs={
-                "class": "form-control form-control-sm",
-                "style": "width: 60px; display: inline-block;",
-            }
-        ),
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
     )
 
     class Meta:
@@ -47,16 +57,7 @@ class EventForm(forms.ModelForm):
             "groups",
             "event_description",
         ]
-        widgets = {
-            "users": forms.SelectMultiple(
-                attrs={"class": "form-control form-control-sm"}
-            ),  # Multi-select dropdown
-            "status": forms.Select(attrs={"class": "form-control form-control-sm"}),
-            "event_type": forms.Select(attrs={"class": "form-control form-control-sm"}),
-            "groups": forms.SelectMultiple(
-                attrs={"class": "form-control form-control-sm"}
-            ),
-        }
+        widgets = EVENT_WIDGETS
     
     def save(self, commit=True):
         event = super().save(commit=False)
@@ -80,4 +81,32 @@ class EventForm(forms.ModelForm):
         #    event.users.set(users)
         #    self.save_m2m()
         return event
-    
+
+
+class EventEditForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
+    """Edit every part of an existing event; start and end are set directly."""
+
+    event_start_time = datetime_field(_("Start time"))
+    event_end_time = datetime_field(_("End time"))
+
+    class Meta:
+        model = Event
+        fields = [
+            "event_name",
+            "event_description",
+            "event_type",
+            "status",
+            "event_start_time",
+            "event_end_time",
+            "groups",
+            "users",
+        ]
+        widgets = EVENT_WIDGETS
+
+    def clean(self):
+        cleaned = super().clean()
+        start, end = cleaned.get("event_start_time"), cleaned.get("event_end_time")
+        if start and end and end <= start:
+            self.add_error("event_end_time", _("The end must be after the start."))
+        return cleaned
+
