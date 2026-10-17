@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 # Create your views here.
 from django.http import JsonResponse
 from .forms import EventEditForm, EventForm
-from .models import Event
+from .models import Event, EventDocument
+from media.forms import save_images
 from django.views.generic import CreateView, UpdateView
 from accounts.models import UserProfile
 from groups.models import GroupProfile
@@ -52,6 +53,7 @@ def events(request):
         Event.objects.filter(pk__in=matching)
         .select_related("owner__user", "status", "event_type")
         .prefetch_related(
+            "documents",
             Prefetch("users", queryset=UserProfile.objects.select_related("user")),
             Prefetch(
                 "groups",
@@ -73,6 +75,7 @@ def events(request):
     for event in queryset:
         involved = event.all_involved_users  # computed once, from prefetched data
         can_edit = event.owner.user_id == request.user.id
+        documents = [{"name": d.filename, "url": d.file.url} for d in event.documents.all()]
         for u in people:
             if u in involved:
                 events_list.append(
@@ -90,6 +93,7 @@ def events(request):
                         "all_involved_users": [user.username for user in involved],
                         "affiliated_users": affiliated_usernames,
                         "can_edit": can_edit,
+                        "documents": documents,
                         "edit_url": reverse("event_edit", args=[event.id]) if can_edit else "",
                     }
                 )
@@ -100,13 +104,14 @@ def event_editing(request):
     if request.method == "POST":
         # Handle form submission
         print("POST received")
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             event = form.save(commit=False)
             event.owner = UserProfile.objects.get(user=request.user)
             event.save()        
             form.save_m2m()
             event.users.add(event.owner)
+            save_images(EventDocument, form.cleaned_data["documents"], event=event)
             # Redirect to same page to prevent re-submission
             return redirect("calendar")
         else:
@@ -136,10 +141,13 @@ def calendar_at(event):
 def event_edit(request, pk):
     event = get_own_event(request, pk)
     if request.method == "POST":
-        form = EventEditForm(request.POST, instance=event)
+        form = EventEditForm(request.POST, request.FILES, instance=event)
         if form.is_valid():
             event = form.save()
             event.users.add(event.owner)  # the author stays involved, as on create
+            for document in form.cleaned_data["remove_documents"]:
+                document.delete()
+            save_images(EventDocument, form.cleaned_data["documents"], event=event)
             messages.success(request, _("Event saved."))
             return redirect(calendar_at(event))
     else:

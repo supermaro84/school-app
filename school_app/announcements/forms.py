@@ -1,8 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from .models import Announcement, AnnouncementComment, AnnouncementImage
+from .models import Announcement, AnnouncementComment, AnnouncementDocument, AnnouncementImage
 from groups.models import GroupProfile
-from media.forms import MultipleImageField
+from media.forms import MultipleDocumentField, MultipleImageField
 from school_app.forms import GroupsOrUsersRequiredMixin
 
 
@@ -23,6 +23,13 @@ class AnnouncementForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
         required=False,
         label=_("Remove images"),
     )
+    documents = MultipleDocumentField()
+    remove_documents = forms.ModelMultipleChoiceField(
+        queryset=AnnouncementDocument.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label=_("Remove documents"),
+    )
 
     class Meta:
         model = Announcement
@@ -32,6 +39,7 @@ class AnnouncementForm(GroupsOrUsersRequiredMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.instance.pk:
             self.fields["remove_images"].queryset = self.instance.images.all()
+            self.fields["remove_documents"].queryset = self.instance.documents.all()
 
 
 class AnnouncementCommentForm(forms.ModelForm):

@@ -1,7 +1,7 @@
 from .models import Message, MessageThread
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from media.forms import MultipleImageField
+from media.forms import MultipleDocumentField, MultipleImageField
 
 
 class MessageThreadForm(forms.ModelForm):
@@ -10,6 +10,7 @@ class MessageThreadForm(forms.ModelForm):
     )
     title = forms.CharField(max_length=150, required=True, label=_("Message title"))
     images = MultipleImageField()
+    documents = MultipleDocumentField()
 
     class Meta:
         model = MessageThread
@@ -18,6 +19,7 @@ class MessageThreadForm(forms.ModelForm):
 
 class MessageReplyForm(forms.ModelForm):
     images = MultipleImageField()
+    documents = MultipleDocumentField()
 
     class Meta:
         model = Message

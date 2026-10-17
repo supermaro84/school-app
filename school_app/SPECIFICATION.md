@@ -16,6 +16,7 @@ Components:
 6. Media (images & documents) – *TODO*
 7. Landing / Dashboard – *TODO*
 8. [Theme and layout](#8-theme-and-layout)
+9. [Galleries and documents](#9-galleries-and-documents)
 
 ---
 
@@ -168,7 +169,7 @@ Note that sophia_martinez lists lisa_thompson, but lisa_thompson does not list s
 3. **Open sign-up.** Anyone can register. For a school app, consider invitation-only accounts or admin approval.
 4. **Affiliation direction.** Should affiliations be symmetric, or strictly guardian → student? Should students see their guardians' content at all?
 5. **Privacy.** Any logged-in user can list all users and see their birthdate, phone and affiliations. Visibility should probably depend on role and relationship.
-6. **Missing login checks.** Several views lack `@login_required` / `LoginRequiredMixin`, including announcements, events API, calendar, messages, media, and the group create/edit views. Anonymous access to these currently fails or leaks data.
+6. **Missing login checks.** Several views lack `@login_required` / `LoginRequiredMixin`, including announcements, calendar and messages. Anonymous access to these currently fails or leaks data. (Group create/edit, media and the events API are protected; group editing is limited to the group's admins.)
 7. **No profile self-service.** Users can't edit their own profile (phone, birthdate) or change their password in the app.
 8. **Two kinds of "admin".** `Admin` role, `is_staff`/`is_superuser` and group admin (`GroupProfile.admins`) are separate concepts; the spec should define how they relate.
 9. **Small code issues:** `user_detail` raises a 500 for an unknown `pk` (use `get_object_or_404`); a comment in `user_list` says "15 per page" but the code uses 5; `user_and_affiliated_usernames` returns users, not usernames.
@@ -207,4 +208,31 @@ Each deployment sets its look with environment variables (in `.env`; documented 
 - Invalid values fall back to the default and log a warning at startup.
 - The theme toggle (sun / moon / half-circle button in the navbar and on the auth pages) lets each viewer choose Light, Dark or System. The choice is saved in the browser (`localStorage`, key `theme-mode`) and applied before the page is drawn; System follows the device and changes with it.
 - For production, run `manage.py collectstatic` (files go to `STATIC_ROOT`, `school_app/staticfiles/`, git-ignored) and serve them from the web server.
+
+---
+
+## 9. Galleries and documents
+
+### 9.1 Media page (`/media/images/`)
+
+| Section | Content |
+|---|---|
+| Galleries | Galleries the user can see, filter All / My galleries / Shared with me, "New gallery" button. Cards show cover image, name, image count, owner and who the gallery reaches (You / child names). |
+| My images | Images the user attached to announcements, messages and galleries (plus older loose uploads), each with where it is posted and Delete. |
+
+### 9.2 Galleries (`media.Gallery`, `media.GalleryImage`)
+
+| Rule | Behaviour |
+|---|---|
+| Fields | Owner, name, description, created date, shared with users and/or groups (both optional; unshared means private). |
+| Who sees it | Owner, shared users, members and admins of shared groups, and their guardians (affiliated users). Anyone else gets 404. |
+| Who adds images | Owner, shared users and group members/admins. Guardians who only see it through a child can't upload (403). Images are compressed like other attachments and stored as `galleries/<uploader>/<gallery id>/`. |
+| Who deletes images | The uploader, and the gallery owner for any image. |
+| Edit / delete gallery | Owner only; deleting removes all images and their files. |
+
+### 9.3 Documents
+
+- PDF, Word, Excel, PowerPoint, OpenDocument, RTF, TXT and CSV files, up to 20 MB each and 10 per post, can be attached to announcements (create/edit, removable on edit), messages (new thread and reply) and events (create in the calendar, add/remove on the edit page).
+- Files aren't converted; they are stored next to the post's images (`announcements|messages/<user>/<id>/`, `events/<author>/<event id>/`). The size is saved at upload. Deleting a document or its post removes the file.
+- The **Documents** menu (`/documents/`) lists every document on announcements and events reaching the user or their affiliated users and on the user's message threads, with source, link to the post, uploader, date, size, Download, and Delete for the user's own documents. Filter All / Mine. Older admin-uploaded `DocumentFile`s are listed for their owner only.
 

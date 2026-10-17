@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from groups.models import GroupProfile
 from django_ckeditor_5.fields import CKEditor5Field
 from django.db.models.signals import post_delete
-from media.models import AttachedImage, delete_attached_file
+from media.models import AttachedDocument, AttachedImage, delete_attached_file
 
 
 
@@ -81,3 +81,17 @@ class AnnouncementImage(AttachedImage):
 
 
 post_delete.connect(delete_attached_file, sender=AnnouncementImage)
+
+
+class AnnouncementDocument(AttachedDocument):
+    announcement = models.ForeignKey(
+        Announcement, related_name="documents", on_delete=models.CASCADE
+    )
+    # Same folder as the announcement's images
+    file = models.FileField(_("document"), upload_to=announcement_image_path, max_length=255)
+
+    class Meta(AttachedDocument.Meta):
+        pass
+
+
+post_delete.connect(delete_attached_file, sender=AnnouncementDocument)

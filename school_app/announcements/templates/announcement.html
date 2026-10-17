@@ -28,7 +28,8 @@
     </p>
 
     <div class="rich-text mb-3">{{ announcement.text|safe }}</div>
-    {% include "includes/image_gallery.html" with images=announcement.images.all %}
+      {% include "includes/image_gallery.html" with images=announcement.images.all %}
+    {% include "includes/document_list.html" with documents=announcement.documents.all %}
 
     <dl class="meta-list border-top pt-3 mt-3">
         <dt>{% translate "Recipients:" %}</dt>

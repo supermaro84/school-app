@@ -2,6 +2,8 @@ from django.contrib.auth.models import Group
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from accounts.utils import get_affiliated_users
 from .models import GroupProfile
 from django.urls import reverse
@@ -60,7 +62,7 @@ def group_detail(request, pk):
     )
 
 
-class CreateGroupView(CreateView):
+class CreateGroupView(LoginRequiredMixin, CreateView):
     model = GroupProfile
     template_name = "group_form.html"
     form_class = GroupForm
@@ -93,14 +95,18 @@ class CreateGroupView(CreateView):
         return reverse("group_detail", kwargs={"pk": self.object.pk})
 
 
-class EditGroupView(UpdateView):
+class EditGroupView(LoginRequiredMixin, UpdateView):
+    """Change a group's description, admins and members; group admins only."""
+
     model = GroupProfile
     form_class = GroupEditForm
     template_name = "group_edit.html"
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
+    def get_object(self, queryset=None):
+        group = super().get_object(queryset)
+        if not group.admins.filter(pk=self.request.user.pk).exists():
+            raise PermissionDenied
+        return group
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -39,6 +39,7 @@
             <div class="form-text">{% translate "You can select several images. They are compressed when uploaded." %}</div>
             {% for error in form.images.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
         </div>
+        {% include "includes/document_field.html" %}
         <button type="submit" class="btn btn-primary btn-submit"><i class="bi bi-send me-1"></i>{% translate "Save" %}</button>
     </form>
     <script>new SlimSelect({ settings: slimSelectSettings, select: '.recipients-select' });</script>

@@ -19,8 +19,8 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-xl sticky-top app-navbar app-navbar-{{ theme.navbar }}"{% if theme.navbar_dark %} data-bs-theme="dark"{% endif %}>
-        <div class="container-xl">
+    <nav class="navbar navbar-expand-xxl sticky-top app-navbar app-navbar-{{ theme.navbar }}"{% if theme.navbar_dark %} data-bs-theme="dark"{% endif %}>
+        <div class="container-fluid px-xxl-4">
             <a class="navbar-brand" href="{% url 'landing' %}">
                 {% if theme.logo_url %}<img src="{{ theme.logo_url }}" alt="">{% else %}<i class="bi bi-mortarboard-fill"></i>{% endif %}
                 <span>{{ app_name }}</span>
@@ -31,7 +31,7 @@
             </button>
             <div class="collapse navbar-collapse" id="main-nav">
                 {% if user.is_authenticated %}
-                <ul class="navbar-nav me-auto mb-2 mb-xl-0 gap-xl-1">
+                <ul class="navbar-nav me-auto mb-2 mb-xxl-0 gap-xxl-1">
                     {% url 'landing' as landing_url %}
                     <li class="nav-item">
                         <a class="nav-link{% if not nav_section %} active{% endif %}" href="{{ landing_url }}"{% if not nav_section %} aria-current="page"{% endif %}>
@@ -68,9 +68,14 @@
                             <i class="bi bi-images me-1"></i>{% translate "Media" %}
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if nav_section == 'documents' %} active{% endif %}" href="{% url 'documents_page' %}">
+                            <i class="bi bi-file-earmark-text me-1"></i>{% translate "Documents" %}
+                        </a>
+                    </li>
                 </ul>
                 {% endif %}
-                <div class="d-flex flex-wrap flex-xl-nowrap align-items-center gap-2 ms-xl-auto">
+                <div class="d-flex flex-wrap flex-xxl-nowrap align-items-center gap-2 ms-xxl-auto">
                     {% if theme.navbar_dark %}{% include "includes/theme_toggle.html" with variant="light" %}{% else %}{% include "includes/theme_toggle.html" %}{% endif %}
                     {% if user.is_authenticated %}
                     <div class="dropdown">

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
-from media.models import AttachedImage, delete_attached_file
+from media.models import AttachedDocument, AttachedImage, delete_attached_file
 
 
 class MessageThread(models.Model):
@@ -49,3 +49,15 @@ class MessageImage(AttachedImage):
 
 
 post_delete.connect(delete_attached_file, sender=MessageImage)
+
+
+class MessageDocument(AttachedDocument):
+    message = models.ForeignKey(Message, related_name="documents", on_delete=models.CASCADE)
+    # Same folder as the message's images
+    file = models.FileField(_("document"), upload_to=message_image_path, max_length=255)
+
+    class Meta(AttachedDocument.Meta):
+        pass
+
+
+post_delete.connect(delete_attached_file, sender=MessageDocument)

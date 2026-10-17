@@ -144,7 +144,7 @@ class EventsFeedTests(TestCase):
     def test_query_count_does_not_grow_with_events(self):
         for day in range(1, 21):
             self.make_event(f"Lesson {day}", day, groups=[self.group], users=[self.parent.profile])
-        with self.assertNumQueries(9):
+        with self.assertNumQueries(10):
             self.assertEqual(len(self.feed()), 40)
 
     def test_anonymous_gets_empty_list(self):

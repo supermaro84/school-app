@@ -16,3 +16,10 @@ class GroupEditForm(forms.ModelForm):
     class Meta:
         model = GroupProfile
         fields = ["description", "admins", "members"]
+
+    def clean_admins(self):
+        admins = self.cleaned_data.get("admins")
+        # Without an admin nobody could manage the group any more.
+        if not admins:
+            raise forms.ValidationError(_("A group needs at least one admin."))
+        return admins

@@ -1,6 +1,6 @@
 from typing import Any
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import MessageThread, Message, MessageImage
+from .models import MessageThread, Message, MessageDocument, MessageImage
 import datetime
 from zoneinfo import ZoneInfo
 from school_app.settings import TIME_ZONE
@@ -26,7 +26,7 @@ def messages_page(request):
 # Create your views here.
 def show_message_thread_by_id(request, pk):
     message_thread = MessageThread.objects.get(pk=pk)
-    messages = message_thread.messages.prefetch_related("images").order_by("pub_date")
+    messages = message_thread.messages.prefetch_related("images", "documents").order_by("pub_date")
     message_threads = get_users_messages(request.user)
     # Logic to retrieve and display announcements
     if request.user not in message_thread.all_recipients:
@@ -54,6 +54,7 @@ class CreateMessageView(CreateView):
             thread=thread, sender=self.request.user, text=form.cleaned_data["text"]
         )
         save_images(MessageImage, form.cleaned_data["images"], message=message)
+        save_images(MessageDocument, form.cleaned_data["documents"], message=message)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -85,6 +86,7 @@ class ReplyMessageView(CreateView):
         form.instance.sender = self.request.user
         response = super().form_valid(form)
         save_images(MessageImage, form.cleaned_data["images"], message=self.object)
+        save_images(MessageDocument, form.cleaned_data["documents"], message=self.object)
         return response
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -93,7 +95,7 @@ class ReplyMessageView(CreateView):
         # The reply form sits under the thread, so show its messages too.
         thread = get_object_or_404(MessageThread, pk=self.kwargs["pk"])
         context["thread"] = thread
-        context["thread_messages"] = thread.messages.prefetch_related("images").order_by("pub_date")
+        context["thread_messages"] = thread.messages.prefetch_related("images", "documents").order_by("pub_date")
         return context
 
     def get_success_url(self):

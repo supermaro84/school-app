@@ -68,6 +68,8 @@
     {% for error in form.images.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
 </div>
 
+{% include "includes/document_field.html" %}
+
 {{ form.media }}
 <script>
     new SlimSelect({ settings: slimSelectSettings, select: '.group-select' });

@@ -86,13 +86,21 @@ msgstr "Następna"
 msgid "Remove images"
 msgstr "Usuń zdjęcia"
 
+#: announcements/forms.py:31 events/forms.py:99
+msgid "Remove documents"
+msgstr "Usuń dokumenty"
+
 #: announcements/models.py:63
 msgid "comment"
 msgstr "komentarz"
 
-#: announcements/models.py:77 media/models.py:16 media/models.py:47 messages/models.py:45
+#: announcements/models.py:77 media/models.py:139 media/models.py:16 media/models.py:47 messages/models.py:45
 msgid "image"
 msgstr "obraz"
+
+#: announcements/models.py:91 events/models.py:74 media/models.py:62 messages/models.py:57
+msgid "document"
+msgstr "dokument"
 
 #: announcements/templates/announcement.html:10
 msgid "Read Announcement"
@@ -102,11 +110,11 @@ msgstr "Ogłoszenie"
 msgid "Are you sure you want to delete this announcement?"
 msgstr "Czy na pewno chcesz usunąć to ogłoszenie?"
 
-#: announcements/templates/announcement.html:15 groups/templates/group_detail.html:13 groups/templates/groups.html:29
+#: announcements/templates/announcement.html:15 groups/templates/group_detail.html:14 groups/templates/groups.html:30 media/templates/gallery_detail.html:12
 msgid "Edit"
 msgstr "Edytuj"
 
-#: announcements/templates/announcement.html:18 events/templates/event_edit.html:69 media/templates/images_list.html:50
+#: announcements/templates/announcement.html:18 events/templates/event_edit.html:70 media/templates/documents.html:43 media/templates/gallery_detail.html:16 media/templates/gallery_detail.html:73 media/templates/images_list.html:87
 msgid "Delete"
 msgstr "Usuń"
 
@@ -120,28 +128,28 @@ msgstr "Opublikowane przez %(author)s, %(date)s"
 msgid "Expires on %(date)s"
 msgstr "Wygasa: %(date)s"
 
-#: announcements/templates/announcement.html:34
+#: announcements/templates/announcement.html:35
 msgid "Recipients:"
 msgstr "Odbiorcy:"
 
-#: announcements/templates/announcement.html:38
+#: announcements/templates/announcement.html:39
 msgid "Comments"
 msgstr "Komentarze"
 
-#: announcements/templates/announcement.html:42
+#: announcements/templates/announcement.html:43
 #, python-format
 msgid "%(author)s on %(date)s"
 msgstr "%(author)s, %(date)s"
 
-#: announcements/templates/announcement.html:46
+#: announcements/templates/announcement.html:47
 msgid "No comments yet."
 msgstr "Brak komentarzy."
 
-#: announcements/templates/announcement.html:52
+#: announcements/templates/announcement.html:53
 msgid "Add a Comment"
 msgstr "Dodaj komentarz"
 
-#: announcements/templates/announcement.html:55 announcements/templates/announcement_edit_form.html:17 announcements/templates/announcement_form.html:16 events/templates/event_edit.html:64 groups/templates/group_edit.html:25 groups/templates/group_form.html:28 messages/templates/message_create.html:42 messages/templates/message_thread_reply.html:18
+#: announcements/templates/announcement.html:56 announcements/templates/announcement_edit_form.html:17 announcements/templates/announcement_form.html:16 events/templates/event_edit.html:65 groups/templates/group_edit.html:25 groups/templates/group_form.html:28 media/templates/gallery_form.html:50 messages/templates/message_create.html:43 messages/templates/message_thread_reply.html:19
 msgid "Save"
 msgstr "Zapisz"
 
@@ -149,7 +157,7 @@ msgstr "Zapisz"
 msgid "Edit Announcement"
 msgstr "Edytuj ogłoszenie"
 
-#: announcements/templates/announcement_edit_form.html:18 events/templates/event_edit.html:65 groups/templates/group_edit.html:26 messages/templates/message_thread_reply.html:19
+#: announcements/templates/announcement_edit_form.html:18 events/templates/event_edit.html:66 groups/templates/group_edit.html:26 media/templates/gallery_form.html:51 messages/templates/message_thread_reply.html:20
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -205,15 +213,15 @@ msgstr "Data wygaśnięcia"
 msgid "Attached images"
 msgstr "Załączone zdjęcia"
 
-#: announcements/templates/includes/announcement_fields.html:56
+#: announcements/templates/includes/announcement_fields.html:56 templates/includes/document_field.html:11
 msgid "Remove"
 msgstr "Usuń"
 
-#: announcements/templates/includes/announcement_fields.html:65 media/forms.py:20 media/templates/images_list.html:4 messages/templates/message_create.html:37 messages/templates/message_thread_reply.html:13
+#: announcements/templates/includes/announcement_fields.html:65 media/forms.py:21 media/templates/images_list.html:4 messages/templates/message_create.html:37 messages/templates/message_thread_reply.html:13
 msgid "Images"
 msgstr "Obrazy"
 
-#: announcements/templates/includes/announcement_fields.html:67 messages/templates/message_create.html:39
+#: announcements/templates/includes/announcement_fields.html:67 media/templates/gallery_detail.html:49 messages/templates/message_create.html:39
 msgid "You can select several images. They are compressed when uploaded."
 msgstr "Możesz wybrać kilka zdjęć. Zostaną skompresowane podczas przesyłania."
 
@@ -221,87 +229,87 @@ msgstr "Możesz wybrać kilka zdjęć. Zostaną skompresowane podczas przesyłan
 msgid "Title"
 msgstr "Tytuł"
 
-#: announcements/views.py:135
+#: announcements/views.py:137
 msgid "Announcement deleted successfully."
 msgstr "Ogłoszenie zostało usunięte."
 
-#: events/forms.py:110
+#: events/forms.py:125
 msgid "The end must be after the start."
 msgstr "Zakończenie musi być po rozpoczęciu."
 
-#: events/forms.py:33 events/forms.py:89
+#: events/forms.py:35 events/forms.py:92
 msgid "Start time"
 msgstr "Początek"
 
-#: events/forms.py:90
+#: events/forms.py:93
 msgid "End time"
 msgstr "Czas zakończenia"
 
-#: events/models.py:39
+#: events/models.py:41
 msgid "event name"
 msgstr "nazwa wydarzenia"
 
-#: events/models.py:40
+#: events/models.py:42 media/models.py:103
 msgid "description"
 msgstr "opis"
 
-#: events/models.py:41
+#: events/models.py:43
 msgid "type"
 msgstr "typ"
 
-#: events/models.py:42
+#: events/models.py:44
 msgid "event start time"
 msgstr "początek wydarzenia"
 
-#: events/models.py:43
+#: events/models.py:45
 msgid "event end time"
 msgstr "koniec wydarzenia"
 
-#: events/models.py:45
+#: events/models.py:47 media/models.py:108
 msgid "groups"
 msgstr "grupy"
 
-#: events/models.py:46
+#: events/models.py:48 media/models.py:105
 msgid "users"
 msgstr "użytkownicy"
 
-#: events/models.py:47
+#: events/models.py:49
 msgid "status"
 msgstr "status"
+
+#: events/templates/calendar.html:100 events/templates/calendar.html:14 events/templates/calendar.html:45
+msgid "Create Event"
+msgstr "Utwórz wydarzenie"
 
 #: events/templates/calendar.html:13 events/templates/calendar.html:3 templates/base.html:43
 msgid "Calendar"
 msgstr "Kalendarz"
 
-#: events/templates/calendar.html:14 events/templates/calendar.html:44 events/templates/calendar.html:98
-msgid "Create Event"
-msgstr "Utwórz wydarzenie"
-
-#: events/templates/calendar.html:140
+#: events/templates/calendar.html:142
 msgid "Start:"
 msgstr "Początek:"
 
-#: events/templates/calendar.html:141
+#: events/templates/calendar.html:143
 msgid "End:"
 msgstr "Koniec:"
 
-#: events/templates/calendar.html:142
+#: events/templates/calendar.html:144
 msgid "Description:"
 msgstr "Opis:"
 
-#: events/templates/calendar.html:143
+#: events/templates/calendar.html:145
 msgid "Status:"
 msgstr "Status:"
 
-#: events/templates/calendar.html:144
+#: events/templates/calendar.html:146
 msgid "Type:"
 msgstr "Typ:"
 
-#: events/templates/calendar.html:145
+#: events/templates/calendar.html:147
 msgid "Groups:"
 msgstr "Grupy:"
 
-#: events/templates/calendar.html:146
+#: events/templates/calendar.html:148
 msgid "Users:"
 msgstr "Użytkownicy:"
 
@@ -309,27 +317,27 @@ msgstr "Użytkownicy:"
 msgid "Tap a day to create an event, or an event to see its details."
 msgstr "Kliknij dzień, aby utworzyć wydarzenie, lub wydarzenie, aby zobaczyć szczegóły."
 
-#: events/templates/calendar.html:34 events/templates/calendar.html:45 templates/auth_base.html:30 templates/base.html:122
+#: events/templates/calendar.html:34 events/templates/calendar.html:46 templates/auth_base.html:30 templates/base.html:127
 msgid "Close"
 msgstr "Zamknij"
 
-#: events/templates/calendar.html:38 events/templates/event_edit.html:3 events/templates/event_edit.html:7
+#: events/templates/calendar.html:39 events/templates/event_edit.html:3 events/templates/event_edit.html:7
 msgid "Edit event"
 msgstr "Edytuj wydarzenie"
 
-#: events/templates/calendar.html:64
+#: events/templates/calendar.html:65
 msgid "Duration"
 msgstr "Czas trwania"
 
-#: events/templates/calendar.html:69
+#: events/templates/calendar.html:70
 msgid "hours"
 msgstr "godz."
 
-#: events/templates/calendar.html:75
+#: events/templates/calendar.html:76
 msgid "minutes"
 msgstr "min"
 
-#: events/templates/event_edit.html:66
+#: events/templates/event_edit.html:67
 msgid "Are you sure you want to delete this event?"
 msgstr "Czy na pewno chcesz usunąć to wydarzenie?"
 
@@ -337,13 +345,17 @@ msgstr "Czy na pewno chcesz usunąć to wydarzenie?"
 msgid "Back to calendar"
 msgstr "Wróć do kalendarza"
 
-#: events/views.py:143
+#: events/views.py:151
 msgid "Event saved."
 msgstr "Wydarzenie zostało zapisane."
 
-#: events/views.py:156
+#: events/views.py:164
 msgid "Event deleted."
 msgstr "Wydarzenie zostało usunięte."
+
+#: groups/forms.py:24
+msgid "A group needs at least one admin."
+msgstr "Grupa musi mieć co najmniej jednego administratora."
 
 #: groups/forms.py:8
 msgid "Group name"
@@ -353,35 +365,35 @@ msgstr "Nazwa grupy"
 msgid "Group Details"
 msgstr "Szczegóły grupy"
 
-#: groups/templates/group_detail.html:20
+#: groups/templates/group_detail.html:22
 msgid "You are an admin."
 msgstr "Jesteś administratorem."
 
-#: groups/templates/group_detail.html:21
+#: groups/templates/group_detail.html:23
 msgid "You are a member of this group."
 msgstr "Jesteś członkiem tej grupy."
 
-#: groups/templates/group_detail.html:22
+#: groups/templates/group_detail.html:24
 msgid "You are not part of this group."
 msgstr "Nie należysz do tej grupy."
 
-#: groups/templates/group_detail.html:27
+#: groups/templates/group_detail.html:29
 msgid "Admins"
 msgstr "Administratorzy"
 
-#: groups/templates/group_detail.html:32
+#: groups/templates/group_detail.html:34
 msgid "No admins yet."
 msgstr "Brak administratorów."
 
-#: groups/templates/group_detail.html:37
+#: groups/templates/group_detail.html:39
 msgid "Members"
 msgstr "Członkowie"
 
-#: groups/templates/group_detail.html:42
+#: groups/templates/group_detail.html:44
 msgid "No members yet."
 msgstr "Brak członków."
 
-#: groups/templates/group_detail.html:47
+#: groups/templates/group_detail.html:49
 #, python-format
 msgid "Created on %(date)s"
 msgstr "Utworzono: %(date)s"
@@ -422,19 +434,19 @@ msgstr "Moje grupy"
 msgid "All groups"
 msgstr "Wszystkie grupy"
 
-#: groups/templates/groups.html:35
+#: groups/templates/groups.html:37 media/templates/images_list.html:41
 msgid "You"
 msgstr "Ty"
 
-#: groups/templates/groups.html:43
+#: groups/templates/groups.html:45
 msgid "You're not in any group."
 msgstr "Nie należysz do żadnej grupy."
 
-#: groups/templates/groups.html:44
+#: groups/templates/groups.html:46
 msgid "Show all groups"
 msgstr "Pokaż wszystkie grupy"
 
-#: groups/templates/groups.html:55
+#: groups/templates/groups.html:57
 msgid "Select a group to see its members."
 msgstr "Wybierz grupę, aby zobaczyć jej członków."
 
@@ -470,7 +482,7 @@ msgstr "Witaj, gościu!"
 msgid "Please log in to access all features of the school application."
 msgstr "Zaloguj się, aby korzystać ze wszystkich funkcji aplikacji szkolnej."
 
-#: landing/templates/landing.html:103 landing/templates/registration/login.html:12 landing/templates/registration/login.html:4 landing/templates/registration/login.html:5 templates/base.html:106 templates/includes/login_prompt.html:8
+#: landing/templates/landing.html:103 landing/templates/registration/login.html:12 landing/templates/registration/login.html:4 landing/templates/registration/login.html:5 templates/base.html:111 templates/includes/login_prompt.html:8
 msgid "Login"
 msgstr "Zaloguj się"
 
@@ -539,7 +551,7 @@ msgstr "Powrót do strony głównej"
 msgid "You are using a temporary password. Please choose a new password to continue."
 msgstr "Używasz hasła tymczasowego. Aby kontynuować, ustaw nowe hasło."
 
-#: landing/templates/registration/password_change_form.html:17 landing/templates/registration/password_change_form.html:4 landing/templates/registration/password_change_form.html:5 templates/base.html:89
+#: landing/templates/registration/password_change_form.html:17 landing/templates/registration/password_change_form.html:4 landing/templates/registration/password_change_form.html:5 templates/base.html:94
 msgid "Change Password"
 msgstr "Zmień hasło"
 
@@ -571,7 +583,7 @@ msgstr "Masz już konto?"
 msgid "Login here"
 msgstr "Zaloguj się tutaj"
 
-#: landing/templates/registration/signup.html:4 templates/base.html:109
+#: landing/templates/registration/signup.html:4 templates/base.html:114
 msgid "Sign Up"
 msgstr "Zarejestruj się"
 
@@ -588,63 +600,210 @@ msgstr "Twoje hasło zostało zmienione."
 msgid "Account created for %(username)s! You can now log in."
 msgstr "Utworzono konto dla %(username)s! Możesz się teraz zalogować."
 
-#: media/forms.py:28
+#: media/forms.py:29
 #, python-format
 msgid "You can attach at most %(max)d images."
 msgstr "Możesz załączyć maksymalnie %(max)d zdjęć."
 
-#: media/templates/images_list.html:14 media/templates/images_list.html:17
-msgid "Upload"
-msgstr "Prześlij"
-
-#: media/templates/images_list.html:25
-msgid "My images"
-msgstr "Moje obrazy"
-
-#: media/templates/images_list.html:26
-msgid "Delete this image? It will also be removed from where it is posted."
-msgstr "Usunąć ten obraz? Zostanie też usunięty z miejsca, w którym został opublikowany."
-
-#: media/templates/images_list.html:37
-msgid "Gallery"
-msgstr "Galeria"
-
-#: media/templates/images_list.html:39
-msgid "Announcement"
-msgstr "Ogłoszenie"
-
-#: media/templates/images_list.html:42
-msgid "Message"
-msgstr "Wiadomość"
-
-#: media/templates/images_list.html:58
-msgid "You have not posted any images yet."
-msgstr "Nie masz jeszcze żadnych opublikowanych obrazów."
-
-#: media/templates/images_list.html:65
+#: media/forms.py:58 media/templates/documents.html:4 media/templates/documents.html:8 templates/base.html:73 templates/includes/document_field.html:18
 msgid "Documents"
 msgstr "Dokumenty"
 
-#: media/templates/images_list.html:71
+#: media/forms.py:66
+#, python-format
+msgid "You can attach at most %(max)d documents."
+msgstr "Możesz załączyć maksymalnie %(max)d dokumentów."
+
+#: media/forms.py:74
+#, python-format
+msgid "%(name)s is not a supported document type."
+msgstr "%(name)s nie jest obsługiwanym typem dokumentu."
+
+#: media/forms.py:78
+#, python-format
+msgid "%(name)s is larger than %(max)d MB."
+msgstr "%(name)s jest większy niż %(max)d MB."
+
+#: media/models.py:102
+msgid "name"
+msgstr "nazwa"
+
+#: media/templates/documents.html:10 media/templates/images_list.html:16
+msgid "All"
+msgstr "Wszystkie"
+
+#: media/templates/documents.html:11
+msgid "Mine"
+msgstr "Moje"
+
+#: media/templates/documents.html:14
+msgid "Documents attached to announcements, messages and events you can see."
+msgstr "Dokumenty dołączone do ogłoszeń, wiadomości i wydarzeń, które widzisz."
+
+#: media/templates/documents.html:17
+msgid "Delete this document? It will also be removed from where it is posted."
+msgstr "Usunąć ten dokument? Zostanie też usunięty z miejsca, w którym został opublikowany."
+
+#: media/templates/documents.html:27 media/templates/images_list.html:73
+msgid "Announcement"
+msgstr "Ogłoszenie"
+
+#: media/templates/documents.html:28 media/templates/images_list.html:76
+msgid "Message"
+msgstr "Wiadomość"
+
+#: media/templates/documents.html:29
+msgid "Event"
+msgstr "Wydarzenie"
+
+#: media/templates/documents.html:30 media/templates/images_list.html:71
+msgid "Uploaded"
+msgstr "Przesłane"
+
+#: media/templates/documents.html:39
 msgid "Download"
 msgstr "Pobierz"
 
-#: media/templates/images_list.html:74
+#: media/templates/documents.html:50
 msgid "No documents yet."
 msgstr "Brak dokumentów."
+
+#: media/templates/documents.html:9
+msgid "Document filter"
+msgstr "Filtr dokumentów"
+
+#: media/templates/gallery_detail.html:10 media/templates/gallery_form.html:9 templates/includes/back_link.html:3
+msgid "Back"
+msgstr "Wstecz"
+
+#: media/templates/gallery_detail.html:13
+msgid "Delete this gallery and all its images?"
+msgstr "Usunąć tę galerię i wszystkie jej zdjęcia?"
+
+#: media/templates/gallery_detail.html:28
+msgid "Owner"
+msgstr "Właściciel"
+
+#: media/templates/gallery_detail.html:30
+msgid "Created"
+msgstr "Utworzono"
+
+#: media/templates/gallery_detail.html:32
+msgid "Shared with"
+msgstr "Udostępniono"
+
+#: media/templates/gallery_detail.html:36
+msgid "Only you"
+msgstr "Tylko Ty"
+
+#: media/templates/gallery_detail.html:44
+msgid "Add images"
+msgstr "Dodaj zdjęcia"
+
+#: media/templates/gallery_detail.html:51
+msgid "Upload"
+msgstr "Prześlij"
+
+#: media/templates/gallery_detail.html:59
+msgid "Delete this image?"
+msgstr "Usunąć ten obraz?"
+
+#: media/templates/gallery_detail.html:64 templates/includes/image_gallery.html:6
+msgid "Open full size"
+msgstr "Otwórz w pełnym rozmiarze"
+
+#: media/templates/gallery_detail.html:81
+msgid "No images in this gallery yet."
+msgstr "W tej galerii nie ma jeszcze zdjęć."
+
+#: media/templates/gallery_form.html:29
+msgid "Share with"
+msgstr "Udostępnij"
+
+#: media/templates/gallery_form.html:30
+msgid "Optional. Leave both empty to keep the gallery private. People it is shared with can view it and add images."
+msgstr "Opcjonalne. Pozostaw oba pola puste, aby galeria była prywatna. Osoby, którym ją udostępnisz, mogą ją oglądać i dodawać zdjęcia."
+
+#: media/templates/gallery_form.html:4 media/templates/gallery_form.html:8
+msgid "Edit gallery"
+msgstr "Edytuj galerię"
+
+#: media/templates/gallery_form.html:4 media/templates/gallery_form.html:8 media/templates/images_list.html:9
+msgid "New gallery"
+msgstr "Nowa galeria"
+
+#: media/templates/images_list.html:14
+msgid "Galleries"
+msgstr "Galerie"
+
+#: media/templates/images_list.html:15
+msgid "Gallery filter"
+msgstr "Filtr galerii"
+
+#: media/templates/images_list.html:17
+msgid "My galleries"
+msgstr "Moje galerie"
+
+#: media/templates/images_list.html:18
+msgid "Shared with me"
+msgstr "Udostępnione mi"
+
+#: media/templates/images_list.html:50
+msgid "No galleries yet."
+msgstr "Brak galerii."
+
+#: media/templates/images_list.html:58
+msgid "My images"
+msgstr "Moje obrazy"
+
+#: media/templates/images_list.html:59
+msgid "Images you attached to announcements, messages and galleries."
+msgstr "Zdjęcia dołączone do ogłoszeń, wiadomości i galerii."
+
+#: media/templates/images_list.html:60
+msgid "Delete this image? It will also be removed from where it is posted."
+msgstr "Usunąć ten obraz? Zostanie też usunięty z miejsca, w którym został opublikowany."
+
+#: media/templates/images_list.html:79
+msgid "Gallery"
+msgstr "Galeria"
 
 #: media/templates/images_list.html:8
 msgid "Image Gallery"
 msgstr "Galeria obrazów"
+
+#: media/templates/images_list.html:95
+msgid "You have not posted any images yet."
+msgstr "Nie masz jeszcze żadnych opublikowanych obrazów."
 
 #: media/utils.py:26
 #, python-format
 msgid "%(name)s is not a valid image."
 msgstr "%(name)s nie jest prawidłowym obrazem."
 
-#: media/views.py:66
+#: media/views.py:127
+msgid "Gallery created."
+msgstr "Galeria została utworzona."
+
+#: media/views.py:138
+msgid "Gallery saved."
+msgstr "Galeria została zapisana."
+
+#: media/views.py:148
+msgid "Gallery deleted."
+msgstr "Galeria została usunięta."
+
+#: media/views.py:163
+msgid "Images added."
+msgstr "Zdjęcia zostały dodane."
+
+#: media/views.py:181
 msgid "Image deleted."
 msgstr "Obraz został usunięty."
+
+#: media/views.py:254
+msgid "Document deleted."
+msgstr "Dokument został usunięty."
 
 #: messages/forms.py:11
 msgid "Message title"
@@ -670,7 +829,7 @@ msgstr "Dodaj nową wiadomość"
 msgid "New message"
 msgstr "Nowa wiadomość"
 
-#: messages/templates/message_thread_detail.html:27 messages/templates/message_thread_reply.html:8
+#: messages/templates/message_thread_detail.html:28 messages/templates/message_thread_reply.html:8
 msgid "Reply"
 msgstr "Odpowiedz"
 
@@ -690,7 +849,7 @@ msgstr "Wybierz rozmowę, aby ją przeczytać."
 msgid "Messages"
 msgstr "Wiadomości"
 
-#: messages/views.py:78
+#: messages/views.py:79
 msgid "You don't have permission to reply to this message thread."
 msgstr "Nie masz uprawnień, aby odpowiedzieć w tym wątku."
 
@@ -714,11 +873,15 @@ msgstr "Norweski"
 msgid "School App"
 msgstr "Aplikacja szkolna"
 
+#: templates/base.html:102
+msgid "Logout"
+msgstr "Wyloguj"
+
 #: templates/base.html:13
 msgid "Select..."
 msgstr "Wybierz..."
 
-#: templates/base.html:131
+#: templates/base.html:136
 msgid "All rights reserved."
 msgstr "Wszelkie prawa zastrzeżone."
 
@@ -746,26 +909,22 @@ msgstr "Strona główna"
 msgid "Media"
 msgstr "Multimedia"
 
-#: templates/base.html:81
+#: templates/base.html:86
 #, python-format
 msgid "Welcome, %(name)s!"
 msgstr "Witaj, %(name)s!"
 
-#: templates/base.html:83 templates/includes/language_switcher.html:10
+#: templates/base.html:88 templates/includes/language_switcher.html:10
 msgid "Language"
 msgstr "Język"
 
-#: templates/base.html:97
-msgid "Logout"
-msgstr "Wyloguj"
+#: templates/includes/document_field.html:20
+msgid "PDF, Word, Excel, PowerPoint or text files, up to 20 MB each."
+msgstr "Pliki PDF, Word, Excel, PowerPoint lub tekstowe, do 20 MB każdy."
 
-#: templates/includes/back_link.html:3
-msgid "Back"
-msgstr "Wstecz"
-
-#: templates/includes/image_gallery.html:6
-msgid "Open full size"
-msgstr "Otwórz w pełnym rozmiarze"
+#: templates/includes/document_field.html:5
+msgid "Attached documents"
+msgstr "Załączone dokumenty"
 
 #: templates/includes/theme_toggle.html:12
 msgid "Light"

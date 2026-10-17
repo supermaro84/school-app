@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404,redirect
-from .models import Announcement, AnnouncementComment, AnnouncementImage, AnnouncementRead
+from .models import Announcement, AnnouncementComment, AnnouncementDocument, AnnouncementImage, AnnouncementRead
 from .forms import AnnouncementForm, AnnouncementCommentForm
 from django.views.generic import CreateView, UpdateView
 import datetime
@@ -100,6 +100,7 @@ class CreateAnnouncementView(CreateView):
         form.instance.author = self.request.user
         response = super().form_valid(form)
         save_images(AnnouncementImage, form.cleaned_data["images"], announcement=self.object)
+        save_images(AnnouncementDocument, form.cleaned_data["documents"], announcement=self.object)
         return response
 
     def get_context_data(self, **kwargs):
@@ -121,9 +122,10 @@ class EditAnnouncementView(UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         response = super().form_valid(form)
-        for image in form.cleaned_data["remove_images"]:
-            image.delete()
+        for attachment in [*form.cleaned_data["remove_images"], *form.cleaned_data["remove_documents"]]:
+            attachment.delete()
         save_images(AnnouncementImage, form.cleaned_data["images"], announcement=self.object)
+        save_images(AnnouncementDocument, form.cleaned_data["documents"], announcement=self.object)
         return response
     
     def post(self, request, *args, **kwargs):

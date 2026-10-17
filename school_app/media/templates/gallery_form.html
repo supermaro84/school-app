@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% if gallery %}{% translate "Edit gallery" %}{% else %}{% translate "New gallery" %}{% endif %}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-images"></i>{% if gallery %}{% translate "Edit gallery" %}{% else %}{% translate "New gallery" %}{% endif %}</h1>
+    <a href="{% if gallery %}{% url 'gallery_detail' gallery.pk %}{% else %}{% url 'images_list' %}{% endif %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>{% translate "Back" %}</a>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-9 col-xl-7">
+        <section class="app-card">
+            <div class="card-body">
+                <form method="post" class="app-form">
+                    {% csrf_token %}
+                    {% for error in form.non_field_errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.name.id_for_label }}">{{ form.name.label|capfirst }}</label>
+                        {{ form.name }}
+                        {% for error in form.name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.description.id_for_label }}">{{ form.description.label|capfirst }}</label>
+                        {{ form.description }}
+                        {% for error in form.description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                    </div>
+                    <p class="form-label mb-1">{% translate "Share with" %}</p>
+                    <p class="form-text mt-0">{% translate "Optional. Leave both empty to keep the gallery private. People it is shared with can view it and add images." %}</p>
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">{{ form.groups.label|capfirst }}</label>
+                            <select name="groups" class="gallery-groups-select" multiple>
+                                {% for option in form.groups %}
+                                <option value="{{ option.data.value }}"{% if option.data.selected %} selected{% endif %}>{{ option.data.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">{{ form.users.label|capfirst }}</label>
+                            <select name="users" class="gallery-users-select" multiple>
+                                {% for option in form.users %}
+                                <option value="{{ option.data.value }}"{% if option.data.selected %} selected{% endif %}>{{ option.data.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="submit" class="btn btn-primary btn-submit"><i class="bi bi-check-lg me-1"></i>{% translate "Save" %}</button>
+                        <a href="{% if gallery %}{% url 'gallery_detail' gallery.pk %}{% else %}{% url 'images_list' %}{% endif %}" class="btn btn-outline-secondary">{% translate "Cancel" %}</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    new SlimSelect({ settings: slimSelectSettings, select: '.gallery-groups-select' });
+    new SlimSelect({ settings: slimSelectSettings, select: '.gallery-users-select' });
+</script>
+{% endblock %}
