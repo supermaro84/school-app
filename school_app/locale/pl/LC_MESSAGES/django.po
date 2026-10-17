@@ -1,4 +1,4 @@
-# Polish translations for the school app.
+# pl translations for the school app.
 # Regenerate with: python manage.py makemessages -l pl (needs GNU gettext)
 msgid ""
 msgstr ""
@@ -74,9 +74,17 @@ msgstr "Lista użytkowników"
 msgid "Next"
 msgstr "Następna"
 
-#: announcements/models.py:60
+#: announcements/forms.py:23
+msgid "Remove images"
+msgstr "Usuń zdjęcia"
+
+#: announcements/models.py:62
 msgid "comment"
 msgstr "komentarz"
+
+#: announcements/models.py:76 media/models.py:16 media/models.py:47 messages/models.py:45
+msgid "image"
+msgstr "obraz"
 
 #: announcements/templates/announcement.html:11
 msgid "Read Announcement"
@@ -90,38 +98,38 @@ msgstr "Czy na pewno chcesz usunąć to ogłoszenie?"
 msgid "Edit"
 msgstr "Edytuj"
 
-#: announcements/templates/announcement.html:16
+#: announcements/templates/announcement.html:16 media/templates/images_list.html:50
 msgid "Delete"
 msgstr "Usuń"
 
-#: announcements/templates/announcement.html:21
+#: announcements/templates/announcement.html:22
 #, python-format
 msgid "Published by %(author)s on %(date)s"
 msgstr "Opublikowane przez %(author)s, %(date)s"
 
-#: announcements/templates/announcement.html:22
+#: announcements/templates/announcement.html:23
 #, python-format
 msgid "Expires on %(date)s"
 msgstr "Wygasa: %(date)s"
 
-#: announcements/templates/announcement.html:23
+#: announcements/templates/announcement.html:24
 msgid "Recipients:"
 msgstr "Odbiorcy:"
 
-#: announcements/templates/announcement.html:26
+#: announcements/templates/announcement.html:27
 msgid "Comments"
 msgstr "Komentarze"
 
-#: announcements/templates/announcement.html:32
+#: announcements/templates/announcement.html:33
 #, python-format
 msgid "%(author)s on %(date)s"
 msgstr "%(author)s, %(date)s"
 
-#: announcements/templates/announcement.html:40
+#: announcements/templates/announcement.html:41
 msgid "No comments yet."
 msgstr "Brak komentarzy."
 
-#: announcements/templates/announcement.html:44
+#: announcements/templates/announcement.html:45
 msgid "Add a Comment"
 msgstr "Dodaj komentarz"
 
@@ -129,7 +137,7 @@ msgstr "Dodaj komentarz"
 msgid "Announcement detail"
 msgstr "Szczegóły ogłoszenia"
 
-#: announcements/templates/announcement.html:51 announcements/templates/announcement_edit_form.html:52 announcements/templates/announcement_form.html:53 groups/templates/group_edit.html:43 groups/templates/group_form.html:43 messages/templates/message_create.html:17 messages/templates/message_thread_reply.html:8
+#: announcements/templates/announcement.html:52 announcements/templates/announcement_edit_form.html:77 announcements/templates/announcement_form.html:60 groups/templates/group_edit.html:43 groups/templates/group_form.html:43 messages/templates/message_create.html:17 messages/templates/message_thread_reply.html:8
 msgid "Save"
 msgstr "Zapisz"
 
@@ -152,6 +160,22 @@ msgstr "Grupy"
 #: announcements/templates/announcement_edit_form.html:49 announcements/templates/announcement_form.html:49
 msgid "Expiration Date"
 msgstr "Data wygaśnięcia"
+
+#: announcements/templates/announcement_edit_form.html:55
+msgid "Attached images"
+msgstr "Załączone zdjęcia"
+
+#: announcements/templates/announcement_edit_form.html:62
+msgid "Remove"
+msgstr "Usuń"
+
+#: announcements/templates/announcement_edit_form.html:71 announcements/templates/announcement_form.html:54 media/forms.py:20 media/templates/images_list.html:4
+msgid "Images"
+msgstr "Obrazy"
+
+#: announcements/templates/announcement_edit_form.html:73 announcements/templates/announcement_form.html:56
+msgid "You can select several images. They are compressed when uploaded."
+msgstr "Możesz wybrać kilka zdjęć. Zostaną skompresowane podczas przesyłania."
 
 #: announcements/templates/announcement_form.html:10
 msgid "Add a New Announcement"
@@ -201,7 +225,7 @@ msgstr "Zaloguj się"
 msgid "Create Account"
 msgstr "Utwórz konto"
 
-#: announcements/views.py:128
+#: announcements/views.py:135
 msgid "Announcement deleted successfully."
 msgstr "Ogłoszenie zostało usunięte."
 
@@ -537,23 +561,48 @@ msgstr "Twoje hasło zostało zmienione."
 msgid "Account created for %(username)s! You can now log in."
 msgstr "Utworzono konto dla %(username)s! Możesz się teraz zalogować."
 
-#: media/models.py:15
-msgid "image"
-msgstr "obraz"
+#: media/forms.py:28
+#, python-format
+msgid "You can attach at most %(max)d images."
+msgstr "Możesz załączyć maksymalnie %(max)d zdjęć."
 
 #: media/templates/images_list.html:12
+msgid "Close"
+msgstr "Zamknij"
+
+#: media/templates/images_list.html:18
 msgid "Upload"
 msgstr "Prześlij"
 
-#: media/templates/images_list.html:18 media/templates/images_list.html:4
-msgid "Images"
-msgstr "Obrazy"
+#: media/templates/images_list.html:24
+msgid "My images"
+msgstr "Moje obrazy"
+
+#: media/templates/images_list.html:27
+msgid "Delete this image? It will also be removed from where it is posted."
+msgstr "Usunąć ten obraz? Zostanie też usunięty z miejsca, w którym został opublikowany."
 
 #: media/templates/images_list.html:37
+msgid "Gallery"
+msgstr "Galeria"
+
+#: media/templates/images_list.html:39
+msgid "Announcement"
+msgstr "Ogłoszenie"
+
+#: media/templates/images_list.html:42
+msgid "Message"
+msgstr "Wiadomość"
+
+#: media/templates/images_list.html:57
+msgid "You have not posted any images yet."
+msgstr "Nie masz jeszcze żadnych opublikowanych obrazów."
+
+#: media/templates/images_list.html:65
 msgid "Documents"
 msgstr "Dokumenty"
 
-#: media/templates/images_list.html:45
+#: media/templates/images_list.html:73
 msgid "Download"
 msgstr "Pobierz"
 
@@ -561,19 +610,28 @@ msgstr "Pobierz"
 msgid "Image Gallery"
 msgstr "Galeria obrazów"
 
-#: messages/forms.py:10
+#: media/utils.py:26
+#, python-format
+msgid "%(name)s is not a valid image."
+msgstr "%(name)s nie jest prawidłowym obrazem."
+
+#: media/views.py:66
+msgid "Image deleted."
+msgstr "Obraz został usunięty."
+
+#: messages/forms.py:11
 msgid "Message title"
 msgstr "Tytuł wiadomości"
 
-#: messages/forms.py:8
+#: messages/forms.py:9
 msgid "Message text"
 msgstr "Treść wiadomości"
 
-#: messages/models.py:15
+#: messages/models.py:17
 msgid "recipients"
 msgstr "odbiorcy"
 
-#: messages/models.py:29
+#: messages/models.py:31
 msgid "message"
 msgstr "wiadomość"
 
@@ -594,12 +652,12 @@ msgstr "Wiadomość"
 msgid "%(sender)s said: %(text)s"
 msgstr "%(sender)s napisał(a): %(text)s"
 
-#: messages/templates/message_thread_detail.html:26
+#: messages/templates/message_thread_detail.html:27
 #, python-format
 msgid "Published on %(date)s"
 msgstr "Opublikowano: %(date)s"
 
-#: messages/templates/message_thread_detail.html:32
+#: messages/templates/message_thread_detail.html:33
 msgid "Reply"
 msgstr "Odpowiedz"
 
@@ -611,7 +669,7 @@ msgstr "Wiadomości"
 msgid "All Messages"
 msgstr "Wszystkie wiadomości"
 
-#: messages/views.py:77
+#: messages/views.py:79
 msgid "You don't have permission to reply to this message thread."
 msgstr "Nie masz uprawnień, aby odpowiedzieć w tym wątku."
 
@@ -622,6 +680,10 @@ msgstr "Angielski"
 #: school_app/settings.py:134
 msgid "Polish"
 msgstr "Polski"
+
+#: school_app/settings.py:135
+msgid "Norwegian"
+msgstr "Norweski"
 
 #: templates/base.html:118
 msgid "School App. All rights reserved."
@@ -659,6 +721,10 @@ msgstr "Witaj, %(name)s!"
 #: templates/base.html:93
 msgid "Logout"
 msgstr "Wyloguj"
+
+#: templates/includes/image_gallery.html:6
+msgid "Open full size"
+msgstr "Otwórz w pełnym rozmiarze"
 
 #: templates/includes/language_switcher.html:10
 msgid "Language"

@@ -1,13 +1,14 @@
 from django.core.files.storage import FileSystemStorage
 from django.db import models
+from django.db.models.signals import post_delete
 from django.utils.translation import gettext_lazy as _
 import os
 
 
 # Create your models here.
 def user_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return f"images/{instance.owner.id}/{filename}"
+    # file will be uploaded to images/<username>/<filename>
+    return f"images/{instance.owner.username}/{filename}"
 
 
 class ImageFile(models.Model):
@@ -34,3 +35,27 @@ class DocumentFile(models.Model):
         if self.file:
             return self.file.size
         return 0
+
+
+class AttachedImage(models.Model):
+    """Base for compressed images attached to other content.
+
+    Subclasses add a ForeignKey to what the image belongs to and define
+    ``upload_to``; connect ``delete_attached_file`` to their post_delete.
+    """
+
+    file = models.ImageField(_("image"), upload_to="attachments/")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+        ordering = ["pk"]
+
+
+def delete_attached_file(sender, instance, **kwargs):
+    # Remove the file from storage once its row is gone.
+    if instance.file:
+        instance.file.delete(save=False)
+
+
+post_delete.connect(delete_attached_file, sender=ImageFile)

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404,redirect
-from .models import Announcement, AnnouncementComment, AnnouncementRead
+from .models import Announcement, AnnouncementComment, AnnouncementImage, AnnouncementRead
 from .forms import AnnouncementForm, AnnouncementCommentForm
 from django.views.generic import CreateView, UpdateView
 import datetime
@@ -13,6 +13,7 @@ from accounts.models import UserProfile
 from django.db.models import Q
 from django.contrib import messages
 from django.utils.translation import gettext as _
+from media.forms import save_images
 
 
 
@@ -97,7 +98,9 @@ class CreateAnnouncementView(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        save_images(AnnouncementImage, form.cleaned_data["images"], announcement=self.object)
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -117,7 +120,11 @@ class EditAnnouncementView(UpdateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        for image in form.cleaned_data["remove_images"]:
+            image.delete()
+        save_images(AnnouncementImage, form.cleaned_data["images"], announcement=self.object)
+        return response
     
     def post(self, request, *args, **kwargs):
         # Handle delete action

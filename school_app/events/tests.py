@@ -4,7 +4,10 @@ from pathlib import Path
 from django.contrib.auth.models import Group, User
 from django.core.management import call_command
 from django.core.management.base import CommandError
+from datetime import datetime, timedelta
+
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
 from events.models import Event, EventStatus, EventType
@@ -94,3 +97,56 @@ class ImportEventsTests(TestCase):
                 "teacher,Trip,,Excursion,Active,2026-10-20 08:00,2026-10-20 12:00,,,\n"
             )
         self.assertFalse(Event.objects.exists())
+
+
+class EventsFeedTests(TestCase):
+    def setUp(self):
+        self.parent = User.objects.create_user(username="parent", password="pw")
+        self.child = User.objects.create_user(username="child", password="pw")
+        self.stranger = User.objects.create_user(username="stranger", password="pw")
+        self.parent.profile.affiliated_users.add(self.child)
+        self.group = GroupProfile.objects.create(group=Group.objects.create(name="Class 1A"))
+        self.group.members.add(self.child)
+        self.type = EventType.objects.create(name="Lesson")
+        self.status = EventStatus.objects.create(name="Active")
+        self.client.force_login(self.parent)
+
+    def make_event(self, name, day, groups=(), users=()):
+        start = timezone.make_aware(datetime(2026, 10, day, 9, 0))
+        event = Event.objects.create(
+            owner=self.stranger.profile, event_name=name, event_type=self.type, status=self.status,
+            event_start_time=start, event_end_time=start + timedelta(hours=1),
+        )
+        event.groups.add(*groups)
+        event.users.add(*users)
+        return event
+
+    def feed(self, query=""):
+        return self.client.get(reverse("events") + query).json()
+
+    def test_returns_events_of_user_and_affiliates_only(self):
+        self.make_event("Class trip", 5, groups=[self.group])
+        self.make_event("Meeting", 6, users=[self.parent.profile, self.child.profile])
+        self.make_event("Not ours", 7, users=[self.stranger.profile])
+        titles = sorted(e["title"] for e in self.feed())
+        # One entry per involved person, as before.
+        self.assertEqual(titles, ["Class trip (child) ", "Meeting (child) ", "Meeting (parent) "])
+
+    def test_only_events_in_requested_range(self):
+        self.make_event("Early", 1, groups=[self.group])
+        self.make_event("Inside", 15, groups=[self.group])
+        self.make_event("Late", 30, groups=[self.group])
+        query = "?start=2026-10-10T00:00:00%2B02:00&end=2026-10-20T00:00:00%2B02:00"
+        self.assertEqual([e["title"] for e in self.feed(query)], ["Inside (child) "])
+        # Date-only values, as FullCalendar may send them, work too.
+        self.assertEqual(len(self.feed("?start=2026-10-10&end=2026-10-20")), 1)
+
+    def test_query_count_does_not_grow_with_events(self):
+        for day in range(1, 21):
+            self.make_event(f"Lesson {day}", day, groups=[self.group], users=[self.parent.profile])
+        with self.assertNumQueries(9):
+            self.assertEqual(len(self.feed()), 40)
+
+    def test_anonymous_gets_empty_list(self):
+        self.client.logout()
+        self.assertEqual(self.feed(), [])

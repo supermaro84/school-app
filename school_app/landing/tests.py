@@ -39,6 +39,14 @@ class LanguageSwitchTests(TestCase):
 
         self.assertContains(self.client.get(reverse("announcements_page")), "Wszystkie ogłoszenia")
 
+    def test_switching_to_norwegian(self):
+        self.switch_to("nb")
+        response = self.client.get(reverse("groups"))
+        self.assertContains(response, '<html lang="nb">')
+        self.assertContains(response, "Mine grupper")
+        self.assertContains(response, "Velkommen, Lucy!")
+        self.assertContains(response, 'value="nb"')  # switcher offers all three
+
     def test_switching_back_to_english(self):
         self.switch_to("pl")
         self.switch_to("en")

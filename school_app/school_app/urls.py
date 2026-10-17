@@ -40,7 +40,7 @@ from messages.views import (
     show_message_thread_by_id,
     ReplyMessageView,
 )
-from media.views import images_list, CreateImageView
+from media.views import CreateImageView, delete_image
 
 urlpatterns = [
     path("", summary, name="landing"),
@@ -110,6 +110,9 @@ urlpatterns = [
     path("messages/<int:pk>/reply/", ReplyMessageView.as_view(), name="reply_message"),
     # Media URLs
     path("media/images/", CreateImageView.as_view(), name="images_list"),
+    path(
+        "media/images/<str:source>/<int:pk>/delete/", delete_image, name="image_delete"
+    ),
     # Users URLs
     path("users/", user_list, name="users_list"),
     path("users/<int:pk>/", user_detail, name="user_detail"),

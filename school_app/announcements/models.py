@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from groups.models import GroupProfile
 from django_ckeditor_5.fields import CKEditor5Field
+from django.db.models.signals import post_delete
+from media.models import AttachedImage, delete_attached_file
 
 
 
@@ -58,3 +60,23 @@ class AnnouncementComment(models.Model):
     )
     comment_date = models.DateTimeField("published comment date", auto_now_add=True)
     text = models.CharField(_("comment"), max_length=500)
+
+
+def announcement_image_path(instance, filename):
+    # announcements/<author username>/<announcement id>/<filename>
+    author = instance.announcement.author
+    username = author.username if author else "unknown"
+    return f"announcements/{username}/{instance.announcement_id}/{filename}"
+
+
+class AnnouncementImage(AttachedImage):
+    announcement = models.ForeignKey(
+        Announcement, related_name="images", on_delete=models.CASCADE
+    )
+    file = models.ImageField(_("image"), upload_to=announcement_image_path)
+
+    class Meta(AttachedImage.Meta):
+        pass
+
+
+post_delete.connect(delete_attached_file, sender=AnnouncementImage)

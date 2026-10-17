@@ -17,6 +17,7 @@
  </h1>
   
   <p class="lead">{{ announcement.text | safe }}</p>
+  {% include "includes/image_gallery.html" with images=announcement.images.all %}
   <hr class="my-4">
   <p>{% blocktranslate with author=announcement.author date=announcement.pub_date %}Published by {{ author }} on {{ date }}{% endblocktranslate %}</p>
   <p>{% blocktranslate with date=announcement.exp_date %}Expires on {{ date }}{% endblocktranslate %}</p>

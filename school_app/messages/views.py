@@ -1,11 +1,12 @@
 from typing import Any
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import MessageThread, Message
+from .models import MessageThread, Message, MessageImage
 import datetime
 from zoneinfo import ZoneInfo
 from school_app.settings import TIME_ZONE
 from django.views.generic import CreateView, UpdateView
-from .forms import MessageThreadForm
+from .forms import MessageReplyForm, MessageThreadForm
+from media.forms import save_images
 from django.urls import reverse
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages as django_messages
@@ -25,7 +26,7 @@ def messages_page(request):
 # Create your views here.
 def show_message_thread_by_id(request, pk):
     message_thread = MessageThread.objects.get(pk=pk)
-    messages = message_thread.messages.all().order_by("pub_date")
+    messages = message_thread.messages.prefetch_related("images").order_by("pub_date")
     message_threads = get_users_messages(request.user)
     # Logic to retrieve and display announcements
     if request.user not in message_thread.all_recipients:
@@ -52,6 +53,7 @@ class CreateMessageView(CreateView):
         message = Message.objects.create(
             thread=thread, sender=self.request.user, text=form.cleaned_data["text"]
         )
+        save_images(MessageImage, form.cleaned_data["images"], message=message)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -67,7 +69,7 @@ class CreateMessageView(CreateView):
 class ReplyMessageView(CreateView):
     model = Message
     template_name = "message_thread_reply.html"
-    fields = ["text"]
+    form_class = MessageReplyForm
 
     def dispatch(self, request, *args, **kwargs):
         thread_id = self.kwargs["pk"]
@@ -82,11 +84,17 @@ class ReplyMessageView(CreateView):
         thread_id = self.kwargs["pk"]
         form.instance.thread = MessageThread.objects.get(pk=thread_id)
         form.instance.sender = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        save_images(MessageImage, form.cleaned_data["images"], message=self.object)
+        return response
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["message_threads"] = get_users_messages(self.request.user)
+        # The reply form sits under the thread, so show its messages too.
+        thread = get_object_or_404(MessageThread, pk=self.kwargs["pk"])
+        context["thread"] = thread
+        context["messages"] = thread.messages.prefetch_related("images").order_by("pub_date")
         return context
 
     def get_success_url(self):
