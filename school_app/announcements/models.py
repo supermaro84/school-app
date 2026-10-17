@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from groups.models import GroupProfile
 from django_ckeditor_5.fields import CKEditor5Field
@@ -56,4 +57,4 @@ class AnnouncementComment(models.Model):
         User, on_delete=models.CASCADE, related_name="announcement_comments"
     )
     comment_date = models.DateTimeField("published comment date", auto_now_add=True)
-    text = models.CharField(max_length=500)
+    text = models.CharField(_("comment"), max_length=500)

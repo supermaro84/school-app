@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Announcements{% endblock %}
+{% block title %}{% translate "Announcements" %}{% endblock %}
 
 {% block content %}
 <div class="container-fluid d-flex flex-column" style="height: calc(100vh - var(--navbar-height, 80px)); overflow-y: auto;"> <!-- Adjust based on your navbar height -->
@@ -10,7 +11,7 @@
                 <div class="card-header bg-primary text-white">
                     <h1 class="mb-0">
                         <i class="fas fa-bullhorn me-2"></i>
-                        Announcements
+                        {% translate "Announcements" %}
                     </h1>
                 </div>
                 <div class="card-body flex-grow-1 p-3 d-flex flex-column overflow-hidden">
@@ -25,7 +26,7 @@
             <h2 class="accordion-header">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                <i class="fas fa-bullhorn me-2"></i>
-                                                All Announcements {{ user.get_full_name }}
+                                                {% translate "All Announcements" %} {{ user.get_full_name }}
             </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
@@ -33,18 +34,18 @@
                 
                 <div class="card-body flex-grow-1 overflow-auto p-2">
                       <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
-<a href="{% url 'announcement_create' %}"><i class="bi bi-plus-circle-dotted">Add new</i></a>
+<a href="{% url 'announcement_create' %}"><i class="bi bi-plus-circle-dotted">{% translate "Add new" %}</i></a>
 
                       </div>
                     
                                             {% for ann in announcements_data %}
                                                 <div class="alert alert-primary alert-dismissible fade show mb-2" role="alert">
                                                     <h6 class="alert-heading">{{ ann.announcement.title }}
-                                                        {% if ann.opened %}<span class="badge text-bg-secondary">Opened</span>{% else %}<span class="badge text-bg-warning">New</span>{% endif %}
+                                                        {% if ann.opened %}<span class="badge text-bg-secondary">{% translate "Opened" %}</span>{% else %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
                                                         {% for user in ann.users_present %}<span class="badge rounded-pill text-bg-primary">{{ user.get_full_name }}</span>{% if not forloop.last %} {% endif %}{% endfor %}
                                                     </h6>
                                                    
-                                                    <a href="{% url 'announcement_detail' ann.announcement.pk %}" class="btn btn-primary btn-sm">View</a>
+                                                    <a href="{% url 'announcement_detail' ann.announcement.pk %}" class="btn btn-primary btn-sm">{% translate "View" %}</a>
                                                 </div>
                                             {% endfor %}                                            
                                         </div>
@@ -64,7 +65,7 @@
                                         <div class="card-header bg-success text-white">
                                             <h5 class="mb-0">
                                                 <i class="fas fa-calendar-alt me-2"></i>
-                                                Calendar / Events
+                                                {% translate "Calendar / Events" %}
                                             </h5>
                                         </div>
                                         <div class="card-body flex-grow-1 overflow-auto p-2">                                            
@@ -79,13 +80,13 @@
                     {% else %}
                         <div class="text-center flex-grow-1 d-flex align-items-center justify-content-center">
                             <div>
-                                <p class="lead">Please log in to access all features of the school application.</p>
+                                <p class="lead">{% translate "Please log in to access all features of the school application." %}</p>
                                 <div class="d-grid gap-2 d-md-block">
                                     <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
-                                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                                        <i class="fas fa-sign-in-alt me-2"></i>{% translate "Login" %}
                                     </a>
                                     <a href="{% url 'signup' %}" class="btn btn-outline-primary btn-lg">
-                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                        <i class="fas fa-user-plus me-2"></i>{% translate "Create Account" %}
                                     </a>
                                 </div>
                             </div>

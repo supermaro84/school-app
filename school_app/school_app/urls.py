@@ -46,6 +46,7 @@ urlpatterns = [
     path("", summary, name="landing"),
     path("admin/", admin.site.urls),
     path("ckeditor5/", include('django_ckeditor_5.urls')),  # Add this line
+    path("i18n/", include("django.conf.urls.i18n")),  # set_language view for the language switcher
 
     # Authentication URLs
     path("login/", CustomLoginView.as_view(), name="login"),

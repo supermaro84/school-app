@@ -1,17 +1,19 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 from accounts.models import UserProfile
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=True)
+    email = forms.EmailField(required=True, label=_("Email"))
+    first_name = forms.CharField(max_length=30, required=True, label=_("First name"))
+    last_name = forms.CharField(max_length=30, required=True, label=_("Last name"))
     birthdate = forms.DateField(
         required=False,
         widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-        help_text="Optional: Your date of birth",
+        label=_("Birthdate"),
+        help_text=_("Optional: Your date of birth"),
     )
 
     class Meta:

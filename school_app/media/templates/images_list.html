@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Images{% endblock %}
+{% block title %}{% translate "Images" %}{% endblock %}
 
 {% block content %}
 <div class="container-fluid h-100 d-flex flex-column p-3">
-    <h1>Image Gallery</h1>
+    <h1>{% translate "Image Gallery" %}</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary btn-lg">Upload</button>
+        <button type="submit" class="btn btn-primary btn-lg">{% translate "Upload" %}</button>
     </form>
     
     <div class="row flex-grow-1 overflow-hidden">
         <!-- Images column -->
         <div class="col-lg-6 col-md-6 d-flex flex-column">
-            <h3>Images</h3>
+            <h3>{% translate "Images" %}</h3>
             <div class="flex-grow-1 overflow-auto">
                 <div class="row">
                     {% for image in images %}
@@ -33,7 +34,7 @@
         
         <!-- Documents column -->
         <div class="col-lg-6 col-md-6 d-flex flex-column">
-            <h3>Documents</h3>
+            <h3>{% translate "Documents" %}</h3>
             <div class="flex-grow-1 overflow-auto">
                 <div class="row">
                     {% for document in documents %}
@@ -41,7 +42,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h6 class="card-title">{{ document.filename }}</h6>
-                                    <a href="{{ document.file.url }}" class="btn btn-sm btn-primary" download>Download</a>
+                                    <a href="{{ document.file.url }}" class="btn btn-sm btn-primary" download>{% translate "Download" %}</a>
                                 </div>
                             </div>
                         </div>

@@ -1,0 +1,12 @@
+kind,name
+type,Edukacyjne
+type,Integracyjne
+type,Administracyjne
+type,Dzień wolny
+type,Spotkanie
+type,Inne
+type,Lekcja
+status,Aktywne
+status,Wstępne
+status,Odwołane
+status,Zakończone

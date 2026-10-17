@@ -1,45 +1,46 @@
 {% extends 'groups.html' %}
+{% load i18n %}
 
-{% block title %}Group edit{% endblock %}
+{% block title %}{% translate "Group edit" %}{% endblock %}
 
 {% block group %}
 
 <div class="card-header bg-success text-white">
     <h5 class="mb-0">
         <i class="fas fa-calendar-alt me-2"></i>
-        Edit Group
+        {% translate "Edit Group" %}
     </h5>
 </div>
 <h1><h2>{{ group }}</h2></h1>
 <div class="card-body flex-grow-1 overflow-auto p-2">                                            
     <form method="post">
         {% csrf_token %}
-        <label>Description</label>
+        <label>{% translate "Description" %}</label>
         {{form.description}}
         <br>
-      <label for="users-select">Select Admins</label>
+      <label for="users-select">{% translate "Select Admins" %}</label>
 <select class="users-select" name="admins" multiple>
     {% for admin in form.admins %}
         <option value="{{ admin.pk }}">{{ admin }}</option>
     {% endfor %}
 </select>
 <script>
-    new SlimSelect({
+    new SlimSelect({ settings: slimSelectSettings,
         select: '.users-select'
     });
 </script>
-<label for="members-select">Select Members</label>
+<label for="members-select">{% translate "Select Members" %}</label>
 <select class="members-select" name="members" multiple>
     {% for member in form.members %}
         <option value="{{ member.pk }}">{{ member }}</option>
     {% endfor %}
 </select>
 <script>
-    new SlimSelect({
+    new SlimSelect({ settings: slimSelectSettings,
         select: '.members-select'
     });
 </script>    
-        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+        <button type="submit" class="btn btn-primary btn-lg">{% translate "Save" %}</button>
     </form>
 
 </div>

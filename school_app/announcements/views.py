@@ -12,6 +12,7 @@ from accounts.utils import get_affiliated_users, get_group_profiles_for_users_li
 from accounts.models import UserProfile
 from django.db.models import Q
 from django.contrib import messages
+from django.utils.translation import gettext as _
 
 
 
@@ -124,7 +125,7 @@ class EditAnnouncementView(UpdateView):
             self.object = self.get_object()
             announcement_id = self.object.pk
             self.object.delete()
-            messages.success(request, 'Announcement deleted successfully.')
+            messages.success(request, _('Announcement deleted successfully.'))
             return redirect('announcements_page')
         # Handle normal update
         return super().post(request, *args, **kwargs)

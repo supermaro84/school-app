@@ -1,0 +1,14 @@
+owner,name,description,type,status,start,end,groups,users,repeat_weekly_until
+admin,Szkoła zamknięta: przegląd ogrzewania,"Pilny przegląd instalacji grzewczej. Brak lekcji, świetlica nieczynna.",Administracyjne,Zakończone,2026-10-09 07:30,2026-10-09 16:00,Klasa 1A;Klasa 2B;Klasa 3C;Rodzice klasy 1A;Rodzice klasy 2B;Rodzice klasy 3C,,
+t_kowalski,Warsztaty plastyczne z liści,"Przynieś swój jesienny liść! Zamienimy liście w jeże, sowy i lisy.",Edukacyjne,Aktywne,2026-10-19 11:00,2026-10-19 12:00,Klasa 1A,,
+t_kowalski,Kółko matematyczne,"Łamigłówki, gry logiczne i zagadki dla ciekawych świata z klas 1A i 2B.",Edukacyjne,Aktywne,2026-10-20 13:00,2026-10-20 14:00,Klasa 1A;Klasa 2B,,2026-12-15
+admin,Rada pedagogiczna,"Porządek obrad: przegląd planu lekcji, dzień zdjęć szkolnych, bezpieczeństwo podczas parady Halloween.",Spotkanie,Aktywne,2026-10-21 14:00,2026-10-21 15:30,,t_kowalski;t_nowak;t_wisniewski;t_zielinska,
+t_wisniewski,Jesienny dzień sportu,"Odwołany z powodu prognozy ulewnego deszczu. Lekcje odbywają się normalnie.",Integracyjne,Odwołane,2026-10-23 08:00,2026-10-23 12:00,Klasa 2B;Klasa 3C,,
+t_wisniewski,Kiermasz ciast na wycieczkę klasową,"Ciasta, babeczki i ciasteczka w auli szkolnej. Cały dochód przeznaczamy na wycieczkę 2B do zoo.",Integracyjne,Aktywne,2026-10-28 09:40,2026-10-28 10:05,Klasa 2B;Rodzice klasy 2B,,
+admin,Parada przebierańców na Halloween,"Czarownice, dynie i superbohaterowie mile widziani! Parada wokół szkolnego ogrodu, potem gorąca herbata w auli.",Integracyjne,Aktywne,2026-10-30 11:00,2026-10-30 12:00,Klasa 1A;Klasa 2B;Klasa 3C;Rodzice klasy 1A;Rodzice klasy 2B;Rodzice klasy 3C,,
+admin,Dzień zdjęć szkolnych,"Zdjęcia indywidualne i klasowe. Uczesz włosy i przynieś swój najpiękniejszy uśmiech.",Administracyjne,Aktywne,2026-11-04 08:00,2026-11-04 12:00,Klasa 1A;Klasa 2B;Klasa 3C,,
+t_zielinska,Festiwal nauki: projekty wulkanów,"Klasa 3C prezentuje swoje wulkany. Rodzice są zaproszeni na pokaz erupcji!",Edukacyjne,Aktywne,2026-11-06 11:00,2026-11-06 13:00,Klasa 3C;Rodzice klasy 3C,,
+t_nowak,Wywiadówki,"10-minutowe spotkania z wychowawcami. Zapisz się, odpowiadając na ogłoszenie.",Spotkanie,Aktywne,2026-11-12 15:00,2026-11-12 19:00,Rodzice klasy 1A;Rodzice klasy 2B,,
+t_zielinska,Wycieczka: Muzeum Przyrodnicze,"Zbiórka przy bramie szkoły o 8:00. Prosimy o drugie śniadanie i wygodne buty.",Edukacyjne,Aktywne,2026-11-20 08:00,2026-11-20 13:00,Klasa 3C;Rodzice klasy 3C,,
+t_nowak,Zimowy koncert chóru,"Klasy 1A i 2B śpiewają zimowe piosenki dla rodzin. Termin do potwierdzenia.",Integracyjne,Wstępne,2026-12-17 17:00,2026-12-17 18:30,Klasa 1A;Klasa 2B;Rodzice klasy 1A;Rodzice klasy 2B,,
+t_nowak,Podsumowanie wyzwania czytelniczego,"Dyplomy i niespodzianka dla wszystkich, którzy przeczytali 10 książek przed feriami.",Integracyjne,Aktywne,2026-12-18 10:00,2026-12-18 11:00,Klasa 1A;Klasa 2B,,

@@ -1,5 +1,6 @@
 from django.core.files.storage import FileSystemStorage
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 import os
 
 
@@ -11,7 +12,7 @@ def user_directory_path(instance, filename):
 
 class ImageFile(models.Model):
     owner = models.ForeignKey("auth.User", on_delete=models.CASCADE, default=1)
-    file = models.ImageField(upload_to=user_directory_path)
+    file = models.ImageField(_("image"), upload_to=user_directory_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 

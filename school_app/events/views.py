@@ -22,12 +22,8 @@ def events(request):
                         "start": event.event_start_time.isoformat(),
                         "end": event.event_end_time.isoformat(),
                         "description": event.event_description,
-                        "status": event.status.value
-                        if hasattr(event.status, "value")
-                        else str(event.status),
-                        "type": event.event_type.value
-                        if hasattr(event.event_type, "value")
-                        else str(event.event_type),
+                        "status": str(event.status),
+                        "type": str(event.event_type),
                         "list_of_groups": event.list_of_groups,
                         "users": ", ".join([user.user.username for user in event.users.all()]),
                         "all_involved_users": [user.username for user in event.all_involved_users],

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
 
@@ -10,7 +11,9 @@ class MessageThread(models.Model):
         related_name="authored_messages",
         null=True,
     )
-    recipients = models.ManyToManyField(User, related_name="massage_threads")
+    recipients = models.ManyToManyField(
+        User, related_name="massage_threads", verbose_name=_("recipients")
+    )
     @property
     def all_recipients(self):
         return [self.author]+list(self.recipients.all())
@@ -23,5 +26,5 @@ class Message(models.Model):
         MessageThread, related_name="messages", on_delete=models.CASCADE
     )
     pub_date = models.DateTimeField("date published", auto_now_add=True)
-    text = models.CharField(max_length=1500)
+    text = models.CharField(_("message"), max_length=1500)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

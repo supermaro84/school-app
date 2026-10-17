@@ -16,7 +16,11 @@ class ForcePasswordChangeMiddleware:
             and hasattr(user, "profile")
             and user.profile.must_change_password
         ):
-            allowed_paths = [reverse("password_change"), reverse("logout")]
+            allowed_paths = [
+                reverse("password_change"),
+                reverse("logout"),
+                reverse("set_language"),
+            ]
             static_url = "/" + settings.STATIC_URL.lstrip("/")
             if request.path not in allowed_paths and not request.path.startswith(
                 static_url

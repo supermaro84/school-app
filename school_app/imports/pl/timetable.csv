@@ -1,0 +1,46 @@
+owner,name,description,type,status,start,end,groups,users,repeat_weekly_until
+t_kowalski,Język polski 1A,"Czytanie, pisanie i opowiadanie. Nauczyciel: pan Kowalski.",Lekcja,Aktywne,2026-10-19 08:00,2026-10-19 08:45,Klasa 1A,,2026-11-13
+t_kowalski,Matematyka 1A,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pan Kowalski.",Lekcja,Aktywne,2026-10-19 08:55,2026-10-19 09:40,Klasa 1A,,2026-11-13
+t_nowak,Język angielski 1A,"Piosenki, gry i pierwsze rozmowy po angielsku. Nauczyciel: pani Nowak.",Lekcja,Aktywne,2026-10-19 10:05,2026-10-19 10:50,Klasa 1A,,2026-11-13
+t_kowalski,Matematyka 1A,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pan Kowalski.",Lekcja,Aktywne,2026-10-20 08:00,2026-10-20 08:45,Klasa 1A,,2026-11-13
+t_kowalski,Język polski 1A,"Czytanie, pisanie i opowiadanie. Nauczyciel: pan Kowalski.",Lekcja,Aktywne,2026-10-20 08:55,2026-10-20 09:40,Klasa 1A,,2026-11-13
+t_kowalski,Wychowanie fizyczne 1A,Zajęcia ruchowe. Przynieś strój sportowy i obuwie zmienne. Nauczyciel: pan Kowalski.,Lekcja,Aktywne,2026-10-20 10:05,2026-10-20 10:50,Klasa 1A,,2026-11-13
+t_kowalski,Język polski 1A,"Czytanie, pisanie i opowiadanie. Nauczyciel: pan Kowalski.",Lekcja,Aktywne,2026-10-21 08:00,2026-10-21 08:45,Klasa 1A,,2026-11-13
+t_nowak,Język angielski 1A,"Piosenki, gry i pierwsze rozmowy po angielsku. Nauczyciel: pani Nowak.",Lekcja,Aktywne,2026-10-21 08:55,2026-10-21 09:40,Klasa 1A,,2026-11-13
+t_kowalski,Plastyka 1A,"Rysowanie, malowanie i prace ręczne. Nauczyciel: pan Kowalski.",Lekcja,Aktywne,2026-10-21 10:05,2026-10-21 10:50,Klasa 1A,,2026-11-13
+t_kowalski,Matematyka 1A,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pan Kowalski.",Lekcja,Aktywne,2026-10-22 08:00,2026-10-22 08:45,Klasa 1A,,2026-11-13
+t_kowalski,Język polski 1A,"Czytanie, pisanie i opowiadanie. Nauczyciel: pan Kowalski.",Lekcja,Aktywne,2026-10-22 08:55,2026-10-22 09:40,Klasa 1A,,2026-11-13
+t_nowak,Muzyka 1A,"Śpiew, rytm i instrumenty. Nauczyciel: pani Nowak.",Lekcja,Aktywne,2026-10-22 10:05,2026-10-22 10:50,Klasa 1A,,2026-11-13
+t_kowalski,Matematyka 1A,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pan Kowalski.",Lekcja,Aktywne,2026-10-23 08:00,2026-10-23 08:45,Klasa 1A,,2026-11-13
+t_nowak,Język angielski 1A,"Piosenki, gry i pierwsze rozmowy po angielsku. Nauczyciel: pani Nowak.",Lekcja,Aktywne,2026-10-23 08:55,2026-10-23 09:40,Klasa 1A,,2026-11-13
+t_kowalski,Wychowanie fizyczne 1A,Zajęcia ruchowe. Przynieś strój sportowy i obuwie zmienne. Nauczyciel: pan Kowalski.,Lekcja,Aktywne,2026-10-23 10:05,2026-10-23 10:50,Klasa 1A,,2026-11-13
+t_wisniewski,Matematyka 2B,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pan Wiśniewski.",Lekcja,Aktywne,2026-10-19 08:00,2026-10-19 08:45,Klasa 2B,,2026-11-13
+t_nowak,Język angielski 2B,"Piosenki, gry i pierwsze rozmowy po angielsku. Nauczyciel: pani Nowak.",Lekcja,Aktywne,2026-10-19 08:55,2026-10-19 09:40,Klasa 2B,,2026-11-13
+t_wisniewski,Język polski 2B,"Czytanie, pisanie i opowiadanie. Nauczyciel: pan Wiśniewski.",Lekcja,Aktywne,2026-10-19 10:05,2026-10-19 10:50,Klasa 2B,,2026-11-13
+t_nowak,Język angielski 2B,"Piosenki, gry i pierwsze rozmowy po angielsku. Nauczyciel: pani Nowak.",Lekcja,Aktywne,2026-10-20 08:00,2026-10-20 08:45,Klasa 2B,,2026-11-13
+t_wisniewski,Matematyka 2B,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pan Wiśniewski.",Lekcja,Aktywne,2026-10-20 08:55,2026-10-20 09:40,Klasa 2B,,2026-11-13
+t_wisniewski,Przyroda 2B,Doświadczenia i odkrywanie natury. Nauczyciel: pan Wiśniewski.,Lekcja,Aktywne,2026-10-20 10:05,2026-10-20 10:50,Klasa 2B,,2026-11-13
+t_wisniewski,Matematyka 2B,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pan Wiśniewski.",Lekcja,Aktywne,2026-10-21 08:00,2026-10-21 08:45,Klasa 2B,,2026-11-13
+t_wisniewski,Język polski 2B,"Czytanie, pisanie i opowiadanie. Nauczyciel: pan Wiśniewski.",Lekcja,Aktywne,2026-10-21 08:55,2026-10-21 09:40,Klasa 2B,,2026-11-13
+t_nowak,Muzyka 2B,"Śpiew, rytm i instrumenty. Nauczyciel: pani Nowak.",Lekcja,Aktywne,2026-10-21 10:05,2026-10-21 10:50,Klasa 2B,,2026-11-13
+t_wisniewski,Język polski 2B,"Czytanie, pisanie i opowiadanie. Nauczyciel: pan Wiśniewski.",Lekcja,Aktywne,2026-10-22 08:00,2026-10-22 08:45,Klasa 2B,,2026-11-13
+t_nowak,Język angielski 2B,"Piosenki, gry i pierwsze rozmowy po angielsku. Nauczyciel: pani Nowak.",Lekcja,Aktywne,2026-10-22 08:55,2026-10-22 09:40,Klasa 2B,,2026-11-13
+t_wisniewski,Wychowanie fizyczne 2B,Zajęcia ruchowe. Przynieś strój sportowy i obuwie zmienne. Nauczyciel: pan Wiśniewski.,Lekcja,Aktywne,2026-10-22 10:05,2026-10-22 10:50,Klasa 2B,,2026-11-13
+t_wisniewski,Przyroda 2B,Doświadczenia i odkrywanie natury. Nauczyciel: pan Wiśniewski.,Lekcja,Aktywne,2026-10-23 08:00,2026-10-23 08:45,Klasa 2B,,2026-11-13
+t_wisniewski,Matematyka 2B,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pan Wiśniewski.",Lekcja,Aktywne,2026-10-23 08:55,2026-10-23 09:40,Klasa 2B,,2026-11-13
+t_nowak,Muzyka 2B,"Śpiew, rytm i instrumenty. Nauczyciel: pani Nowak.",Lekcja,Aktywne,2026-10-23 10:05,2026-10-23 10:50,Klasa 2B,,2026-11-13
+t_zielinska,Matematyka 3C,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-19 08:00,2026-10-19 08:45,Klasa 3C,,2026-11-13
+t_zielinska,Język polski 3C,"Czytanie, pisanie i opowiadanie. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-19 08:55,2026-10-19 09:40,Klasa 3C,,2026-11-13
+t_zielinska,Przyroda 3C,Doświadczenia i odkrywanie natury. Nauczyciel: pani Zielińska.,Lekcja,Aktywne,2026-10-19 10:05,2026-10-19 10:50,Klasa 3C,,2026-11-13
+t_zielinska,Język polski 3C,"Czytanie, pisanie i opowiadanie. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-20 08:00,2026-10-20 08:45,Klasa 3C,,2026-11-13
+t_zielinska,Matematyka 3C,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-20 08:55,2026-10-20 09:40,Klasa 3C,,2026-11-13
+t_zielinska,Historia 3C,Opowieści z przeszłości naszego miasta i kraju. Nauczyciel: pani Zielińska.,Lekcja,Aktywne,2026-10-20 10:05,2026-10-20 10:50,Klasa 3C,,2026-11-13
+t_zielinska,Matematyka 3C,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-21 08:00,2026-10-21 08:45,Klasa 3C,,2026-11-13
+t_zielinska,Przyroda 3C,Doświadczenia i odkrywanie natury. Nauczyciel: pani Zielińska.,Lekcja,Aktywne,2026-10-21 08:55,2026-10-21 09:40,Klasa 3C,,2026-11-13
+t_zielinska,Plastyka 3C,"Rysowanie, malowanie i prace ręczne. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-21 10:05,2026-10-21 10:50,Klasa 3C,,2026-11-13
+t_zielinska,Język polski 3C,"Czytanie, pisanie i opowiadanie. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-22 08:00,2026-10-22 08:45,Klasa 3C,,2026-11-13
+t_zielinska,Historia 3C,Opowieści z przeszłości naszego miasta i kraju. Nauczyciel: pani Zielińska.,Lekcja,Aktywne,2026-10-22 08:55,2026-10-22 09:40,Klasa 3C,,2026-11-13
+t_zielinska,Matematyka 3C,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-22 10:05,2026-10-22 10:50,Klasa 3C,,2026-11-13
+t_zielinska,Matematyka 3C,"Liczby, figury i rozwiązywanie zadań. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-23 08:00,2026-10-23 08:45,Klasa 3C,,2026-11-13
+t_zielinska,Język polski 3C,"Czytanie, pisanie i opowiadanie. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-23 08:55,2026-10-23 09:40,Klasa 3C,,2026-11-13
+t_zielinska,Plastyka 3C,"Rysowanie, malowanie i prace ręczne. Nauczyciel: pani Zielińska.",Lekcja,Aktywne,2026-10-23 10:05,2026-10-23 10:50,Klasa 3C,,2026-11-13

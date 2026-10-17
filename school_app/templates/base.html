@@ -1,15 +1,25 @@
-{% load django_bootstrap5 %}
+{% load django_bootstrap5 i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}My Website{% endblock %}</title>
+    <title>{% block title %}{% translate "School App" %}{% endblock %}</title>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script src="https://unpkg.com/slim-select@latest/dist/slimselect.js"></script>
     <link href="https://unpkg.com/slim-select@latest/dist/slimselect.css" rel="stylesheet"></link>
+    <script>
+        // Translated texts for every SlimSelect multi-select on the site
+        var slimSelectSettings = {
+            placeholderText: '{% filter escapejs %}{% translate "Select..." %}{% endfilter %}',
+            searchPlaceholder: '{% filter escapejs %}{% translate "Search" %}{% endfilter %}',
+            searchText: '{% filter escapejs %}{% translate "No results" %}{% endfilter %}',
+            searchingText: '{% filter escapejs %}{% translate "Searching..." %}{% endfilter %}'
+        };
+    </script>
     {% bootstrap_css %}
 </head>
 <style>
@@ -48,46 +58,47 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container" style="width: 100%;">
                 <a class="navbar-brand" href="{% url 'landing' %}">
-                    <i class="fas fa-graduation-cap me-2"></i>Home
+                    <i class="fas fa-graduation-cap me-2"></i>{% translate "Home" %}
                 </a>
                 {% if user.is_authenticated %}
                 <a class="navbar-brand" href="{% url 'calendar' %}">
-                    <i class="fas fa-graduation-cap me-2"></i>Calendar
+                    <i class="fas fa-graduation-cap me-2"></i>{% translate "Calendar" %}
                 </a>
                 <a class="navbar-brand" href="{% url 'announcements_page' %}">
-                    <i class="fas fa-graduation-cap me-2"></i>Announcements
+                    <i class="fas fa-graduation-cap me-2"></i>{% translate "Announcements" %}
                 </a>
                 <a class="navbar-brand" href="{% url 'messages_page' %}">
-                    <i class="fas fa-graduation-cap me-2"></i>Messages
+                    <i class="fas fa-graduation-cap me-2"></i>{% translate "Messages" %}
                 </a>
                 <a class="navbar-brand" href="{% url 'groups' %}">
-                    <i class="fas fa-graduation-cap me-2"></i>Groups
+                    <i class="fas fa-graduation-cap me-2"></i>{% translate "Groups" %}
                 </a>
                 
                 <a class="navbar-brand" href="{% url 'users_list' %}">
-                    <i class="fas fa-graduation-cap me-2"></i>Users
+                    <i class="fas fa-graduation-cap me-2"></i>{% translate "Users" %}
                 </a>
                  <a class="navbar-brand" href="{% url 'images_list' %}">
-                    <i class="fas fa-graduation-cap me-2"></i>Media
+                    <i class="fas fa-graduation-cap me-2"></i>{% translate "Media" %}
                 </a>
                 {% endif %}
-                <div class="navbar-nav ms-auto">
+                <div class="navbar-nav ms-auto align-items-center">
+                    <div class="me-3">{% include "includes/language_switcher.html" with variant="light" %}</div>
                     {% if user.is_authenticated %}
                         <span class="navbar-text me-3">
-                            Welcome, {{ user.first_name|default:user.username }}!
+                            {% blocktranslate with name=user.first_name|default:user.username %}Welcome, {{ name }}!{% endblocktranslate %}
                         </span>
                         <form method="post" action="{% url 'logout' %}" class="d-inline">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-outline-light btn-sm">
-                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                                <i class="fas fa-sign-out-alt me-1"></i>{% translate "Logout" %}
                             </button>
                         </form>
                     {% else %}
                         <a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">
-                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                            <i class="fas fa-sign-in-alt me-1"></i>{% translate "Login" %}
                         </a>
                         <a class="btn btn-primary btn-sm" href="{% url 'signup' %}">
-                            <i class="fas fa-user-plus me-1"></i>Sign Up
+                            <i class="fas fa-user-plus me-1"></i>{% translate "Sign Up" %}
                         </a>
                     {% endif %}
                 </div>
@@ -104,7 +115,7 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="container text-center">
-                <p class="mb-0">&copy; 2025 My Website. All rights reserved.</p>
+                <p class="mb-0">&copy; 2025 {% translate "School App. All rights reserved." %}</p>
             </div>
         </footer>
     </div>

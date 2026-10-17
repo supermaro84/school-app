@@ -9,6 +9,7 @@ from .forms import MessageThreadForm
 from django.urls import reverse
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages as django_messages
+from django.utils.translation import gettext as _
 
 
 def get_users_messages(user):
@@ -73,7 +74,7 @@ class ReplyMessageView(CreateView):
         thread = get_object_or_404(MessageThread, pk=thread_id)
         
         if request.user not in thread.all_recipients:
-            django_messages.error(request, "You don't have permission to reply to this message thread.")
+            django_messages.error(request, _("You don't have permission to reply to this message thread."))
             return redirect('messages_page')
         return super().dispatch(request, *args, **kwargs)
 
