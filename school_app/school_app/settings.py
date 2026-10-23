@@ -26,12 +26,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-q=v6i6^z_3(zrya@s=_%wg-)i*q=-ty=7b0w%h*ae()n0ro%(j"
+# DJANGO_SECRET_KEY, not SECRET_KEY: that name is taken by the Spaces key below.
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-q=v6i6^z_3(zrya@s=_%wg-)i*q=-ty=7b0w%h*ae()n0ro%(j",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
 
-ALLOWED_HOSTS = ["192.168.0.117", "192.168.0.252", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv(
+        "ALLOWED_HOSTS", "192.168.0.117,192.168.0.252,localhost,127.0.0.1"
+    ).split(",")
+    if host.strip()
+]
 
 
 # Application definition
@@ -170,8 +180,16 @@ LOGOUT_REDIRECT_URL = "/"
 # Email backend for development (console backend)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-STORAGES = {
-    "default": {
+# Uploads go to DigitalOcean Spaces when BUCKET_NAME is set, otherwise to
+# MEDIA_ROOT on local disk. Not "/media/": the app has its own pages there.
+MEDIA_URL = "/uploads/"
+MEDIA_ROOT = BASE_DIR / "uploads"
+USE_LOCAL_UPLOADS = not os.getenv("BUCKET_NAME")
+
+if USE_LOCAL_UPLOADS:
+    DEFAULT_STORAGE = {"BACKEND": "django.core.files.storage.FileSystemStorage"}
+else:
+    DEFAULT_STORAGE = {
         "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
             "access_key": os.getenv("ACCESS_KEY"),
@@ -180,7 +198,10 @@ STORAGES = {
             "endpoint_url": "https://fra1.digitaloceanspaces.com",
             "region_name": "fra1",
         },
-    },
+    }
+
+STORAGES = {
+    "default": DEFAULT_STORAGE,
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },

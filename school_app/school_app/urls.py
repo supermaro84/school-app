@@ -15,6 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth import views as auth_views
@@ -136,3 +138,8 @@ urlpatterns = [
     path("profile/", my_profile, name="my_profile"),
     path("profile/edit/", profile_edit, name="profile_edit"),
 ]
+
+# Local uploads under runserver; in deployment nginx serves /uploads/ itself.
+# static() is a no-op unless DEBUG is on.
+if settings.USE_LOCAL_UPLOADS:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
