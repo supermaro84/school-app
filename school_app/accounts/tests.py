@@ -38,7 +38,7 @@ class ImportUsersTests(TestCase):
         tom = User.objects.get(username="tom")
 
         password = credentials["tom"]["password"]
-        self.assertRegex(password, r"^tom-[A-Za-z0-9]{6}$")
+        self.assertEqual(password, "tom")
         self.assertTrue(tom.check_password(password))
         self.assertTrue(tom.profile.must_change_password)
         self.assertEqual(tom.profile.user_role.user_role, "Guardian")
