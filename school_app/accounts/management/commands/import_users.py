@@ -1,5 +1,4 @@
 import csv
-import secrets
 from datetime import date
 from pathlib import Path
 
@@ -11,17 +10,8 @@ from accounts.models import UserRoles
 
 REQUIRED_COLUMNS = {"username", "first_name", "last_name", "email", "role"}
 
-# Characters that are easy to read and type (no 0/O, 1/l/I)
-PASSWORD_ALPHABET = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789"
-
-
 TRUE_VALUES = {"yes", "y", "true", "1"}
 FALSE_VALUES = {"no", "n", "false", "0", ""}
-
-
-def generate_password(username, suffix_length=6):
-    suffix = "".join(secrets.choice(PASSWORD_ALPHABET) for _ in range(suffix_length))
-    return f"{username}-{suffix}"
 
 
 def parse_flag(row, column, line):
@@ -35,8 +25,8 @@ def parse_flag(row, column, line):
 
 class Command(BaseCommand):
     help = (
-        "Import users from a CSV file. Each new user gets a temporary password "
-        "(username + random suffix) that must be changed after the first login. "
+        "Import users from a CSV file. Each new user's temporary password is "
+        "their username and must be changed after the first login. "
         "Columns: username, first_name, last_name, email, role, and optionally "
         "birthdate (YYYY-MM-DD), phone_number, description, affiliated_users "
         "(usernames separated by ';'), is_staff and is_superuser (yes/no)."
@@ -120,7 +110,8 @@ class Command(BaseCommand):
                 is_staff = parse_flag(row, "is_staff", line)
                 is_superuser = parse_flag(row, "is_superuser", line)
 
-                password = generate_password(username)
+                # Temporary: changed at first login (must_change_password)
+                password = username
                 user = User.objects.create_user(
                     username=username,
                     password=password,
