@@ -78,33 +78,14 @@ class LanguageSwitchTests(TestCase):
         self.assertContains(self.client.get(reverse("password_change")), "Zmień hasło")
 
 
-class LandingAnnouncementsTests(TestCase):
-    def setUp(self):
-        self.parent = User.objects.create_user(username="parent", password="pw")
-        self.child = User.objects.create_user(username="child", password="pw")
-        self.parent.profile.affiliated_users.add(self.child)
-        author = User.objects.create_user(username="teacher", password="pw")
-        self.read = Announcement.objects.create(author=author, title="Read one", text="x")
-        self.read.users.add(self.parent)
-        self.unread = Announcement.objects.create(author=author, title="Unread one", text="x")
-        self.unread.users.add(self.parent, self.child)
-        AnnouncementRead.objects.create(announcement=self.read, user=self.parent)
-        self.client.force_login(self.parent)
-
-    def test_counts_and_unread_per_user(self):
+class LandingCardsTests(TestCase):
+    def test_only_upcoming_events_card(self):
+        user = User.objects.create_user(username="lucy", password="pw")
+        self.client.force_login(user)
         response = self.client.get(reverse("landing"))
-        parent, child = response.context["affiliated_users"]
-        self.assertEqual(len(parent.announcement_items), 2)
-        self.assertEqual(parent.unread_count, 1)
-        self.assertEqual(len(child.announcement_items), 1)
-        self.assertEqual(child.unread_count, 1)
-        self.assertContains(response, "Unread: 1", count=2)
-        self.assertContains(response, reverse("announcement_detail", args=[self.unread.pk]))
-
-    def test_opening_announcement_clears_unread(self):
-        self.client.get(reverse("announcement_detail", args=[self.unread.pk]))
-        response = self.client.get(reverse("landing"))
-        self.assertNotContains(response, "Unread:")
+        self.assertContains(response, "Upcoming Events")
+        self.assertNotContains(response, "My announcements")
+        self.assertNotContains(response, "My messages")
 
 
 class LandingUpcomingEventsTests(TestCase):
@@ -124,3 +105,38 @@ class LandingUpcomingEventsTests(TestCase):
         response = self.client.get(reverse("landing"))
         self.assertContains(response, ">Wycieczka</span>")
         self.assertContains(response, ">Wstępne</span>")
+
+
+class SignUpTests(TestCase):
+    def test_sign_up_without_birthdate(self):
+        response = self.client.post(reverse("signup"), {
+            "username": "newuser", "first_name": "New", "last_name": "User", "email": "new@example.com",
+            "birthdate": "", "password1": "S3cure-pass-123", "password2": "S3cure-pass-123",
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertIsNone(User.objects.get(username="newuser").profile.birthdate)
+
+
+class PasswordToggleTests(TestCase):
+    def test_auth_pages_have_the_toggle(self):
+        self.assertContains(self.client.get(reverse("login")), "data-password-toggle")
+        self.assertContains(self.client.get(reverse("signup")), "data-password-toggle")
+        user = User.objects.create_user(username="lucy", password="pw")
+        self.client.force_login(user)
+        self.assertContains(self.client.get(reverse("password_change")), "data-password-toggle")
+
+    def test_reset_confirm_page_uses_the_app_layout(self):
+        from django.contrib.auth.tokens import default_token_generator
+        from django.utils.encoding import force_bytes
+        from django.utils.http import urlsafe_base64_encode
+
+        user = User.objects.create_user(username="lucy", password="pw", email="lucy@example.com")
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        url = reverse("password_reset_confirm", args=[uid, default_token_generator.make_token(user)])
+        response = self.client.get(url, follow=True)
+        self.assertTemplateUsed(response, "registration/password_reset_confirm.html")
+        self.assertContains(response, 'name="new_password1"')
+        self.assertContains(response, "data-password-toggle")
+
+        bad = self.client.get(reverse("password_reset_confirm", args=[uid, "bad-token"]))
+        self.assertContains(bad, "This password reset link is invalid")

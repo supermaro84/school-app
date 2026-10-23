@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _
+from .forms import OwnProfileForm, OwnUserForm
 from .models import UserProfile, User
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -62,3 +65,22 @@ def user_detail(request, pk):
             "user_profiles": user_profiles_list,
         },
     )
+
+
+@login_required
+def my_profile(request):
+    return redirect("user_detail", pk=request.user.pk)
+
+
+@login_required
+def profile_edit(request):
+    """Edit your own name, email, birthdate, phone and description."""
+    user_form = OwnUserForm(request.POST or None, instance=request.user)
+    profile_form = OwnProfileForm(request.POST or None, instance=request.user.profile)
+    if request.method == "POST" and user_form.is_valid() and profile_form.is_valid():
+        user_form.save()
+        profile_form.save()
+        messages.success(request, _("Your profile has been saved."))
+        return redirect("user_detail", pk=request.user.pk)
+    return render(request, "profile_edit.html", {"user_form": user_form, "profile_form": profile_form})
+

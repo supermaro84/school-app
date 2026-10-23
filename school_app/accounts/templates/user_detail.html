@@ -6,7 +6,10 @@
 {% block content %}
 <div class="page-header">
     <h1><i class="bi bi-person-badge"></i>{% translate "User Details" %}</h1>
-    <a href="{% url 'users_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>{% translate "Back to Users" %}</a>
+    <div class="d-flex flex-wrap gap-2">
+        {% if profile.user == user %}<a href="{% url 'profile_edit' %}" class="btn btn-primary"><i class="bi bi-pencil me-1"></i>{% translate "Edit profile" %}</a>{% endif %}
+        <a href="{% url 'users_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>{% translate "Back to Users" %}</a>
+    </div>
 </div>
 <div class="row">
     <div class="col-12 col-lg-8 col-xl-6">
@@ -21,10 +24,11 @@
                     {% if profile.user_role %}<span class="badge text-bg-info ms-auto">{{ profile.user_role }}</span>{% endif %}
                 </div>
                 <dl class="meta-list">
-                    <dt>{% translate "Birthdate" %}</dt><dd>{{ profile.birthdate|default:"–" }}</dd>
+                    <dt>{% translate "Email" %}</dt><dd>{% if profile.user.email %}<a href="mailto:{{ profile.user.email }}" class="text-break">{{ profile.user.email }}</a>{% else %}–{% endif %}</dd>
                     <dt>{% translate "Phone:" %}</dt><dd>{{ profile.phone_number|default:"–" }}</dd>
                     <dt>{% translate "Role:" %}</dt><dd>{{ profile.user_role|default:"–" }}</dd>
                     <dt>{% translate "Affiliated users:" %}</dt><dd>{{ profile.affiliated_usernames|default:"–" }}</dd>
+                    <dt>{% translate "Description" %}</dt><dd>{% if profile.description %}{{ profile.description|linebreaksbr }}{% else %}–{% endif %}</dd>
                 </dl>
             </div>
         </section>

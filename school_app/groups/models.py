@@ -18,3 +18,7 @@ class GroupProfile(models.Model):
 
     def __str__(self):
         return self.group.name
+
+    def drop_admins_from_members(self):
+        """Admins take precedence: nobody is both admin and plain member."""
+        self.members.remove(*self.admins.all())

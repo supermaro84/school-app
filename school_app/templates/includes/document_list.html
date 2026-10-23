@@ -1,0 +1,13 @@
+{% load i18n %}
+{# Attached documents as download links; pass documents=... #}
+{% if documents %}
+<ul class="list-unstyled d-flex flex-column gap-1 my-2">
+    {% for document in documents %}
+    <li class="d-flex align-items-center gap-2 text-break">
+        {% include "includes/document_icon.html" with ext=document.extension %}
+        <a href="{{ document.file.url }}" target="_blank" rel="noopener">{{ document.filename }}</a>
+        {% if document.file_size %}<small class="text-secondary text-nowrap">{{ document.file_size|filesizeformat }}</small>{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

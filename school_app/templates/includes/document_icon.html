@@ -1,0 +1,2 @@
+{# File-type icon for a document; pass ext="pdf" etc. #}
+{% if ext == "pdf" %}<i class="bi bi-file-earmark-pdf text-danger"></i>{% elif ext in "doc docx odt rtf" %}<i class="bi bi-file-earmark-word text-primary"></i>{% elif ext in "xls xlsx ods csv" %}<i class="bi bi-file-earmark-excel text-success"></i>{% elif ext in "ppt pptx odp" %}<i class="bi bi-file-earmark-ppt text-warning"></i>{% else %}<i class="bi bi-file-earmark-text text-secondary"></i>{% endif %}

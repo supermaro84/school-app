@@ -15,6 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth import views as auth_views
@@ -33,14 +35,23 @@ from announcements.views import (
 )
 from events.views import events, event_editing, event_edit, event_delete
 from groups import views as group_views
-from accounts.views import user_list, user_detail
+from accounts.views import user_list, user_detail, my_profile, profile_edit
 from messages.views import (
     messages_page,
     CreateMessageView,
     show_message_thread_by_id,
     ReplyMessageView,
 )
-from media.views import CreateImageView, delete_image
+from media.views import (
+    delete_document,
+    delete_image,
+    documents_page,
+    gallery_create,
+    gallery_delete,
+    gallery_detail,
+    gallery_edit,
+    media_page,
+)
 
 urlpatterns = [
     path("", summary, name="landing"),
@@ -111,11 +122,24 @@ urlpatterns = [
     path("messages/<int:pk>/", show_message_thread_by_id, name="message_thread_detail"),
     path("messages/<int:pk>/reply/", ReplyMessageView.as_view(), name="reply_message"),
     # Media URLs
-    path("media/images/", CreateImageView.as_view(), name="images_list"),
+    path("media/images/", media_page, name="images_list"),
+    path("documents/", documents_page, name="documents_page"),
+    path("documents/<str:source>/<int:pk>/delete/", delete_document, name="document_delete"),
+    path("media/galleries/new/", gallery_create, name="gallery_create"),
+    path("media/galleries/<int:pk>/", gallery_detail, name="gallery_detail"),
+    path("media/galleries/<int:pk>/edit/", gallery_edit, name="gallery_edit"),
+    path("media/galleries/<int:pk>/delete/", gallery_delete, name="gallery_delete"),
     path(
         "media/images/<str:source>/<int:pk>/delete/", delete_image, name="image_delete"
     ),
     # Users URLs
     path("users/", user_list, name="users_list"),
     path("users/<int:pk>/", user_detail, name="user_detail"),
+    path("profile/", my_profile, name="my_profile"),
+    path("profile/edit/", profile_edit, name="profile_edit"),
 ]
+
+# Local uploads under runserver; in deployment nginx serves /uploads/ itself.
+# static() is a no-op unless DEBUG is on.
+if settings.USE_LOCAL_UPLOADS:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -2,6 +2,8 @@ from django.contrib.auth.models import Group
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from accounts.utils import get_affiliated_users
 from .models import GroupProfile
 from django.urls import reverse
@@ -60,29 +62,21 @@ def group_detail(request, pk):
     )
 
 
-class CreateGroupView(CreateView):
+class CreateGroupView(LoginRequiredMixin, CreateView):
     model = GroupProfile
     template_name = "group_form.html"
     form_class = GroupForm
 
     def form_valid(self, form):
-        # 1. Create the base Django Group
-        group_name = self.request.POST.get("name")
-        if not group_name:
-            form.add_error(None, "Group name is required.")
-            return self.form_invalid(form)
-
-        group = Group.objects.create(name=group_name)
-
-        # 2. Assign it to the GroupProfile
-        form.instance.group = group
-
-        # 3. Optionally, add the creator as admin/member
-        form.instance.save()
-        form.instance.admins.add(self.request.user)
-        form.instance.members.add(self.request.user)
-
-        return super().form_valid(form)
+        form.instance.group = Group.objects.create(name=form.cleaned_data["name"])
+        response = super().form_valid(form)  # saves description, admins, members
+        group = self.object
+        # The creator always manages the group; members also come from the
+        # chosen groups; admins are never plain members as well.
+        group.admins.add(self.request.user)
+        group.members.set(form.new_members())
+        group.drop_admins_from_members()
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -93,14 +87,23 @@ class CreateGroupView(CreateView):
         return reverse("group_detail", kwargs={"pk": self.object.pk})
 
 
-class EditGroupView(UpdateView):
+class EditGroupView(LoginRequiredMixin, UpdateView):
+    """Change a group's description, admins and members; group admins only."""
+
     model = GroupProfile
     form_class = GroupEditForm
     template_name = "group_edit.html"
 
+    def get_object(self, queryset=None):
+        group = super().get_object(queryset)
+        if not group.admins.filter(pk=self.request.user.pk).exists():
+            raise PermissionDenied
+        return group
+
     def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        self.object.drop_admins_from_members()
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

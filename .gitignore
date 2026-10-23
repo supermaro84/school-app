@@ -16,3 +16,12 @@ credentials*.csv
 
 # collectstatic output
 staticfiles/
+
+# Locally stored uploads
+uploads/
+
+# Local screenshot scratch space
+screens_tmp/
+
+# Local Claude Code settings
+school_app/.claude/

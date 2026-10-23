@@ -63,6 +63,7 @@ class Command(BaseCommand):
                 )
                 profile.admins.add(*admins)
                 profile.members.add(*members)
+                profile.drop_admins_from_members()
                 created += 1
 
         self.stdout.write(

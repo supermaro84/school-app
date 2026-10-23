@@ -6,25 +6,62 @@
 {% block content %}
 <div class="page-header">
     <h1><i class="bi bi-images"></i>{% translate "Image Gallery" %}</h1>
+    <a href="{% url 'gallery_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>{% translate "New gallery" %}</a>
 </div>
 
-<form method="post" enctype="multipart/form-data" class="app-card mb-4 app-form">
-    <div class="card-body">
-        {% csrf_token %}
-        <label class="form-label" for="{{ form.file.id_for_label }}">{% translate "Upload" %}</label>
-        <div class="d-flex flex-column flex-sm-row gap-2">
-            <input type="file" name="{{ form.file.html_name }}" id="{{ form.file.id_for_label }}" class="form-control" accept="image/*" required>
-            <button type="submit" class="btn btn-primary text-nowrap"><i class="bi bi-upload me-1"></i>{% translate "Upload" %}</button>
+<section class="mb-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <h2 class="h5 mb-0">{% translate "Galleries" %} <span class="badge text-bg-secondary align-middle">{{ galleries|length }}</span></h2>
+        <div class="btn-group btn-group-sm" role="group" aria-label="{% translate 'Gallery filter' %}">
+            <a href="?show=all" class="btn {% if show == 'all' %}btn-primary{% else %}btn-outline-primary{% endif %}">{% translate "All" %}</a>
+            <a href="?show=mine" class="btn {% if show == 'mine' %}btn-primary{% else %}btn-outline-primary{% endif %}">{% translate "My galleries" %}</a>
+            <a href="?show=shared" class="btn {% if show == 'shared' %}btn-primary{% else %}btn-outline-primary{% endif %}">{% translate "Shared with me" %}</a>
         </div>
-        {% for error in form.file.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
     </div>
-</form>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
+        {% for gallery in galleries %}
+        <div class="col">
+            <a href="{% url 'gallery_detail' gallery.pk %}" class="app-card image-card h-100 d-block overflow-hidden text-reset text-decoration-none">
+                {% with cover=gallery.images.all.0 %}
+                {% if cover %}
+                <img src="{{ cover.file.url }}" class="card-img-top" alt="" loading="lazy">
+                {% else %}
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-body-tertiary text-secondary"><i class="bi bi-images fs-1"></i></div>
+                {% endif %}
+                {% endwith %}
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start gap-2">
+                        <span class="item-title fw-semibold text-truncate">{{ gallery.name }}</span>
+                        <span class="text-nowrap">
+                            {% if gallery.pk in notify.gallery_ids %}<span class="badge text-bg-warning">{% translate "New" %}</span>{% endif %}
+                            <span class="badge text-bg-secondary"><i class="bi bi-image me-1"></i>{{ gallery.images.all|length }}</span>
+                        </span>
+                    </div>
+                    <small class="text-secondary d-block text-truncate"><i class="bi bi-person me-1"></i>{{ gallery.owner.get_full_name|default:gallery.owner.username }}</small>
+                    {% if gallery.connected_users %}
+                    <div class="d-flex flex-wrap gap-1 mt-2">
+                        {% for person in gallery.connected_users %}
+                        <span class="badge {% if person == user %}text-bg-primary{% else %}text-bg-info{% endif %}">{% if person == user %}{% translate "You" %}{% else %}{{ person.first_name|default:person.username }}{% endif %}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="app-card empty-state"><i class="bi bi-images"></i>{% translate "No galleries yet." %}</div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
 
 <div class="row g-4">
-    <div class="col-12 col-xl-8">
-        <h2 class="h5 mb-3">{% translate "My images" %} <span class="badge text-bg-secondary align-middle">{{ my_images|length }}</span></h2>
+    <div class="col-12">
+        <h2 class="h5 mb-1">{% translate "My images" %} <span class="badge text-bg-secondary align-middle">{{ my_images|length }}</span></h2>
+        <p class="small text-secondary mb-3">{% translate "Images you attached to announcements, messages and galleries." %}</p>
         {% translate "Delete this image? It will also be removed from where it is posted." as delete_confirm %}
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
             {% for item in my_images %}
             <div class="col">
                 <div class="app-card image-card h-100 overflow-hidden">
@@ -33,14 +70,17 @@
                     </a>
                     <div class="card-body p-2 d-flex flex-column gap-2">
                         <div class="text-truncate">
-                            {% if item.source == "gallery" %}
-                                <span class="badge text-bg-secondary">{% translate "Gallery" %}</span>
+                            {% if item.source == "upload" %}
+                                <span class="badge text-bg-secondary">{% translate "Uploaded" %}</span>
                             {% elif item.source == "announcement" %}
                                 <span class="badge text-bg-info">{% translate "Announcement" %}</span>
                                 <a href="{% url 'announcement_detail' item.post.pk %}" class="small">{{ item.post.title }}</a>
-                            {% else %}
+                            {% elif item.source == "message" %}
                                 <span class="badge text-bg-primary">{% translate "Message" %}</span>
                                 <a href="{% url 'message_thread_detail' item.post.pk %}" class="small">{{ item.post.title }}</a>
+                            {% else %}
+                                <span class="badge text-bg-success">{% translate "Gallery" %}</span>
+                                <a href="{% url 'gallery_detail' item.post.pk %}" class="small">{{ item.post.name }}</a>
                             {% endif %}
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-auto">
@@ -61,20 +101,5 @@
         </div>
     </div>
 
-    <div class="col-12 col-xl-4">
-        <h2 class="h5 mb-3">{% translate "Documents" %}</h2>
-        <section class="app-card">
-            <div class="list-group list-group-flush app-list">
-                {% for document in documents %}
-                <div class="list-group-item d-flex justify-content-between align-items-center gap-2">
-                    <span class="text-truncate"><i class="bi bi-file-earmark-text me-2 text-secondary"></i>{{ document.filename }}</span>
-                    <a href="{{ document.file.url }}" class="btn btn-sm btn-outline-primary text-nowrap" download><i class="bi bi-download me-1"></i>{% translate "Download" %}</a>
-                </div>
-                {% empty %}
-                <div class="empty-state"><i class="bi bi-folder2-open"></i>{% translate "No documents yet." %}</div>
-                {% endfor %}
-            </div>
-        </section>
-    </div>
 </div>
 {% endblock %}

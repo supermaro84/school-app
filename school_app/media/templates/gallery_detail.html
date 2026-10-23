@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ gallery.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="text-break"><i class="bi bi-images"></i>{{ gallery.name }}</h1>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'images_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>{% translate "Back" %}</a>
+        {% if gallery.owner == user %}
+        <a href="{% url 'gallery_edit' gallery.pk %}" class="btn btn-outline-primary"><i class="bi bi-pencil me-1"></i>{% translate "Edit" %}</a>
+        {% translate "Delete this gallery and all its images?" as delete_gallery_confirm %}
+        <form method="post" action="{% url 'gallery_delete' gallery.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ delete_gallery_confirm|escapejs }}');"><i class="bi bi-trash me-1"></i>{% translate "Delete" %}</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-lg-4">
+        <section class="app-card mb-3">
+            <div class="card-body">
+                {% if gallery.description %}<p class="mb-3">{{ gallery.description|linebreaksbr }}</p>{% endif %}
+                <dl class="meta-list">
+                    <dt>{% translate "Owner" %}</dt>
+                    <dd>{{ gallery.owner.get_full_name|default:gallery.owner.username }}</dd>
+                    <dt>{% translate "Created" %}</dt>
+                    <dd>{{ gallery.created_at|date:"SHORT_DATE_FORMAT" }}</dd>
+                    <dt>{% translate "Shared with" %}</dt>
+                    <dd>
+                        {% for group in gallery.groups.all %}<span class="badge text-bg-info me-1"><i class="bi bi-people me-1"></i>{{ group.group.name }}</span>{% endfor %}
+                        {% for person in gallery.users.all %}<span class="badge text-bg-light border me-1"><i class="bi bi-person me-1"></i>{{ person.get_full_name|default:person.username }}</span>{% endfor %}
+                        {% if not gallery.groups.all and not gallery.users.all %}<span class="text-secondary">{% translate "Only you" %}</span>{% endif %}
+                    </dd>
+                </dl>
+            </div>
+        </section>
+
+        {% if can_upload %}
+        <section class="app-card">
+            <div class="card-header"><h2><i class="bi bi-upload me-2 text-primary"></i>{% translate "Add images" %}</h2></div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" class="app-form">
+                    {% csrf_token %}
+                    {{ form.images }}
+                    <div class="form-text mb-2">{% translate "You can select several images. They are compressed when uploaded." %}</div>
+                    {% for error in form.images.errors %}<div class="text-danger small mb-2">{{ error }}</div>{% endfor %}
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-upload me-1"></i>{% translate "Upload" %}</button>
+                </form>
+            </div>
+        </section>
+        {% endif %}
+    </div>
+
+    <div class="col-12 col-lg-8">
+        {% translate "Delete this image?" as delete_confirm %}
+        <div class="row row-cols-2 row-cols-md-3 g-2 g-md-3">
+            {% for image in images %}
+            <div class="col">
+                <div class="app-card image-card h-100 overflow-hidden">
+                    <a href="{{ image.file.url }}" target="_blank" rel="noopener" title="{% translate 'Open full size' %}">
+                        <img src="{{ image.file.url }}" class="card-img-top" alt="" loading="lazy">
+                    </a>
+                    <div class="card-body p-2 d-flex justify-content-between align-items-center gap-1">
+                        <small class="text-secondary text-truncate">{{ image.uploaded_by.first_name|default:image.uploaded_by.username }} · {{ image.uploaded_at|date:"SHORT_DATE_FORMAT" }}</small>
+                        {% if image.can_delete %}
+                        <form method="post" action="{% url 'image_delete' 'gallery' image.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <button type="submit" class="btn btn-sm btn-link text-danger p-0" title="{% translate 'Delete' %}" aria-label="{% translate 'Delete' %}" onclick="return confirm('{{ delete_confirm|escapejs }}');"><i class="bi bi-trash"></i></button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="app-card empty-state py-5"><i class="bi bi-image"></i>{% translate "No images in this gallery yet." %}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

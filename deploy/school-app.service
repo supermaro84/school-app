@@ -1,0 +1,23 @@
+# systemd unit: runs the Django app with gunicorn on a Unix socket for nginx.
+# Install: sudo cp deploy/school-app.service /etc/systemd/system/
+
+[Unit]
+Description=School App (gunicorn)
+After=network.target
+
+[Service]
+User=school
+# www-data group so nginx can use the socket and read uploaded files.
+Group=www-data
+UMask=0007
+WorkingDirectory=/srv/school-app/school_app
+RuntimeDirectory=school-app
+ExecStart=/srv/school-app/.venv/bin/gunicorn \
+    --workers 2 \
+    --bind unix:/run/school-app/gunicorn.sock \
+    --access-logfile - \
+    school_app.wsgi:application
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

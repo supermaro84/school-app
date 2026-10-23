@@ -38,7 +38,7 @@ class Command(BaseCommand):
         "Import users from a CSV file. Each new user gets a temporary password "
         "(username + random suffix) that must be changed after the first login. "
         "Columns: username, first_name, last_name, email, role, and optionally "
-        "birthdate (YYYY-MM-DD), phone_number, affiliated_users "
+        "birthdate (YYYY-MM-DD), phone_number, description, affiliated_users "
         "(usernames separated by ';'), is_staff and is_superuser (yes/no)."
     )
 
@@ -49,6 +49,12 @@ class Command(BaseCommand):
             default="credentials.csv",
             help="Where to write the generated usernames and passwords "
             "(default: credentials.csv). Must not exist yet.",
+        )
+        parser.add_argument(
+            "--update-descriptions",
+            action="store_true",
+            help="For users that already exist, set their description from the "
+            "file instead of skipping them. Nothing else about them changes.",
         )
 
     def handle(self, *args, **options):
@@ -71,6 +77,9 @@ class Command(BaseCommand):
         roles = {role.user_role.lower(): role for role in UserRoles.objects.all()}
         credentials = []
         skipped = 0
+        updated = 0
+        # Only when asked to and the file has a description column
+        update_descriptions = bool(options["update_descriptions"] and rows and "description" in rows[0])
 
         with transaction.atomic():
             created = []
@@ -79,7 +88,13 @@ class Command(BaseCommand):
                 username = row["username"]
                 if not username:
                     raise CommandError(f"Line {line}: username is empty")
-                if User.objects.filter(username=username).exists():
+                existing = User.objects.filter(username=username).first()
+                if existing and update_descriptions:
+                    existing.profile.description = row.get("description", "")
+                    existing.profile.save(update_fields=["description"])
+                    updated += 1
+                    continue
+                if existing:
                     self.stdout.write(
                         self.style.WARNING(
                             f"Line {line}: user {username} already exists, skipped"
@@ -119,6 +134,7 @@ class Command(BaseCommand):
                 profile.user_role = role
                 profile.birthdate = birthdate
                 profile.phone_number = row.get("phone_number", "")
+                profile.description = (row.get("description") or "").strip()
                 profile.must_change_password = True
                 profile.save()
 
@@ -153,9 +169,10 @@ class Command(BaseCommand):
                 writer.writeheader()
                 writer.writerows(credentials)
 
-        self.stdout.write(
-            self.style.SUCCESS(f"Created {len(credentials)} users, skipped {skipped}.")
-        )
+        summary = f"Created {len(credentials)} users, skipped {skipped}."
+        if update_descriptions:
+            summary += f" Updated the description of {updated} existing users."
+        self.stdout.write(self.style.SUCCESS(summary))
         if credentials:
             self.stdout.write(
                 f"Temporary passwords written to {output_path}. "

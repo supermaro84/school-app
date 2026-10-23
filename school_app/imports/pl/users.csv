@@ -1,22 +1,22 @@
-username,first_name,last_name,email,role,birthdate,phone_number,affiliated_users,is_staff,is_superuser
-admin,Alicja,Adamska,admin@szkola.edu.pl,Administrator,1980-01-10,+48600000001,,yes,yes
-t_kowalski,Jan,Kowalski,jan.kowalski@szkola.edu.pl,Nauczyciel,1979-04-12,+48600000101,,yes,no
-t_nowak,Ewa,Nowak,ewa.nowak@szkola.edu.pl,Nauczyciel,1985-09-23,+48600000102,,yes,no
-t_wisniewski,Piotr,Wiśniewski,piotr.wisniewski@szkola.edu.pl,Nauczyciel,1982-02-05,+48600000103,,yes,no
-t_zielinska,Katarzyna,Zielińska,katarzyna.zielinska@szkola.edu.pl,Nauczyciel,1990-11-30,+48600000104,,yes,no
-zofia_mazur,Zofia,Mazur,zofia.mazur@szkola.edu.pl,Uczeń,2019-03-14,,,no,no
-jakub_lewandowski,Jakub,Lewandowski,jakub.lewandowski@szkola.edu.pl,Uczeń,2019-06-02,,,no,no
-lena_kaminska,Lena,Kamińska,lena.kaminska@szkola.edu.pl,Uczeń,2019-01-27,,,no,no
-antoni_wojcik,Antoni,Wójcik,antoni.wojcik@szkola.edu.pl,Uczeń,2019-08-19,,,no,no
-maja_lewandowska,Maja,Lewandowska,maja.lewandowska@szkola.edu.pl,Uczeń,2017-05-08,,,no,no
-szymon_kaminski,Szymon,Kamiński,szymon.kaminski@szkola.edu.pl,Uczeń,2017-10-11,,,no,no
-hanna_dabrowska,Hanna,Dąbrowska,hanna.dabrowska@szkola.edu.pl,Uczeń,2017-02-21,,,no,no
-filip_wojcik,Filip,Wójcik,filip.wojcik@szkola.edu.pl,Uczeń,2015-07-04,,,no,no
-julia_kaczmarek,Julia,Kaczmarek,julia.kaczmarek@szkola.edu.pl,Uczeń,2015-12-16,,,no,no
-igor_dabrowski,Igor,Dąbrowski,igor.dabrowski@szkola.edu.pl,Uczeń,2015-04-29,,,no,no
-anna_mazur,Anna,Mazur,anna.mazur@example.com,Opiekun,1988-05-17,+48600000201,zofia_mazur,no,no
-tomasz_lewandowski,Tomasz,Lewandowski,tomasz.lewandowski@example.com,Opiekun,1984-03-09,+48600000202,jakub_lewandowski;maja_lewandowska,no,no
-agnieszka_kaminska,Agnieszka,Kamińska,agnieszka.kaminska@example.com,Opiekun,1986-08-25,+48600000203,lena_kaminska;szymon_kaminski,no,no
-marek_wojcik,Marek,Wójcik,marek.wojcik@example.com,Opiekun,1981-12-01,+48600000204,antoni_wojcik;filip_wojcik,no,no
-magdalena_dabrowska,Magdalena,Dąbrowska,magdalena.dabrowska@example.com,Opiekun,1983-06-13,+48600000205,hanna_dabrowska;igor_dabrowski,no,no
-pawel_kaczmarek,Paweł,Kaczmarek,pawel.kaczmarek@example.com,Opiekun,1980-10-07,+48600000206,julia_kaczmarek,no,no
+username,first_name,last_name,email,role,birthdate,phone_number,description,affiliated_users,is_staff,is_superuser
+admin,Alicja,Adamska,admin@szkola.edu.pl,Administrator,1980-01-10,+48600000001,"Administratorka szkoły. Kontakt w sprawie kont, haseł i dostępu do aplikacji.",,yes,yes
+t_kowalski,Jan,Kowalski,jan.kowalski@szkola.edu.pl,Nauczyciel,1979-04-12,+48600000101,"Wychowawca klasy 1A. Uczy czytania, pisania i plastyki; prowadzi kółko matematyczne we wtorki.",,yes,no
+t_nowak,Ewa,Nowak,ewa.nowak@szkola.edu.pl,Nauczyciel,1985-09-23,+48600000102,Uczy języka angielskiego i muzyki w klasach 1A i 2B. Prowadzi chór szkolny i wyzwanie czytelnicze.,,yes,no
+t_wisniewski,Piotr,Wiśniewski,piotr.wisniewski@szkola.edu.pl,Nauczyciel,1982-02-05,+48600000103,Wychowawca klasy 2B. Uczy matematyki i wychowania fizycznego; organizator jesiennego dnia sportu.,,yes,no
+t_zielinska,Katarzyna,Zielińska,katarzyna.zielinska@szkola.edu.pl,Nauczyciel,1990-11-30,+48600000104,Wychowawczyni klasy 3C. Uczy przyrody; uwielbia doświadczenia z wulkanami.,,yes,no
+zofia_mazur,Zofia,Mazur,zofia.mazur@szkola.edu.pl,Uczeń,2019-03-14,,Uczennica klasy 1A. Lubi rysować i zbierać jesienne liście.,,no,no
+jakub_lewandowski,Jakub,Lewandowski,jakub.lewandowski@szkola.edu.pl,Uczeń,2019-06-02,,Uczeń klasy 1A. Lubi piłkę nożną i budowanie z klocków.,,no,no
+lena_kaminska,Lena,Kamińska,lena.kaminska@szkola.edu.pl,Uczeń,2019-01-27,,Uczennica klasy 1A. Kocha zwierzęta i książki z obrazkami.,,no,no
+antoni_wojcik,Antoni,Wójcik,antoni.wojcik@szkola.edu.pl,Uczeń,2019-08-19,,Uczeń klasy 1A. Interesuje się dinozaurami i łamigłówkami.,,no,no
+maja_lewandowska,Maja,Lewandowska,maja.lewandowska@szkola.edu.pl,Uczeń,2017-05-08,,Uczennica klasy 2B. Śpiewa w chórze szkolnym.,,no,no
+szymon_kaminski,Szymon,Kamiński,szymon.kaminski@szkola.edu.pl,Uczeń,2017-10-11,,Uczeń klasy 2B. Najlepszy wynik z ostatniego sprawdzianu z matematyki; gra w szachy.,,no,no
+hanna_dabrowska,Hanna,Dąbrowska,hanna.dabrowska@szkola.edu.pl,Uczeń,2017-02-21,,Uczennica klasy 2B. Lubi czytać i piec.,,no,no
+filip_wojcik,Filip,Wójcik,filip.wojcik@szkola.edu.pl,Uczeń,2015-07-04,,Uczeń klasy 3C. Buduje wulkan na festiwal nauki.,,no,no
+julia_kaczmarek,Julia,Kaczmarek,julia.kaczmarek@szkola.edu.pl,Uczeń,2015-12-16,,Uczennica klasy 3C. Gra na skrzypcach i lubi spacery po lesie.,,no,no
+igor_dabrowski,Igor,Dąbrowski,igor.dabrowski@szkola.edu.pl,Uczeń,2015-04-29,,Uczeń klasy 3C. Interesuje się planetami i robotami.,,no,no
+anna_mazur,Anna,Mazur,anna.mazur@example.com,Opiekun,1988-05-17,+48600000201,Mama Zofii (1A). Przedstawicielka rodziców klasy 1A.,zofia_mazur,no,no
+tomasz_lewandowski,Tomasz,Lewandowski,tomasz.lewandowski@example.com,Opiekun,1984-03-09,+48600000202,Tata Jakuba (1A) i Mai (2B). Chętnie pomaga przy wycieczkach szkolnych.,jakub_lewandowski;maja_lewandowska,no,no
+agnieszka_kaminska,Agnieszka,Kamińska,agnieszka.kaminska@example.com,Opiekun,1986-08-25,+48600000203,Mama Leny (1A) i Szymona (2B). Organizuje kiermasz ciast klasy 2B.,lena_kaminska;szymon_kaminski,no,no
+marek_wojcik,Marek,Wójcik,marek.wojcik@example.com,Opiekun,1981-12-01,+48600000204,Tata Antoniego (1A) i Filipa (3C).,antoni_wojcik;filip_wojcik,no,no
+magdalena_dabrowska,Magdalena,Dąbrowska,magdalena.dabrowska@example.com,Opiekun,1983-06-13,+48600000205,Mama Hanny (2B) i Igora (3C). Wolontariuszka w bibliotece szkolnej.,hanna_dabrowska;igor_dabrowski,no,no
+pawel_kaczmarek,Paweł,Kaczmarek,pawel.kaczmarek@example.com,Opiekun,1980-10-07,+48600000206,Tata Julii (3C). Może towarzyszyć klasie na wycieczkach w piątki.,julia_kaczmarek,no,no

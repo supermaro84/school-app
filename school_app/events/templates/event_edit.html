@@ -12,7 +12,7 @@
     <div class="col-12 col-lg-9 col-xl-7">
         <section class="app-card">
             <div class="card-body">
-                <form method="post" class="app-form" id="event-edit-form">
+                <form method="post" enctype="multipart/form-data" class="app-form" id="event-edit-form">
                     {% csrf_token %}
                     {% for error in form.non_field_errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
                     <div class="mb-3">
@@ -59,6 +59,7 @@
                         {{ form.users }}
                         {% for error in form.users.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                     </div>
+                    {% include "includes/document_field.html" %}
                 </form>
                 <div class="d-flex flex-wrap gap-2">
                     <button type="submit" form="event-edit-form" class="btn btn-primary btn-submit"><i class="bi bi-check-lg me-1"></i>{% translate "Save" %}</button>

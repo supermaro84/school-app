@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db.models import Q
 from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 
 class UserRoles(models.Model):
@@ -20,6 +21,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     birthdate = models.DateField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)
+    description = models.TextField(_("description"), blank=True)
     affiliated_users = models.ManyToManyField(
         User, related_name="affiliated_profiles", blank=True
     )

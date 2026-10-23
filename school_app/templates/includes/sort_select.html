@@ -1,0 +1,12 @@
+{% load i18n %}
+{# Sort picker for list pages; the choice is remembered (school_app/sorting.py) #}
+<form method="get" class="d-flex align-items-center gap-1">
+    <label class="visually-hidden" for="sort-select">{% translate "Sort" %}</label>
+    <i class="bi bi-sort-down text-secondary" aria-hidden="true"></i>
+    <select name="sort" id="sort-select" class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+        <option value="newest"{% if sort == "newest" %} selected{% endif %}>{% translate "Newest" %}</option>
+        <option value="activity"{% if sort == "activity" %} selected{% endif %}>{% translate "Recent activity" %}</option>
+        <option value="title"{% if sort == "title" %} selected{% endif %}>{% translate "A–Z" %}</option>
+    </select>
+    <noscript><button type="submit" class="btn btn-sm btn-outline-secondary">{% translate "Sort" %}</button></noscript>
+</form>
