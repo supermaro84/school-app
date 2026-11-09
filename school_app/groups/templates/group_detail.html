@@ -26,24 +26,24 @@
 
     <div class="row g-3">
         <div class="col-12 col-md-6">
-            <h3 class="h6">{% translate "Admins" %} <span class="badge text-bg-secondary">{{ group_profile.admins.count }}</span></h3>
-            <ul class="list-group">
-                {% for admin in group_profile.admins.all %}
-                <li class="list-group-item">{{ admin.get_full_name|default:admin.username }}</li>
+            <h3 class="h6">{% translate "Admins" %} <span class="badge text-bg-secondary">{{ admins|length }}</span></h3>
+            <div class="list-group">
+                {% for admin in admins %}
+                <a href="{% url 'user_detail' pk=admin.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-2"><span class="text-truncate">{{ admin.get_full_name|default:admin.username }}</span>{% if admin.profile.user_role %}<span class="badge text-bg-info">{{ admin.profile.user_role }}</span>{% endif %}</a>
                 {% empty %}
-                <li class="list-group-item text-secondary">{% translate "No admins yet." %}</li>
+                <div class="list-group-item text-secondary">{% translate "No admins yet." %}</div>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
         <div class="col-12 col-md-6">
-            <h3 class="h6">{% translate "Members" %} <span class="badge text-bg-secondary">{{ group_profile.members.count }}</span></h3>
-            <ul class="list-group">
-                {% for member in group_profile.members.all %}
-                <li class="list-group-item">{{ member.get_full_name|default:member.username }}</li>
+            <h3 class="h6">{% translate "Members" %} <span class="badge text-bg-secondary">{{ members|length }}</span></h3>
+            <div class="list-group">
+                {% for member in members %}
+                <a href="{% url 'user_detail' pk=member.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-2"><span class="text-truncate">{{ member.get_full_name|default:member.username }}</span>{% if member.profile.user_role %}<span class="badge text-bg-info">{{ member.profile.user_role }}</span>{% endif %}</a>
                 {% empty %}
-                <li class="list-group-item text-secondary">{% translate "No members yet." %}</li>
+                <div class="list-group-item text-secondary">{% translate "No members yet." %}</div>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
     <p class="small text-secondary mt-3 mb-0">{% blocktranslate with date=group_profile.group.created_at %}Created on {{ date }}{% endblocktranslate %}</p>

@@ -56,6 +56,9 @@ def group_detail(request, pk):
         {
             **group_list_context(request),
             "group_profile": group_profile,
+            # Roles are shown next to each name, so load them with the users
+            "admins": group_profile.admins.select_related("profile__user_role"),
+            "members": group_profile.members.select_related("profile__user_role"),
             "is_admin": request.user in group_profile.admins.all(),
             "is_member": request.user in group_profile.members.all(),
         },

@@ -107,20 +107,17 @@ class LandingUpcomingEventsTests(TestCase):
         self.assertContains(response, ">Wstępne</span>")
 
 
-class SignUpTests(TestCase):
-    def test_sign_up_without_birthdate(self):
-        response = self.client.post(reverse("signup"), {
-            "username": "newuser", "first_name": "New", "last_name": "User", "email": "new@example.com",
-            "birthdate": "", "password1": "S3cure-pass-123", "password2": "S3cure-pass-123",
-        })
-        self.assertEqual(response.status_code, 302)
-        self.assertIsNone(User.objects.get(username="newuser").profile.birthdate)
+class NoSignUpTests(TestCase):
+    def test_there_is_no_sign_up_page(self):
+        # Accounts are created only by import or in /admin/
+        self.assertEqual(self.client.get("/signup/").status_code, 404)
+        self.assertNotContains(self.client.get(reverse("login")), "/signup/")
+        self.assertNotContains(self.client.get(reverse("landing"), follow=True), "/signup/")
 
 
 class PasswordToggleTests(TestCase):
     def test_auth_pages_have_the_toggle(self):
         self.assertContains(self.client.get(reverse("login")), "data-password-toggle")
-        self.assertContains(self.client.get(reverse("signup")), "data-password-toggle")
         user = User.objects.create_user(username="lucy", password="pw")
         self.client.force_login(user)
         self.assertContains(self.client.get(reverse("password_change")), "data-password-toggle")

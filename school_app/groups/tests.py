@@ -7,6 +7,7 @@ from django.core.management.base import CommandError
 from django.test import TestCase
 from django.urls import reverse
 
+from accounts.models import UserRoles
 from groups.models import GroupProfile
 
 CSV_HEADER = "name,description,admins,members\n"
@@ -115,6 +116,29 @@ class GroupListAffiliateTests(TestCase):
         )
         self.assertContains(response, "You")
         self.assertContains(response, "Lucy")
+
+
+class GroupDetailProfileLinkTests(TestCase):
+    def test_admins_and_members_link_to_their_profiles(self):
+        admin = User.objects.create_user(username="admin_t", password="pw")
+        member = User.objects.create_user(username="member", password="pw")
+        group = GroupProfile.objects.create(group=Group.objects.create(name="Class 1A"))
+        group.admins.add(admin)
+        group.members.add(member)
+        self.client.force_login(member)
+        response = self.client.get(reverse("group_detail", args=[group.pk]))
+        self.assertContains(response, f'href="{reverse("user_detail", args=[admin.pk])}"')
+        self.assertContains(response, f'href="{reverse("user_detail", args=[member.pk])}"')
+
+    def test_members_show_their_role(self):
+        teacher = User.objects.create_user(username="teacher", password="pw")
+        teacher.profile.user_role = UserRoles.objects.create(user_role="Nauczyciel")
+        teacher.profile.save()
+        group = GroupProfile.objects.create(group=Group.objects.create(name="Class 2B"))
+        group.members.add(teacher)
+        self.client.force_login(teacher)
+        response = self.client.get(reverse("group_detail", args=[group.pk]))
+        self.assertContains(response, '<span class="badge text-bg-info">Nauczyciel</span>', html=True)
 
 
 class GroupEditPermissionTests(TestCase):

@@ -123,7 +123,7 @@ Note that sophia_martinez lists lisa_thompson, but lisa_thompson does not list s
 
 | Stage | How | Details |
 |---|---|---|
-| **Sign-up** | `/signup/` (`landing.views.SignUpView`, `CustomUserCreationForm`) | Open to anyone. Collects username, first/last name, email, optional birthdate, password ×2. Creates `User` + `UserProfile` with birthdate. **No role and no affiliations are set.** Redirects to login with a success message. |
+| **No self sign-up** | – | There is no public registration page. Accounts are created only by `import_users` (below) or by a superuser / staff user with user permissions in `/admin/`. |
 | **Bulk import** | `manage.py import_users <file.csv>` | Columns: `username, first_name, last_name, email, role`, optional `birthdate, phone_number, description, affiliated_users` (`;`-separated usernames). Each new user's temporary password is their username, with `must_change_password=True`. Passwords go to `credentials.csv` (git-ignored). Optional `is_staff` / `is_superuser` columns (`yes`/`no`) grant Django admin access. Existing usernames are skipped, unless `--update-descriptions` is given: then only their description is updated from the file. Any other error rolls back the whole import. Example: `fixtures/users_import_example.csv`. |
 | **Bulk group import** | `manage.py import_groups <file.csv>` | Columns: `name, description, admins, members` (`;`-separated usernames, which must already exist). Creates the `Group` and its `GroupProfile`. Existing group names are skipped; an unknown username rolls back the whole import. People listed as admins are not added as members too. |
 | **Group creation in the app** | `/groups/create/` | Name (unique, case-insensitive), description, admins, members, and optionally "Add members from groups": everyone in the chosen groups joins as a member, without duplicates. The creator is always an admin. Admins take precedence: anyone who is an admin is removed from the plain members (also when editing). |
@@ -168,8 +168,8 @@ Note that sophia_martinez lists lisa_thompson, but lisa_thompson does not list s
 ### 1.8 Gaps / open questions
 
 1. **Roles aren't enforced.** Decide which actions each role may do (e.g. may students create groups, announcements or events?) and enforce that in views, not only in templates.
-2. **Default role.** Sign-up leaves `user_role` empty, though the model default suggests `"Guardian"`. Should a new user get a role, or wait for admin approval?
-3. **Open sign-up.** Anyone can register. For a school app, consider invitation-only accounts or admin approval.
+2. **Default role.** Users created in `/admin/` get an empty `user_role`, though the model default suggests `"Guardian"`. The admin must set the role by hand.
+3. ~~**Open sign-up.**~~ Resolved: public sign-up was removed; only imports and `/admin/` create accounts.
 4. **Affiliation direction.** Should affiliations be symmetric, or strictly guardian → student? Should students see their guardians' content at all?
 5. **Privacy.** Any logged-in user can list all users and see their birthdate, phone and affiliations. Visibility should probably depend on role and relationship.
 6. **Missing login checks.** Several views lack `@login_required` / `LoginRequiredMixin`, including announcements, calendar and messages. Anonymous access to these currently fails or leaks data. (Group create/edit, media and the events API are protected; group editing is limited to the group's admins.)

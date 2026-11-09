@@ -3,8 +3,6 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from .forms import CustomUserCreationForm
 from announcements.models import Announcement
 from accounts.models import UserProfile
 from accounts.utils import get_affiliated_users
@@ -65,20 +63,3 @@ class CustomPasswordChangeView(PasswordChangeView):
             profile.save(update_fields=['must_change_password'])
         messages.success(self.request, _('Your password has been changed.'))
         return response
-
-
-class SignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    template_name = 'registration/signup.html'
-    success_url = reverse_lazy('login')
-    
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        username = form.cleaned_data.get('username')
-        messages.success(
-            self.request,
-            _('Account created for %(username)s! You can now log in.') % {'username': username},
-        )
-        return response
-
-

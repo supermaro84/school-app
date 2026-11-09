@@ -25,3 +25,6 @@ screens_tmp/
 
 # Local Claude Code settings
 school_app/.claude/
+
+# Real school data imports (personal data, kept out of git)
+szkola_polska_imports/
