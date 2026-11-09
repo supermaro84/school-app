@@ -1022,3 +1022,163 @@ msgstr "Systemowy"
 #: templates/includes/theme_toggle.html:8
 msgid "Theme"
 msgstr "Motyw"
+
+# inventory
+msgid "Inventory"
+msgstr "Inwentarz"
+
+msgid "Add book"
+msgstr "Dodaj książkę"
+
+msgid "Add photos"
+msgstr "Dodaj zdjęcia"
+
+msgid "Added"
+msgstr "Dodano"
+
+msgid "All items"
+msgstr "Wszystkie przedmioty"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "Available"
+msgstr "Dostępna"
+
+msgid "Book"
+msgstr "Książka"
+
+msgid "Borrowed by me"
+msgstr "Wypożyczone przeze mnie"
+
+msgid "Borrower"
+msgstr "Wypożyczający"
+
+msgid "Category"
+msgstr "Kategoria"
+
+msgid "Delete this item and its photos?"
+msgstr "Usunąć ten przedmiot i jego zdjęcia?"
+
+msgid "Delete this photo?"
+msgstr "Usunąć to zdjęcie?"
+
+msgid "Due"
+msgstr "Zwrot do"
+
+msgid "Due date"
+msgstr "Termin zwrotu"
+
+msgid "Earlier loans"
+msgstr "Wcześniejsze wypożyczenia"
+
+msgid "Edit item"
+msgstr "Edytuj przedmiot"
+
+msgid "Enter a valid ISBN-10 or ISBN-13."
+msgstr "Podaj poprawny numer ISBN-10 lub ISBN-13."
+
+msgid "Give the item back to its owner; they mark it as returned."
+msgstr "Oddaj przedmiot właścicielowi – to on oznacza go jako zwrócony."
+
+msgid "ISBN"
+msgstr "ISBN"
+
+msgid "Item added to your inventory."
+msgstr "Przedmiot dodano do inwentarza."
+
+msgid "Item deleted."
+msgstr "Przedmiot usunięto."
+
+msgid "Item saved."
+msgstr "Przedmiot zapisano."
+
+msgid "Lend"
+msgstr "Wypożycz"
+
+msgid "Lending"
+msgstr "Wypożyczenie"
+
+msgid "Lent on"
+msgstr "Data wypożyczenia"
+
+msgid "Lent out"
+msgstr "Wypożyczona"
+
+msgid "Lent to %(name)s"
+msgstr "Wypożyczono: %(name)s"
+
+msgid "Lent to %(name)s."
+msgstr "Wypożyczono: %(name)s."
+
+msgid "Mark as returned"
+msgstr "Oznacz jako zwrócone"
+
+msgid "Marked as returned."
+msgstr "Oznaczono jako zwrócone."
+
+msgid "My items"
+msgstr "Moje przedmioty"
+
+msgid "No items match your search."
+msgstr "Brak przedmiotów pasujących do wyszukiwania."
+
+msgid "No photos yet."
+msgstr "Brak zdjęć."
+
+msgid "Nobody has added any items yet."
+msgstr "Nikt jeszcze nie dodał żadnych przedmiotów."
+
+msgid "Optional."
+msgstr "Opcjonalnie."
+
+msgid "Optional. 10 or 13 digits; hyphens are fine."
+msgstr "Opcjonalnie. 10 lub 13 cyfr; myślniki są dozwolone."
+
+msgid "Photo deleted."
+msgstr "Zdjęcie usunięto."
+
+msgid "Photos"
+msgstr "Zdjęcia"
+
+msgid "Search by title, author or ISBN..."
+msgstr "Szukaj po tytule, autorze lub ISBN..."
+
+msgid "The due date can't be in the past."
+msgstr "Termin zwrotu nie może być w przeszłości."
+
+msgid "This item is already lent out."
+msgstr "Ten przedmiot jest już wypożyczony."
+
+msgid "This item is lent out. Mark it as returned before deleting it."
+msgstr "Ten przedmiot jest wypożyczony. Przed usunięciem oznacz go jako zwrócony."
+
+msgid "You have it"
+msgstr "Masz u siebie"
+
+msgid "You haven't borrowed anything."
+msgstr "Nie masz wypożyczonych przedmiotów."
+
+msgid "Your inventory is empty. Add your first book."
+msgstr "Twój inwentarz jest pusty. Dodaj pierwszą książkę."
+
+msgid "author"
+msgstr "autor"
+
+msgid "borrower"
+msgstr "wypożyczający"
+
+msgid "category"
+msgstr "kategoria"
+
+msgid "due date"
+msgstr "termin zwrotu"
+
+msgid "overdue"
+msgstr "po terminie"
+
+msgid "owner"
+msgstr "właściciel"
+
+msgid "title"
+msgstr "tytuł"

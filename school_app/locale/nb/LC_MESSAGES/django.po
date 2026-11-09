@@ -1022,3 +1022,163 @@ msgstr "System"
 #: templates/includes/theme_toggle.html:8
 msgid "Theme"
 msgstr "Tema"
+
+# inventory
+msgid "Inventory"
+msgstr "Inventar"
+
+msgid "Add book"
+msgstr "Legg til bok"
+
+msgid "Add photos"
+msgstr "Legg til bilder"
+
+msgid "Added"
+msgstr "Lagt til"
+
+msgid "All items"
+msgstr "Alle gjenstander"
+
+msgid "Author"
+msgstr "Forfatter"
+
+msgid "Available"
+msgstr "Tilgjengelig"
+
+msgid "Book"
+msgstr "Bok"
+
+msgid "Borrowed by me"
+msgstr "Lånt av meg"
+
+msgid "Borrower"
+msgstr "Låntaker"
+
+msgid "Category"
+msgstr "Kategori"
+
+msgid "Delete this item and its photos?"
+msgstr "Slette denne gjenstanden og bildene?"
+
+msgid "Delete this photo?"
+msgstr "Slette dette bildet?"
+
+msgid "Due"
+msgstr "Frist"
+
+msgid "Due date"
+msgstr "Returfrist"
+
+msgid "Earlier loans"
+msgstr "Tidligere utlån"
+
+msgid "Edit item"
+msgstr "Rediger gjenstand"
+
+msgid "Enter a valid ISBN-10 or ISBN-13."
+msgstr "Skriv inn et gyldig ISBN-10 eller ISBN-13."
+
+msgid "Give the item back to its owner; they mark it as returned."
+msgstr "Gi gjenstanden tilbake til eieren; eieren markerer den som returnert."
+
+msgid "ISBN"
+msgstr "ISBN"
+
+msgid "Item added to your inventory."
+msgstr "Gjenstanden er lagt til i inventaret ditt."
+
+msgid "Item deleted."
+msgstr "Gjenstanden er slettet."
+
+msgid "Item saved."
+msgstr "Gjenstanden er lagret."
+
+msgid "Lend"
+msgstr "Lån ut"
+
+msgid "Lending"
+msgstr "Utlån"
+
+msgid "Lent on"
+msgstr "Lånt ut"
+
+msgid "Lent out"
+msgstr "Utlånt"
+
+msgid "Lent to %(name)s"
+msgstr "Utlånt til %(name)s"
+
+msgid "Lent to %(name)s."
+msgstr "Utlånt til %(name)s."
+
+msgid "Mark as returned"
+msgstr "Marker som returnert"
+
+msgid "Marked as returned."
+msgstr "Markert som returnert."
+
+msgid "My items"
+msgstr "Mine gjenstander"
+
+msgid "No items match your search."
+msgstr "Ingen gjenstander passer søket."
+
+msgid "No photos yet."
+msgstr "Ingen bilder ennå."
+
+msgid "Nobody has added any items yet."
+msgstr "Ingen har lagt til gjenstander ennå."
+
+msgid "Optional."
+msgstr "Valgfritt."
+
+msgid "Optional. 10 or 13 digits; hyphens are fine."
+msgstr "Valgfritt. 10 eller 13 sifre; bindestreker er greit."
+
+msgid "Photo deleted."
+msgstr "Bildet er slettet."
+
+msgid "Photos"
+msgstr "Bilder"
+
+msgid "Search by title, author or ISBN..."
+msgstr "Søk etter tittel, forfatter eller ISBN..."
+
+msgid "The due date can't be in the past."
+msgstr "Returfristen kan ikke være i fortiden."
+
+msgid "This item is already lent out."
+msgstr "Denne gjenstanden er allerede utlånt."
+
+msgid "This item is lent out. Mark it as returned before deleting it."
+msgstr "Denne gjenstanden er utlånt. Marker den som returnert før du sletter den."
+
+msgid "You have it"
+msgstr "Du har den"
+
+msgid "You haven't borrowed anything."
+msgstr "Du har ikke lånt noe."
+
+msgid "Your inventory is empty. Add your first book."
+msgstr "Inventaret ditt er tomt. Legg til din første bok."
+
+msgid "author"
+msgstr "forfatter"
+
+msgid "borrower"
+msgstr "låntaker"
+
+msgid "category"
+msgstr "kategori"
+
+msgid "due date"
+msgstr "returfrist"
+
+msgid "overdue"
+msgstr "forfalt"
+
+msgid "owner"
+msgstr "eier"
+
+msgid "title"
+msgstr "tittel"

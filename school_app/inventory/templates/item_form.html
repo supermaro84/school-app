@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% if item %}{% translate "Edit item" %}{% else %}{% translate "Add book" %}{% endif %}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-book"></i>{% if item %}{% translate "Edit item" %}{% else %}{% translate "Add book" %}{% endif %}</h1>
+    <a href="{% if item %}{% url 'item_detail' item.pk %}{% else %}{% url 'inventory' %}{% endif %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>{% translate "Back" %}</a>
+</div>
+
+<div class="row">
+    <div class="col-12 col-lg-9 col-xl-7">
+        <section class="app-card mb-3">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" class="app-form">
+                    {% csrf_token %}
+                    {% for error in form.non_field_errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label|capfirst }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+                        {% if field.name == 'images' %}
+                        {{ field }}
+                        <div class="form-text">{% translate "You can select several images. They are compressed when uploaded." %}</div>
+                        {% else %}
+                        {{ field }}
+                        {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+                        {% endif %}
+                        {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                    </div>
+                    {% endfor %}
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="submit" class="btn btn-primary btn-submit"><i class="bi bi-check-lg me-1"></i>{% translate "Save" %}</button>
+                        <a href="{% if item %}{% url 'item_detail' item.pk %}{% else %}{% url 'inventory' %}{% endif %}" class="btn btn-outline-secondary">{% translate "Cancel" %}</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        {% if images %}
+        <section class="app-card">
+            <div class="card-header"><h2><i class="bi bi-images me-2 text-primary"></i>{% translate "Photos" %}</h2></div>
+            <div class="card-body">
+                {% translate "Delete this photo?" as delete_confirm %}
+                <div class="row row-cols-3 row-cols-sm-4 g-2">
+                    {% for image in images %}
+                    <div class="col">
+                        <div class="position-relative">
+                            <img src="{{ image.file.url }}" class="img-thumbnail thumb p-0 w-100" alt="" loading="lazy">
+                            <form method="post" action="{% url 'item_image_delete' image.pk %}" class="position-absolute top-0 end-0 m-1">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger py-0 px-1" title="{% translate 'Delete' %}" aria-label="{% translate 'Delete' %}" onclick="return confirm('{{ delete_confirm|escapejs }}');"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
