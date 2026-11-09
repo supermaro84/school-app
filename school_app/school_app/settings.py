@@ -43,6 +43,21 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+# Extra origins allowed to POST forms, e.g. https://szkola.example.org (only
+# needed when the site is reached under a name Django can't match itself).
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip() for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if origin.strip()
+]
+
+# HTTPS=True once nginx serves the site with a certificate (deploy/README.md).
+# nginx always sets X-Forwarded-Proto, so Django can trust it to know a request
+# came over HTTPS; cookies are then only sent over HTTPS.
+HTTPS = os.getenv("HTTPS", "False").lower() in ("true", "1", "yes")
+if HTTPS:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 
 # Application definition
 

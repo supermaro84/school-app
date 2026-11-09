@@ -115,7 +115,8 @@ nginx -t && systemctl reload nginx
 
 Open `http://203.0.113.10/`.
 
-Plain HTTP means passwords travel unencrypted: use test accounts only.
+Plain HTTP means passwords travel unencrypted: use test accounts only, or
+set up a domain and HTTPS (see [Domain and HTTPS](#domain-and-https)).
 
 ## Updating
 
@@ -241,9 +242,43 @@ tail -n 50 /var/log/nginx/error.log
 - **Page without styling:** run `collectstatic` again.
 - **Changed `.env`:** run `systemctl restart school-app`.
 
-## Adding a domain later
+## Domain and HTTPS
 
-Point the domain's A record at the Droplet's IP (or use
-`203-0-113-10.sslip.io`), set `server_name` in the nginx config, add the
-hostname to `ALLOWED_HOSTS`, then `apt install certbot python3-certbot-nginx`,
-`certbot --nginx -d <hostname>` and `ufw allow 'Nginx Full'`.
+With a domain pointing at the Droplet, nginx gets a free Let's Encrypt
+certificate from certbot, which also renews it automatically. Commands use
+`szkola.example.org`; use your own domain.
+
+1. **DNS.** Add an A record for the domain (and `www`, if wanted) with the
+   Droplet's IP. Wait until `dig +short szkola.example.org` prints the IP.
+2. **nginx name.** In `/etc/nginx/sites-available/school-app` replace
+   `server_name _;` with the names, so certbot finds the block:
+
+   ```nginx
+   server_name szkola.example.org www.szkola.example.org;
+   ```
+
+   Keep `default_server`. Run `nginx -t && systemctl reload nginx`.
+3. **Certificate.** certbot changes the nginx file to serve HTTPS and to
+   redirect HTTP to it:
+
+   ```bash
+   apt install -y certbot python3-certbot-nginx
+   ufw allow 'Nginx Full'
+   certbot --nginx -d szkola.example.org -d www.szkola.example.org \
+       --redirect --agree-tos -m you@example.org --no-eff-email
+   certbot renew --dry-run      # checks automatic renewal
+   ```
+
+4. **Django.** In `school_app/.env`:
+
+   ```ini
+   ALLOWED_HOSTS=szkola.example.org,www.szkola.example.org,203.0.113.10
+   HTTPS=True
+   ```
+
+   `HTTPS=True` makes Django trust nginx's `X-Forwarded-Proto` header and send
+   login cookies over HTTPS only. Then `systemctl restart school-app`.
+
+`update.sh` never overwrites the nginx file, so the certificate settings stay
+across deploys. Copying `deploy/nginx.conf` over it again would remove them:
+re-run the `certbot --nginx` command afterwards.
