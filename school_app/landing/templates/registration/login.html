@@ -18,10 +18,6 @@
 {% endblock %}
 
 {% block below_card %}
-<p class="mb-1">
-    {% translate "Don't have an account?" %}
-    <a href="{% url 'signup' %}" class="fw-semibold text-decoration-none">{% translate "Sign up here" %}</a>
-</p>
 <a href="{% url 'landing' %}" class="small text-secondary text-decoration-none">
     <i class="bi bi-arrow-left me-1"></i>{% translate "Back to Home" %}
 </a>

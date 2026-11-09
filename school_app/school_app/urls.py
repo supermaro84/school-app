@@ -24,7 +24,6 @@ from landing.views import (
     CustomLoginView,
     CustomLogoutView,
     CustomPasswordChangeView,
-    SignUpView,
     summary,
 )
 from announcements.views import (
@@ -62,7 +61,6 @@ urlpatterns = [
     # Authentication URLs
     path("login/", CustomLoginView.as_view(), name="login"),
     path("logout/", CustomLogoutView.as_view(), name="logout"),
-    path("signup/", SignUpView.as_view(), name="signup"),
     path(
         "password_change/",
         CustomPasswordChangeView.as_view(),
