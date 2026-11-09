@@ -17,6 +17,7 @@ Components:
 7. Landing / Dashboard – *TODO*
 8. [Theme and layout](#8-theme-and-layout)
 9. [Galleries and documents](#9-galleries-and-documents)
+10. [Inventory](#10-inventory)
 
 ---
 
@@ -242,3 +243,33 @@ Each deployment sets its look with environment variables (in `.env`; documented 
 - Files aren't converted; they are stored next to the post's images (`announcements|messages/<user>/<id>/`, `events/<author>/<event id>/`). The size is saved at upload. Deleting a document or its post removes the file.
 - The **Documents** menu (`/documents/`) lists every document on announcements and events reaching the user or their affiliated users and on the user's message threads, with source, link to the post, uploader, date, size, Download, and Delete for the user's own documents. Filter All / Mine. Older admin-uploaded `DocumentFile`s are listed for their owner only.
 
+## 10. Inventory
+
+Personal inventories of things users own and lend to each other; first used for the school library (a dedicated library user account owns its books).
+
+### 10.1 Data model (`inventory/models.py`)
+
+| Model | Fields / rules |
+|---|---|
+| `Item` | Base for every category: id, `category`, title, description, owner, created/updated. |
+| `Book(Item)` | Multi-table inheritance: author, ISBN (optional, ISBN-10/13 with check digit, stored without hyphens; copies may share an ISBN). |
+| `ItemImage` | Photos of an item, compressed like other attachments, stored as `inventory/<owner>/<item id>/`. |
+| `Loan` | Item, borrower, lent date, optional due date, returned date. At most one open loan per item (DB constraint); closed loans are the history. |
+
+A new category means: a subclass of `Item`, a `Item.Category` choice, an entry in `CATEGORY_MODELS` and a form in `CATEGORY_FORMS`.
+
+### 10.2 Behaviour
+
+| Rule | Behaviour |
+|---|---|
+| Who sees items | Every logged-in user (open catalogue). Borrower names are shown only to the owner and the borrower; others see "Lent out". |
+| `/inventory/` | Tabs: *My items* (owned, with "Lent to X" and due date), *Borrowed by me* (items I hold, with owner and due date), *All items*. Search by title, author, description or ISBN. 20 per page. |
+| Add / edit | Anyone can add books to their own inventory with photos; only the owner edits, deletes photos or deletes the item. A lent item can't be deleted. |
+| Bulk import | `manage.py import_items <file.csv>`. Columns: `owner, title, author`, optional `isbn, description, category` (only `book`). Owners must exist. A row is skipped when the owner already has a book with the same title and author; any other error (unknown owner, bad ISBN, empty title) rolls back the whole import. |
+| Lending | Owner picks the borrower (anyone but themselves) and an optional due date (not in the past). The item then appears in the borrower's *Borrowed by me*. Only the owner marks it returned. Overdue loans are highlighted. |
+
+### 10.3 Gaps / open questions
+
+1. Borrowers can't request items; lending starts with the owner.
+2. No group-owned inventories (e.g. a library shared by several librarians).
+3. No notifications or reminders for due dates.

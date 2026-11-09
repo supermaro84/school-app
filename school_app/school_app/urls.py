@@ -35,6 +35,7 @@ from announcements.views import (
 from events.views import events, event_editing, event_edit, event_delete
 from groups import views as group_views
 from accounts.views import user_list, user_detail, my_profile, profile_edit
+from inventory import views as inventory_views
 from messages.views import (
     messages_page,
     CreateMessageView,
@@ -131,6 +132,15 @@ urlpatterns = [
         "media/images/<str:source>/<int:pk>/delete/", delete_image, name="image_delete"
     ),
     # Users URLs
+    path("inventory/", inventory_views.inventory_list, name="inventory"),
+    path("inventory/new/", inventory_views.item_create, name="item_create"),
+    path("inventory/<int:pk>/", inventory_views.item_detail, name="item_detail"),
+    path("inventory/<int:pk>/edit/", inventory_views.item_edit, name="item_edit"),
+    path("inventory/<int:pk>/delete/", inventory_views.item_delete, name="item_delete"),
+    path("inventory/<int:pk>/lend/", inventory_views.item_lend, name="item_lend"),
+    path("inventory/<int:pk>/return/", inventory_views.item_return, name="item_return"),
+    path("inventory/photos/<int:pk>/delete/", inventory_views.item_image_delete, name="item_image_delete"),
+
     path("users/", user_list, name="users_list"),
     path("users/<int:pk>/", user_detail, name="user_detail"),
     path("profile/", my_profile, name="my_profile"),

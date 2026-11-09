@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ item.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="text-break"><i class="bi bi-book"></i>{{ item.title }}</h1>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'inventory' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>{% translate "Back" %}</a>
+        {% if is_owner %}
+        <a href="{% url 'item_edit' item.pk %}" class="btn btn-outline-primary"><i class="bi bi-pencil me-1"></i>{% translate "Edit" %}</a>
+        {% if not loan %}
+        {% translate "Delete this item and its photos?" as delete_confirm %}
+        <form method="post" action="{% url 'item_delete' item.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('{{ delete_confirm|escapejs }}');"><i class="bi bi-trash me-1"></i>{% translate "Delete" %}</button>
+        </form>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-lg-5">
+        <section class="app-card mb-3">
+            <div class="card-body">
+                <dl class="meta-list">
+                    <dt>{% translate "Category" %}</dt>
+                    <dd><span class="badge text-bg-light border">{{ item.get_category_display }}</span></dd>
+                    {% if details.author %}
+                    <dt>{% translate "Author" %}</dt>
+                    <dd>{{ details.author }}</dd>
+                    {% endif %}
+                    {% if details.isbn %}
+                    <dt>ISBN</dt>
+                    <dd>{{ details.isbn }}</dd>
+                    {% endif %}
+                    <dt>{% translate "Owner" %}</dt>
+                    <dd><a href="{% url 'user_detail' item.owner.pk %}" class="text-decoration-none">{{ item.owner.get_full_name|default:item.owner.username }}</a></dd>
+                    <dt>{% translate "Status" %}</dt>
+                    <dd>
+                        {% if not loan %}
+                        <span class="badge text-bg-success">{% translate "Available" %}</span>
+                        {% elif is_owner or loan.borrower == user %}
+                        <span class="badge text-bg-warning">{% blocktranslate with name=loan.borrower.get_full_name|default:loan.borrower.username %}Lent to {{ name }}{% endblocktranslate %}</span>
+                        {% else %}
+                        <span class="badge text-bg-secondary">{% translate "Lent out" %}</span>
+                        {% endif %}
+                    </dd>
+                    <dt>{% translate "Added" %}</dt>
+                    <dd>{{ item.created_at|date:"SHORT_DATE_FORMAT" }}</dd>
+                </dl>
+                {% if item.description %}<p class="mt-3 mb-0">{{ item.description|linebreaksbr }}</p>{% endif %}
+            </div>
+        </section>
+
+        {% if is_owner or loan.borrower == user %}
+        <section class="app-card mb-3">
+            <div class="card-header"><h2><i class="bi bi-arrow-left-right me-2 text-primary"></i>{% translate "Lending" %}</h2></div>
+            <div class="card-body">
+                {% if loan %}
+                <dl class="meta-list">
+                    <dt>{% translate "Borrower" %}</dt>
+                    <dd><a href="{% url 'user_detail' loan.borrower.pk %}" class="text-decoration-none">{{ loan.borrower.get_full_name|default:loan.borrower.username }}</a></dd>
+                    <dt>{% translate "Lent on" %}</dt>
+                    <dd>{{ loan.lent_at|date:"SHORT_DATE_FORMAT" }}</dd>
+                    <dt>{% translate "Due date" %}</dt>
+                    <dd>{% if loan.due_date %}<span class="{% if loan.is_overdue %}text-danger fw-semibold{% endif %}">{{ loan.due_date|date:"SHORT_DATE_FORMAT" }}{% if loan.is_overdue %} · {% translate "overdue" %}{% endif %}</span>{% else %}–{% endif %}</dd>
+                </dl>
+                {% if is_owner %}
+                <form method="post" action="{% url 'item_return' item.pk %}" class="mt-3">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success w-100"><i class="bi bi-box-arrow-in-down-left me-1"></i>{% translate "Mark as returned" %}</button>
+                </form>
+                {% else %}
+                <p class="form-text mt-3 mb-0">{% translate "Give the item back to its owner; they mark it as returned." %}</p>
+                {% endif %}
+                {% else %}
+                <form method="post" action="{% url 'item_lend' item.pk %}" class="app-form">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ lend_form.borrower.id_for_label }}">{{ lend_form.borrower.label }}</label>
+                        <select name="borrower" id="{{ lend_form.borrower.id_for_label }}" class="lend-borrower-select" required>
+                            <option value=""></option>
+                            {% for option in lend_form.borrower %}{% if option.data.value %}
+                            <option value="{{ option.data.value }}">{{ option.data.label }}</option>
+                            {% endif %}{% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ lend_form.due_date.id_for_label }}">{{ lend_form.due_date.label }}</label>
+                        {{ lend_form.due_date }}
+                        <div class="form-text">{% translate "Optional." %}</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-box-arrow-up-right me-1"></i>{% translate "Lend" %}</button>
+                </form>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if is_owner and history %}
+        <section class="app-card">
+            <div class="card-header"><h2><i class="bi bi-clock-history me-2 text-primary"></i>{% translate "Earlier loans" %}</h2></div>
+            <ul class="list-group list-group-flush">
+                {% for past in history %}
+                <li class="list-group-item d-flex justify-content-between gap-2">
+                    <span class="text-truncate">{{ past.borrower.get_full_name|default:past.borrower.username }}</span>
+                    <small class="text-secondary flex-shrink-0">{{ past.lent_at|date:"SHORT_DATE_FORMAT" }} – {{ past.returned_at|date:"SHORT_DATE_FORMAT" }}</small>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <section class="app-card">
+            <div class="card-header"><h2><i class="bi bi-images me-2 text-primary"></i>{% translate "Photos" %}</h2></div>
+            <div class="card-body">
+                {% with images=item.images.all %}
+                {% if images %}
+                {% include "includes/image_gallery.html" %}
+                {% else %}
+                <p class="text-secondary mb-0">{% translate "No photos yet." %}{% if is_owner %} <a href="{% url 'item_edit' item.pk %}">{% translate "Add photos" %}</a>{% endif %}</p>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if is_owner and not loan %}
+<script>
+    new SlimSelect({ settings: slimSelectSettings, select: '.lend-borrower-select' });
+</script>
+{% endif %}
+{% endblock %}
